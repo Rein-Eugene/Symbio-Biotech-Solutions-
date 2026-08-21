@@ -2110,30 +2110,49 @@ function renderManualsView(){
 
 // ==================== FARMING FOR PROFIT PLANNER ====================
 const PLANNER_CROPS = [
-  'Kienyeji Greens (Managu / Terere / Saget)',
-  'Sukuma Wiki (Kale)',
+  'Managu (African Nightshade)',
+  'Terere (Amaranthus)',
+  'Saget (Spider Plant)',
   'Spinach',
+  'Swiss Chard',
+  'Lettuce',
+  'Sukuma Wiki (Kale)',
+  'Cabbage',
   'Cowpea (Kunde)',
   'Soyabean',
   'Groundnuts',
+  'Yellow Beans',
   'Sweet Potatoes / OFSP',
-  'Cabbage',
-  'Tomatoes / Capsicum'
+  'Tomatoes',
+  'Capsicum',
+  'Eggplant',
+  'Maize',
+  'Watermelon',
+  'Onions',
+  'Spring Onions / Leeks',
+  'Carrots',
+  'Garlic',
+  'Passion Fruit',
+  'Pixie Orange'
 ];
 
 const PLANNER_BIO_MAP = {
-  'TradGreens': '<strong>Companion Herbs:</strong> Basil &amp; Mint (repels flea beetles &amp; aphids).<br><strong>Insectary Flowers:</strong> Marigolds (nematode defence) &amp; Alyssum (attracts syrphid flies).<br><strong>Next Bed Cluster:</strong> Legumes (cowpea/soyabean) to recharge soil nitrogen.',
-  'Legumes': '<strong>Companion Herbs:</strong> Rosemary &amp; Coriander (attracts ladybirds &amp; lacewings).<br><strong>Insectary Flowers:</strong> Sunflowers (pollinator attraction &amp; physical trellis).<br><strong>Next Bed Cluster:</strong> Brassicas or heavy-feeder nightshades.',
-  'Tubers': '<strong>Companion/Border:</strong> Bush beans &amp; marigolds.<br><strong>Trap Crop/Border:</strong> Vetiver grass perimeter to discourage sweet potato weevils.<br><strong>Next Bed Cluster:</strong> Leafy traditional greens/legumes.',
-  'Brassicas': '<strong>Push-Pull Intercrop:</strong> Desmodium interplanted + Napier/Brachiaria perimeter.<br><strong>Companion Herbs:</strong> Dill &amp; Mint (confuses cabbage moths).<br><strong>Insectary Flowers:</strong> Nasturtium (sacrificial trap crop for aphids).',
-  'Solanaceae': '<strong>Companion Herbs:</strong> African marigold &amp; sweet basil (deters thrips, whiteflies &amp; hornworms).<br><strong>Insectary Flowers:</strong> Cosmos &amp; calendula.<br><strong>Next Bed Cluster:</strong> Legumes or green manure (mucuna/Lucerne).',
-  'Cereals': '<strong>Companion Intercrop:</strong> Climbing beans or cowpea interplanted \u2014 nitrogen fixing, and the maize stalk doubles as a natural trellis.<br><strong>Push-Pull Border:</strong> Desmodium interplanted + Napier/Brachiaria perimeter \u2014 the classic stemborer control system.<br><strong>Next Bed Cluster:</strong> Legumes or traditional greens to use the residual nitrogen.',
-  'Cucurbits': '<strong>Companion Herbs:</strong> Dill &amp; Nasturtium (nasturtium works as a sacrificial trap crop for cucumber beetles).<br><strong>Insectary Flowers:</strong> Marigolds (nematode suppression) &amp; a radish border (deters cucumber beetles).<br><strong>Next Bed Cluster:</strong> Legumes, to rebuild nitrogen after a heavy feeder.',
-  'RootsAlliums': '<strong>Classic Pairing:</strong> Onions and carrots grown together confuse each other\u2019s pests \u2014 onion scent repels carrot fly, carrot scent repels onion fly.<br><strong>Companion Herbs:</strong> Chamomile &amp; Savory (improves onion flavour and vigour).<br><strong>Next Bed Cluster:</strong> Brassicas or traditional greens.'
+  'TradGreens': '<strong>Companion Herbs:</strong> Basil &amp; Mint (repels flea beetles &amp; aphids).<br><strong>Insectary Flowers:</strong> Marigolds (nematode defence) &amp; Alyssum (attracts syrphid flies).<br><strong>Next Bed Cluster / Rotation:</strong> Legumes (cowpea/soyabean) to recharge soil nitrogen.',
+  'Legumes': '<strong>Companion Herbs:</strong> Rosemary &amp; Coriander (attracts ladybirds &amp; lacewings).<br><strong>Insectary Flowers:</strong> Sunflowers (pollinator attraction &amp; physical trellis).<br><strong>Next Bed Cluster / Rotation:</strong> Brassicas or heavy-feeder nightshades.',
+  'Tubers': '<strong>Companion/Border:</strong> Bush beans &amp; marigolds.<br><strong>Trap Crop/Border:</strong> Vetiver grass perimeter to discourage sweet potato weevils.<br><strong>Next Bed Cluster / Rotation:</strong> Leafy traditional greens/legumes.',
+  'Brassicas': '<strong>Push-Pull Intercrop:</strong> Desmodium interplanted + Napier/Brachiaria perimeter.<br><strong>Companion Herbs:</strong> Dill &amp; Mint (confuses cabbage moths).<br><strong>Insectary Flowers:</strong> Nasturtium (sacrificial trap crop for aphids).<br><strong>Next Bed Cluster / Rotation:</strong> Legumes or root crops (onions/carrots) \u2014 breaks the pest cycle and restores nitrogen after a heavy feeder.',
+  'Solanaceae': '<strong>Companion Herbs:</strong> African marigold &amp; sweet basil (deters thrips, whiteflies &amp; hornworms).<br><strong>Insectary Flowers:</strong> Cosmos &amp; calendula.<br><strong>Next Bed Cluster / Rotation:</strong> Legumes or green manure (mucuna/Lucerne).',
+  'Cereals': '<strong>Companion Intercrop:</strong> Climbing beans or cowpea interplanted \u2014 nitrogen fixing, and the maize stalk doubles as a natural trellis.<br><strong>Push-Pull Border:</strong> Desmodium interplanted + Napier/Brachiaria perimeter \u2014 the classic stemborer control system.<br><strong>Next Bed Cluster / Rotation:</strong> Legumes or traditional greens to use the residual nitrogen.',
+  'Cucurbits': '<strong>Companion Herbs:</strong> Dill &amp; Nasturtium (nasturtium works as a sacrificial trap crop for cucumber beetles).<br><strong>Insectary Flowers:</strong> Marigolds (nematode suppression) &amp; a radish border (deters cucumber beetles).<br><strong>Next Bed Cluster / Rotation:</strong> Legumes, to rebuild nitrogen after a heavy feeder.',
+  'RootsAlliums': '<strong>Classic Pairing:</strong> Onions and carrots grown together confuse each other\u2019s pests \u2014 onion scent repels carrot fly, carrot scent repels onion fly.<br><strong>Companion Herbs:</strong> Chamomile &amp; Savory (improves onion flavour and vigour).<br><strong>Next Bed Cluster / Rotation:</strong> Brassicas or traditional greens.'
 };
 
 function plannerCropOptions(selected){
   return PLANNER_CROPS.map(c => `<option value="${escapeHtml(c)}" ${c===selected?'selected':''}>${escapeHtml(c)}</option>`).join('');
+}
+
+function plannerCropDatalistOptions(){
+  return PLANNER_CROPS.map(c => `<option value="${escapeHtml(c)}">`).join('');
 }
 
 function renderPlannerView(){
@@ -2198,6 +2217,8 @@ function renderPlannerView(){
 
     <!-- 2. PRODUCTION PLAN -->
     <div id="p-production" class="planner-tab">
+      <p style="font-size:13px;color:var(--bone-dim);margin-bottom:6px;">Pick a crop from the list, or just type your own if it's not there.</p>
+      <datalist id="plannerCropList">${plannerCropDatalistOptions()}</datalist>
       <div class="planner-table-wrap">
         <table class="planner-table">
           <thead>
@@ -2236,6 +2257,7 @@ function renderPlannerView(){
               <th>Harvest/Cut Interval</th>
               <th>Nursery Sowing Date</th>
               <th>Days to Maturity</th>
+              <th>Expected First Harvest</th>
               <th>Next Batch Planting</th>
             </tr>
           </thead>
@@ -2347,7 +2369,7 @@ function addProductionRow(){
   const tbody = document.getElementById('plannerProductionBody');
   const tr = document.createElement('tr');
   tr.innerHTML = `
-    <td><select class="pr-crop">${plannerCropOptions()}</select></td>
+    <td><input type="text" class="pr-crop" list="plannerCropList" placeholder="Type or choose a crop"></td>
     <td><input type="number" class="pr-rev" min="0" placeholder="0"></td>
     <td><input type="number" class="pr-price" min="0" placeholder="0"></td>
     <td class="total-cell pr-target-kg">0 Kgs</td>
@@ -2459,6 +2481,7 @@ function addCalendarRow(){
     </td>
     <td class="total-cell cal-nursery">\u2013</td>
     <td><input type="number" class="cal-days" placeholder="Days"></td>
+    <td class="total-cell cal-firstharvest">\u2013</td>
     <td class="total-cell cal-nextbatch">\u2013</td>
   `;
   tbody.appendChild(tr);
@@ -2466,12 +2489,14 @@ function addCalendarRow(){
   tr.querySelector('.cal-method').addEventListener('change', recalc);
   tr.querySelector('.cal-plantdate').addEventListener('change', recalc);
   tr.querySelector('.cal-interval').addEventListener('change', recalc);
+  tr.querySelector('.cal-days').addEventListener('input', recalc);
 }
 
 function calcSuccession(row){
   const method = row.querySelector('.cal-method').value;
   const dateVal = row.querySelector('.cal-plantdate').value;
   const interval = parseInt(row.querySelector('.cal-interval').value) || 2;
+  const daysToMaturity = parseInt(row.querySelector('.cal-days').value) || 0;
   if(!dateVal) return;
 
   const plantDate = new Date(dateVal);
@@ -2482,6 +2507,15 @@ function calcSuccession(row){
     nurseryCell.textContent = sowDate.toISOString().split('T')[0];
   } else {
     nurseryCell.textContent = 'Direct Sown';
+  }
+
+  const harvestCell = row.querySelector('.cal-firstharvest');
+  if(daysToMaturity > 0){
+    const harvestDate = new Date(plantDate);
+    harvestDate.setDate(harvestDate.getDate() + daysToMaturity);
+    harvestCell.textContent = harvestDate.toISOString().split('T')[0];
+  } else {
+    harvestCell.textContent = '\u2013';
   }
 
   const nextBatch = new Date(plantDate);
@@ -2592,7 +2626,7 @@ function applyPlannerState(state){
   (state.production?.rows || []).forEach(rowData => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><select class="pr-crop">${plannerCropOptions(rowData.crop)}</select></td>
+      <td><input type="text" class="pr-crop" list="plannerCropList" value="${escapeHtml(rowData.crop || '')}" placeholder="Type or choose a crop"></td>
       <td><input type="number" class="pr-rev" min="0" value="${escapeHtml(rowData.rev || '')}"></td>
       <td><input type="number" class="pr-price" min="0" value="${escapeHtml(rowData.price || '')}"></td>
       <td class="total-cell pr-target-kg">0 Kgs</td>
@@ -2639,6 +2673,7 @@ function applyPlannerState(state){
       </td>
       <td class="total-cell cal-nursery">\u2013</td>
       <td><input type="number" class="cal-days" value="${escapeHtml(rowData.days || '')}" placeholder="Days"></td>
+      <td class="total-cell cal-firstharvest">\u2013</td>
       <td class="total-cell cal-nextbatch">\u2013</td>
     `;
     cBody.appendChild(tr);
@@ -2646,6 +2681,7 @@ function applyPlannerState(state){
     tr.querySelector('.cal-method').addEventListener('change', recalc);
     tr.querySelector('.cal-plantdate').addEventListener('change', recalc);
     tr.querySelector('.cal-interval').addEventListener('change', recalc);
+    tr.querySelector('.cal-days').addEventListener('input', recalc);
     calcSuccession(tr);
   });
 }
