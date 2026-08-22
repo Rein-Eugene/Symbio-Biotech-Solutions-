@@ -3,27 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free tools from Symbio Biotech to plan, compare, and grow a farm enterprise in Kenya — enterprise comparison, farming manuals, and a farming-for-profit planner.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F4F1E7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12180F" media="(prefers-color-scheme: dark)">
 <title>Agribusiness Enterprise Planner — Symbio Biotech</title>
+<script>
+  // Apply the saved theme before paint to avoid a flash of the wrong theme.
+  (function(){
+    try{
+      var t = localStorage.getItem('theme');
+      if(t === 'light' || t === 'dark'){ document.documentElement.setAttribute('data-theme', t); }
+    }catch(e){}
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* ---- Palette: Forest green + Matte sage + Gold (dominant) ---- */
   :root{
-    --soil-900:#F7F2E7;
-    --soil-800:#FFFFFF;
-    --bone:#2E2416;
-    --bone-dim:#7A6E58;
-    --maize:#8F6607;
-    --leaf:#5C7A43;
-    --rust:#A8532A;
-    --line:#E5DCC8;
+    color-scheme: light;
+    --soil-900:#F4F1E7;   /* paper background */
+    --soil-800:#FFFFFF;   /* surface / cards */
+    --bone:#25301D;       /* forest-tinted ink */
+    --bone-dim:#5B6A50;   /* muted sage-gray text */
+    --maize:#8F6B12;      /* GOLD accent (white-text safe) */
+    --gold-bright:#C9A227;/* brighter gold for tints/highlights */
+    --leaf:#2F4A35;       /* FOREST GREEN (primary) */
+    --sage:#8FA079;       /* MATTE SAGE */
+    --rust:#9E5A31;       /* supporting earthy clay */
+    --line:#E4DECD;       /* borders */
+    --gold-text:#FFFFFF;  /* text on gold fills */
+    --shadow:rgba(42,55,32,0.08);
+  }
+  /* Follow the OS preference when the user hasn't chosen explicitly */
+  @media (prefers-color-scheme: dark){
+    :root{
+      color-scheme: dark;
+      --soil-900:#12180F;
+      --soil-800:#1C241A;
+      --bone:#EAEEE0;
+      --bone-dim:#9DAA8E;
+      --maize:#E0BB4C;
+      --gold-bright:#E9C860;
+      --leaf:#43714D;
+      --sage:#9FB089;
+      --rust:#C77E52;
+      --line:#31392C;
+      --gold-text:#16200E;
+      --shadow:rgba(0,0,0,0.45);
+    }
+  }
+  /* Explicit manual overrides win over the OS preference */
+  :root[data-theme="light"]{
+    color-scheme: light;
+    --soil-900:#F4F1E7; --soil-800:#FFFFFF; --bone:#25301D; --bone-dim:#5B6A50;
+    --maize:#8F6B12; --gold-bright:#C9A227; --leaf:#2F4A35; --sage:#8FA079;
+    --rust:#9E5A31; --line:#E4DECD; --gold-text:#FFFFFF; --shadow:rgba(42,55,32,0.08);
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --soil-900:#12180F; --soil-800:#1C241A; --bone:#EAEEE0; --bone-dim:#9DAA8E;
+    --maize:#E0BB4C; --gold-bright:#E9C860; --leaf:#43714D; --sage:#9FB089;
+    --rust:#C77E52; --line:#31392C; --gold-text:#16200E; --shadow:rgba(0,0,0,0.45);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
+  html{background:var(--soil-900);}
   body{
     background:var(--soil-900);
     color:var(--bone);
     font-family:'IBM Plex Sans',sans-serif;
     min-height:100vh;
     -webkit-font-smoothing:antialiased;
+    transition:background-color .25s ease, color .25s ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; scroll-behavior:auto !important;}
   }
   .wrap{max-width:920px;margin:0 auto;padding:48px 24px 96px;}
 
@@ -112,7 +167,7 @@
     flex-wrap:wrap;
   }
   button.primary{
-    background:var(--maize);
+    background:var(--leaf);
     color:#FFFFFF;
     border:none;
     border-radius:4px;
@@ -151,7 +206,7 @@
     white-space:nowrap;
   }
   .tab:hover{border-color:var(--maize);color:var(--bone);}
-  .tab.active{background:var(--maize);border-color:var(--maize);color:#FFFFFF;font-weight:600;}
+  .tab.active{background:var(--maize);border-color:var(--maize);color:var(--gold-text);font-weight:600;}
   .tab.bundle-tab{border-style:dashed;}
   .tab.bundle-tab.active{background:var(--leaf);border-color:var(--leaf);}
 
@@ -227,12 +282,12 @@
     letter-spacing:0.08em;
     text-transform:uppercase;
     background:var(--maize);
-    color:#FFFFFF;
+    color:var(--gold-text);
     padding:4px 8px;
     border-radius:3px;
     white-space:nowrap;
   }
-  .badge.fast{background:var(--leaf);}
+  .badge.fast{background:var(--leaf);color:#FFFFFF;}
   .badge.gap{background:transparent;border:1px solid var(--bone-dim);color:var(--bone-dim);}
   .metrics{
     display:grid;
@@ -338,7 +393,7 @@
     border-radius:4px;
     cursor:pointer;
   }
-  .calc-btn:hover{background:var(--maize);color:#FFFFFF;}
+  .calc-btn:hover{background:var(--maize);color:var(--gold-text);}
   .calc-out{
     margin-top:10px;
     display:flex;
@@ -445,6 +500,57 @@
     border-radius:3px;
     white-space:nowrap;
   }
+  .manual-badge.locked-badge{background:var(--maize);}
+  .manual-badge.unlocked-badge{background:var(--leaf);}
+  .manual-card.manual-locked{border-left-color:var(--maize);}
+
+  .manual-lock-box{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+  }
+  .lock-price{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:20px;
+    font-weight:600;
+    color:var(--maize);
+    margin-bottom:10px;
+  }
+  .lock-steps{
+    font-size:13px;
+    line-height:1.7;
+    color:var(--bone-dim);
+    margin-bottom:12px;
+  }
+  .lock-steps strong{color:var(--bone);}
+  .lock-steps ol{margin:6px 0 0 18px;padding:0;}
+  .lock-steps li{margin-bottom:4px;}
+  .code-entry-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .code-entry-row input{
+    flex:1;
+    min-width:160px;
+    box-sizing:border-box;
+    background:var(--soil-900);
+    border:1px solid var(--line);
+    border-radius:4px;
+    color:var(--bone);
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:0.05em;
+    font-size:13px;
+    padding:9px 10px;
+  }
+  .code-entry-row input:focus{border-color:var(--maize);outline:none;}
+  .code-status{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--bone-dim);
+    margin-top:8px;
+    min-height:14px;
+  }
   .manual-teaser{
     font-size:14px;
     color:var(--bone-dim);
@@ -469,7 +575,7 @@
     border-radius:4px;
     cursor:pointer;
   }
-  .manual-btn:hover{background:var(--maize);color:#FFFFFF;}
+  .manual-btn:hover{background:var(--maize);color:var(--gold-text);}
   .manual-btn.pdf-btn{border-color:var(--rust);color:var(--rust);}
   .manual-btn.pdf-btn:hover{background:var(--rust);color:#FFFFFF;}
 
@@ -563,7 +669,7 @@
   .planner-nav button.p-active, .planner-nav button:hover{
     background:var(--maize);
     border-color:var(--maize);
-    color:#FFFFFF;
+    color:var(--gold-text);
     font-weight:600;
   }
 
@@ -677,7 +783,7 @@
     margin-top:14px;
     margin-right:8px;
   }
-  .planner-btn:hover{background:var(--maize);color:#FFFFFF;}
+  .planner-btn:hover{background:var(--maize);color:var(--gold-text);}
 
   .planner-grid{
     display:grid;
@@ -710,8 +816,8 @@
     margin-bottom:10px;
   }
   .planner-pest-box{
-    background:rgba(107,142,78,0.1);
-    border-left:3px solid var(--leaf);
+    background:color-mix(in srgb, var(--sage) 16%, transparent);
+    border-left:3px solid var(--sage);
     border-radius:4px;
     padding:10px 12px;
     font-size:11.5px;
@@ -772,7 +878,7 @@
     border-left-color:var(--maize);
   }
   .home-card:nth-child(1){border-left-color:var(--leaf);}
-  .home-card:nth-child(2){border-left-color:var(--rust);}
+  .home-card:nth-child(2){border-left-color:var(--sage);}
   .home-card:nth-child(3){border-left-color:var(--maize);}
   .home-card-icon{font-size:28px;margin-bottom:10px;}
   .home-card-title{
@@ -787,9 +893,48 @@
     line-height:1.6;
     color:var(--bone-dim);
   }
+
+  /* ---- Theme toggle ---- */
+  .theme-toggle{
+    position:fixed;
+    top:16px;
+    right:16px;
+    z-index:50;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--soil-800);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:8px 12px;
+    border-radius:20px;
+    cursor:pointer;
+    box-shadow:0 2px 10px var(--shadow);
+    transition:border-color .15s ease, color .15s ease, background-color .25s ease;
+  }
+  .theme-toggle:hover{border-color:var(--maize);color:var(--maize);}
+  .theme-toggle .icon{width:15px;height:15px;flex-shrink:0;}
+  .theme-toggle .icon-sun{display:none;}
+  .theme-toggle .icon-moon{display:block;}
+  :root[data-theme="dark"] .theme-toggle .icon-sun{display:block;}
+  :root[data-theme="dark"] .theme-toggle .icon-moon{display:none;}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .theme-toggle .icon-sun{display:block;}
+    :root:not([data-theme="light"]) .theme-toggle .icon-moon{display:none;}
+  }
+  @media (max-width:600px){ .theme-toggle .label{display:none;} .theme-toggle{padding:8px;} }
 </style>
 </head>
 <body>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light theme" title="Toggle theme">
+  <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+  <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+  <span class="label">Theme</span>
+</button>
 <div class="wrap">
   <header class="app-header">
     <div class="eyebrow">Symbio Biotech</div>
@@ -801,12 +946,12 @@
     <div class="home-card" id="homeCardCompare">
       <div class="home-card-icon">🌱</div>
       <div class="home-card-title">Compare Enterprises</div>
-      <div class="home-card-desc">Enter what you have \u2014 capital, land, water, labour \u2014 and see every enterprise ranked by fit, with planting timing and revenue projections.</div>
+      <div class="home-card-desc">Enter what you have — capital, land, water, labour — and see every enterprise ranked by fit, with planting timing and revenue projections.</div>
     </div>
     <div class="home-card" id="homeCardManuals">
       <div class="home-card-icon">📘</div>
       <div class="home-card-title">Farming Manuals and Systems</div>
-      <div class="home-card-desc">Free step-by-step guides \u2014 JMS, FAA &amp; LAB, compost, pest control, pig systems, and more.</div>
+      <div class="home-card-desc">Free step-by-step guides — JMS, FAA &amp; LAB, compost, pest control, pig systems, and more.</div>
     </div>
     <div class="home-card" id="homeCardPlanner">
       <div class="home-card-icon">📊</div>
@@ -816,7 +961,7 @@
   </div>
 
   <div id="compareSection" style="display:none;">
-    <span class="back-link" id="backFromCompare">\u2190 Back to Home</span>
+    <span class="back-link" id="backFromCompare">← Back to Home</span>
     <header style="margin-bottom:32px;">
       <div class="stamp">Advisory Tool</div>
       <div class="eyebrow">Symbio Biotech Agribusiness Advisory</div>
@@ -1038,7 +1183,7 @@ const ENTERPRISES = [
   {
     id: 'flower-seedlings', category: 'crops',
     name: 'Flower seedling nursery (Starke Ayres varieties)',
-    accent: '#7C4A6B',
+      accent: '#6B4A2E',
     minCapital: 12000, costHigh: 35000,
     landMin: 1, waterMin: 1, labourMin: 0,
     paybackMin: 2, paybackMax: 4,
@@ -1051,7 +1196,7 @@ const ENTERPRISES = [
   {
     id: 'greenhouse-strawberry', category: 'crops',
     name: 'Greenhouse strawberry (vertical system)',
-    accent: '#C0455A',
+      accent: '#A1462F',
     minCapital: 200000, costHigh: 400000,
     landMin: 2, waterMin: 2, labourMin: 1,
     paybackMin: 6, paybackMax: 9,
@@ -1227,7 +1372,7 @@ const ENTERPRISES = [
   {
     id: 'passion-fruit', category: 'trees',
     name: 'Passion fruit farming',
-    accent: '#7C4A6B',
+      accent: '#6B4A2E',
     minCapital: 20000, costHigh: 50000,
     landMin: 2, waterMin: 1, labourMin: 0,
     paybackMin: 8, paybackMax: 12,
@@ -1612,6 +1757,8 @@ function calcRevenue(entId){
 const MANUALS = [
   {
     id: 'bio-inputs',
+    price: 2500,
+    codeHash: 'b1bbd5192e5d12860d68dd268c0f5f4fb47e8aecbff79fa4cc770ff9bbdc0065',
     title: 'Symbio Bio-Inputs Manual',
     subtitle: 'Making JMS, FAA & LAB \u2014 and using them to build fast, nutrient-rich compost',
     teaser: 'The core three: JMS, FAA, and LAB serum, made from scratch, then combined into a 30\u201345 day compost protocol instead of the usual 2\u20136 months.',
@@ -1715,6 +1862,7 @@ const MANUALS = [
   },
   {
     id: 'jlf-manual',
+    price: 0,
     title: 'Symbio JADAM Liquid Fertilizer (JLF)',
     subtitle: 'Crop-specific liquid fertilizer from local weeds and crop waste',
     teaser: 'Turn weeds and crop trimmings into potent, crop-matched liquid fertilizer using rainwater and leaf mold \u2014 full ratios for kale, tomato, spinach, and managu.',
@@ -1752,6 +1900,8 @@ const MANUALS = [
   },
   {
     id: 'living-floor',
+    price: 1000,
+    codeHash: 'f25ad04ef93efb9d34be2a9e576fc227f1e32e53db139fe46763bf5c33b741bd',
     title: 'Symbio Living Floor System',
     subtitle: 'A practical protocol for high-yield soil regeneration',
     teaser: 'Layer organic material on undug soil and let microbes, fungi, and earthworms do the work \u2014 a 5-step no-till protocol that cuts watering by up to 70% and eliminates weeding.',
@@ -1800,6 +1950,7 @@ const MANUALS = [
   },
   {
     id: 'pest-control',
+    price: 0,
     title: 'Symbio Biological Pest Control Manual',
     subtitle: 'Companion planting with flowers and herbs to repel pests and attract beneficial insects',
     teaser: 'Marigold, lavender, basil, borage, dill, coriander \u2014 a working roster of plants that build a standing defence instead of spraying after pests arrive.',
@@ -1845,6 +1996,8 @@ const MANUALS = [
   },
   {
     id: 'imo-trapping',
+    price: 1000,
+    codeHash: '13279918e5b5cd8aba15b19fb24daf5d80f26abc6a0824448bbfb14d9d016b3c',
     title: 'Symbio IMO Trapping & Multiplication Guide',
     subtitle: 'Capturing and multiplying indigenous microorganisms using the rice-bran method',
     teaser: 'Trap local microbes from bamboo and forest sources using cooked rice, then multiply them with molasses into a broad, resilient microbial culture.',
@@ -1884,6 +2037,8 @@ const MANUALS = [
   },
   {
     id: 'regen-microfarm',
+    price: 1000,
+    codeHash: '50f8131009b23f01f2461587aef61d83ace89d3a85b8205310134d7df87b3266',
     title: 'Symbio Regenerative Micro-Farm Operations Guide',
     subtitle: 'Integrating apiary, rabbits, and rotational beds under shade netting',
     teaser: 'A working system combining bees, rabbits, and a rotating vegetable bed layout \u2014 sized around a 300m\u00b2 net with 10 hives as a working example.',
@@ -1919,6 +2074,8 @@ const MANUALS = [
   },
   {
     id: 'piglet-breeding-guide',
+    price: 1000,
+    codeHash: '0091ce2bb081c04b69e1466e7f315a76f1a80f372c35f258f35d3d234a14462b',
     title: 'Symbio Piglet Breeding Setup Guide',
     subtitle: 'Starting a piglet production enterprise with in-pig sows',
     teaser: 'Starting with pregnant sows skips the longest part of the wait \u2014 housing design, feed formulation, and the one structural detail that prevents most piglet deaths.',
@@ -1970,6 +2127,8 @@ const MANUALS = [
   },
   {
     id: 'pig-refinery-system',
+    price: 2500,
+    codeHash: '90c0e39a9d8187db3bca6e495c4b4527df5d3c5ba36a0c32061d5d70b229da47',
     title: 'Symbio Pig Refinery System',
     subtitle: 'Deep litter housing and submerged fermentation feed for low-odour, high-efficiency pig keeping',
     teaser: 'Housing that never needs washing, and a feed method that pre-digests forage before the pig eats it \u2014 tackling smell, feed cost, and growth rate together.',
@@ -2061,37 +2220,111 @@ function toggleManualBody(manualId){
   if(body) body.classList.toggle('open');
 }
 
+function isManualUnlocked(manualId){
+  try { return localStorage.getItem('symbioUnlocked_' + manualId) === 'true'; }
+  catch(e){ return false; }
+}
+
+function markManualUnlocked(manualId){
+  try { localStorage.setItem('symbioUnlocked_' + manualId, 'true'); return true; }
+  catch(e){ return false; }
+}
+
+async function sha256Hex(text){
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function attemptUnlock(manualId){
+  const input = document.getElementById('code-input-' + manualId);
+  const statusEl = document.getElementById('code-status-' + manualId);
+  const code = input.value.trim().toUpperCase();
+  if(!code){ statusEl.textContent = 'Enter the code you received after payment.'; return; }
+
+  const manual = MANUALS.find(m => m.id === manualId);
+  statusEl.textContent = 'Checking...';
+  const enteredHash = await sha256Hex(code);
+
+  if(enteredHash === manual.codeHash){
+    markManualUnlocked(manualId);
+    renderManualsView();
+  } else {
+    statusEl.textContent = 'That code didn\u2019t match \u2014 check it and try again, or confirm your payment went through.';
+  }
+}
+
 function renderManualsView(){
   const results = document.getElementById('results');
   const cardsHtml = MANUALS.map(m => {
+    const isFree = !m.price || m.price === 0;
+    const unlocked = isFree || isManualUnlocked(m.id);
+
     const bodyHtml = m.content.map(section => {
       const paras = section.body.map(p => `<p>${escapeHtml(p)}</p>`).join('');
       return `<h4>${escapeHtml(section.heading)}</h4>${paras}`;
     }).join('');
-    return `
-      <div class="manual-card">
-        <div class="manual-card-top">
-          <div>
-            <div class="manual-title">${escapeHtml(m.title)}</div>
-            <div class="manual-subtitle">${escapeHtml(m.subtitle)}</div>
-          </div>
-          <div class="manual-badge">Free</div>
-        </div>
-        <div class="manual-teaser">${escapeHtml(m.teaser)}</div>
+
+    const badgeHtml = isFree
+      ? `<div class="manual-badge">Free</div>`
+      : unlocked
+        ? `<div class="manual-badge unlocked-badge">Unlocked</div>`
+        : `<div class="manual-badge locked-badge">KSh ${m.price.toLocaleString()}</div>`;
+
+    let actionsAndBody;
+    if(unlocked){
+      actionsAndBody = `
         <div class="manual-actions">
           <button type="button" class="manual-btn" data-toggle-id="${m.id}">Read Here</button>
           <button type="button" class="manual-btn pdf-btn" data-pdf-id="${m.id}">Open as PDF</button>
         </div>
         <div class="manual-body" id="manual-body-${m.id}">${bodyHtml}</div>
+      `;
+    } else {
+      actionsAndBody = `
+        <div class="manual-lock-box">
+          <div class="lock-price">KSh ${m.price.toLocaleString()}</div>
+          <div class="lock-steps">
+            <strong>How to unlock:</strong>
+            <ol>
+              <li>Send KSh ${m.price.toLocaleString()} via M-Pesa to <strong>0745 250 185</strong> (Symbio Biotech Solutions)</li>
+              <li>Message the same number on WhatsApp/SMS with your payment confirmation</li>
+              <li>You'll receive an access code \u2014 enter it below to unlock this manual on this device</li>
+            </ol>
+          </div>
+          <div class="code-entry-row">
+            <input type="text" id="code-input-${m.id}" placeholder="Enter access code" autocapitalize="characters">
+            <button type="button" class="manual-btn" data-unlock-id="${m.id}">Unlock</button>
+          </div>
+          <div class="code-status" id="code-status-${m.id}"></div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="manual-card ${unlocked ? '' : 'manual-locked'}">
+        <div class="manual-card-top">
+          <div>
+            <div class="manual-title">${escapeHtml(m.title)}</div>
+            <div class="manual-subtitle">${escapeHtml(m.subtitle)}</div>
+          </div>
+          ${badgeHtml}
+        </div>
+        <div class="manual-teaser">${escapeHtml(m.teaser)}</div>
+        ${actionsAndBody}
       </div>
     `;
   }).join('');
 
+  const freeCount = MANUALS.filter(m => !m.price || m.price === 0).length;
+
   results.innerHTML = `
-    <span class="back-link" id="backFromManuals">\u2190 Back</span>
+    <span class="back-link" id="backFromManuals">← Back</span>
     <div class="results-head">
       <h2>Farming Manuals and Systems</h2>
-      <span>${MANUALS.length} free manuals</span>
+      <span>${freeCount} free \u2014 ${MANUALS.length - freeCount} paid</span>
     </div>
     <div class="cards">${cardsHtml}</div>
   `;
@@ -2103,6 +2336,9 @@ function renderManualsView(){
   });
   results.querySelectorAll('[data-pdf-id]').forEach(btn => {
     btn.addEventListener('click', () => openManualPdf(btn.dataset.pdfId));
+  });
+  results.querySelectorAll('[data-unlock-id]').forEach(btn => {
+    btn.addEventListener('click', () => attemptUnlock(btn.dataset.unlockId));
   });
 }
 
@@ -2158,7 +2394,7 @@ function plannerCropDatalistOptions(){
 function renderPlannerView(){
   const results = document.getElementById('results');
   results.innerHTML = `
-    <span class="back-link" id="backFromPlanner">\u2190 Back</span>
+    <span class="back-link" id="backFromPlanner">← Back</span>
     <div class="results-head">
       <h2>Farming for Profit Planner</h2>
       <span>by Symbio Biotech Solutions</span>
@@ -2166,10 +2402,10 @@ function renderPlannerView(){
     <div class="planner-intro">
       <strong>How to use this tool:</strong>
       <ol>
-        <li><strong>Marketing Chart</strong> \u2014 estimate what you can realistically sell through each channel (direct clients, local market, hotels, aggregators) to see your projected revenue.</li>
-        <li><strong>Production Plan</strong> \u2014 work out how many beds or units you need per crop to hit that revenue.</li>
-        <li><strong>Biological Bed Mapping</strong> \u2014 assign a crop to each bed and get companion-planting and pest-control suggestions automatically.</li>
-        <li><strong>Seedling &amp; Succession Calendar</strong> \u2014 plan sowing and repeat-planting dates so beds stay continuously productive.</li>
+        <li><strong>Marketing Chart</strong> — estimate what you can realistically sell through each channel (direct clients, local market, hotels, aggregators) to see your projected revenue.</li>
+        <li><strong>Production Plan</strong> — work out how many beds or units you need per crop to hit that revenue.</li>
+        <li><strong>Biological Bed Mapping</strong> — assign a crop to each bed and get companion-planting and pest-control suggestions automatically.</li>
+        <li><strong>Seedling &amp; Succession Calendar</strong> — plan sowing and repeat-planting dates so beds stay continuously productive.</li>
       </ol>
     </div>
 
@@ -2479,10 +2715,10 @@ function addCalendarRow(){
         <option value="4">Every 4 Weeks</option>
       </select>
     </td>
-    <td class="total-cell cal-nursery">\u2013</td>
+    <td class="total-cell cal-nursery">–</td>
     <td><input type="number" class="cal-days" placeholder="Days"></td>
-    <td class="total-cell cal-firstharvest">\u2013</td>
-    <td class="total-cell cal-nextbatch">\u2013</td>
+    <td class="total-cell cal-firstharvest">–</td>
+    <td class="total-cell cal-nextbatch">–</td>
   `;
   tbody.appendChild(tr);
   const recalc = () => calcSuccession(tr);
@@ -2671,10 +2907,10 @@ function applyPlannerState(state){
           <option value="4" ${rowData.interval === '4' ? 'selected' : ''}>Every 4 Weeks</option>
         </select>
       </td>
-      <td class="total-cell cal-nursery">\u2013</td>
+      <td class="total-cell cal-nursery">–</td>
       <td><input type="number" class="cal-days" value="${escapeHtml(rowData.days || '')}" placeholder="Days"></td>
-      <td class="total-cell cal-firstharvest">\u2013</td>
-      <td class="total-cell cal-nextbatch">\u2013</td>
+      <td class="total-cell cal-firstharvest">–</td>
+      <td class="total-cell cal-nextbatch">–</td>
     `;
     cBody.appendChild(tr);
     const recalc = () => calcSuccession(tr);
@@ -2765,6 +3001,33 @@ document.getElementById('homeCardCompare').addEventListener('click', showCompare
 document.getElementById('homeCardManuals').addEventListener('click', goToManuals);
 document.getElementById('homeCardPlanner').addEventListener('click', goToPlanner);
 document.getElementById('backFromCompare').addEventListener('click', showHome);
+
+// ==================== THEME TOGGLE ====================
+(function(){
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+  function effectiveTheme(){
+    const explicit = root.getAttribute('data-theme');
+    if(explicit === 'light' || explicit === 'dark') return explicit;
+    return media.matches ? 'dark' : 'light';
+  }
+  function apply(theme){
+    root.setAttribute('data-theme', theme);
+    try{ localStorage.setItem('theme', theme); }catch(e){}
+    btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+  }
+  btn.addEventListener('click', () => {
+    apply(effectiveTheme() === 'dark' ? 'light' : 'dark');
+  });
+  // Keep in sync with OS changes only while the user hasn't chosen explicitly.
+  media.addEventListener('change', () => {
+    let saved = null;
+    try{ saved = localStorage.getItem('theme'); }catch(e){}
+    if(saved !== 'light' && saved !== 'dark'){ root.removeAttribute('data-theme'); }
+  });
+  btn.setAttribute('aria-pressed', effectiveTheme() === 'dark' ? 'true' : 'false');
+})();
 
 </script>
 </body>
