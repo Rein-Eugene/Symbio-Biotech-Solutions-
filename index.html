@@ -2493,6 +2493,16 @@ function plannerCropDatalistOptions(){
   return PLANNER_CROPS.map(c => `<option value="${escapeHtml(c)}">`).join('');
 }
 
+const PLANNER_BED_SIZES = [
+  'Standard Bed (1m x 10m)',
+  'Cone Garden (100\u2013120 plants)',
+  'Vertical Grow Bag (80\u2013100 plants)'
+];
+
+function plannerBedSizeDatalistOptions(){
+  return PLANNER_BED_SIZES.map(b => `<option value="${escapeHtml(b)}">`).join('');
+}
+
 function renderPlannerView(){
   const results = document.getElementById('results');
   results.innerHTML = `
@@ -2557,6 +2567,11 @@ function renderPlannerView(){
     <div id="p-production" class="planner-tab">
       <p style="font-size:13px;color:var(--bone-dim);margin-bottom:6px;">Pick a crop from the list, or just type your own if it's not there.</p>
       <datalist id="plannerCropList">${plannerCropDatalistOptions()}</datalist>
+      <datalist id="plannerBedSizeList">${plannerBedSizeDatalistOptions()}</datalist>
+      <div class="save-row" style="margin-bottom:14px;">
+        <button type="button" class="planner-btn" id="autofillFromMarketingBtn">\u2b07 Autofill from Marketing Chart</button>
+      </div>
+      <div class="save-status" id="autofillStatus"></div>
       <div class="planner-table-wrap">
         <table class="planner-table">
           <thead>
@@ -2627,6 +2642,7 @@ function renderPlannerView(){
   document.getElementById('addMarketingRowBtn').addEventListener('click', addMarketingRow);
   document.getElementById('addMarketingChannelBtn').addEventListener('click', addMarketingChannel);
   document.getElementById('addProductionRowBtn').addEventListener('click', addProductionRow);
+  document.getElementById('autofillFromMarketingBtn').addEventListener('click', autofillFromMarketing);
   document.getElementById('addMapUnitBtn').addEventListener('click', addMapUnit);
   document.getElementById('addCalendarRowBtn').addEventListener('click', addCalendarRow);
 
@@ -2703,6 +2719,58 @@ function calcMarketing(){
 }
 
 // ---- 2. Production Plan ----
+function getMarketingRowTotals(){
+  const results = [];
+  document.querySelectorAll('#plannerMarketingBody tr').forEach(row => {
+    const crop = row.querySelector('.m-crop').value;
+    let rowVal = 0;
+    row.querySelectorAll('.m-channel-cell').forEach(cell => {
+      const wks = parseFloat(cell.querySelector('.m-wks').value) || 0;
+      const kgwk = parseFloat(cell.querySelector('.m-kgwk').value) || 0;
+      const price = parseFloat(cell.querySelector('.m-price').value) || 0;
+      rowVal += (wks * kgwk) * price;
+    });
+    results.push({ crop, totalVal: rowVal });
+  });
+  return results;
+}
+
+function autofillFromMarketing(){
+  const marketingTotals = getMarketingRowTotals();
+  let filledCount = 0, createdCount = 0, skippedCount = 0;
+
+  marketingTotals.forEach(({ crop, totalVal }) => {
+    if(!crop || totalVal <= 0){ skippedCount++; return; }
+
+    const prodRows = Array.from(document.querySelectorAll('#plannerProductionBody tr'));
+    const match = prodRows.find(row =>
+      row.querySelector('.pr-crop').value.trim().toLowerCase() === crop.trim().toLowerCase()
+    );
+
+    if(match){
+      match.querySelector('.pr-rev').value = Math.round(totalVal);
+      filledCount++;
+    } else {
+      addProductionRow();
+      const newRow = document.querySelector('#plannerProductionBody tr:last-child');
+      newRow.querySelector('.pr-crop').value = crop;
+      newRow.querySelector('.pr-rev').value = Math.round(totalVal);
+      createdCount++;
+    }
+  });
+
+  calcProduction();
+
+  const statusEl = document.getElementById('autofillStatus');
+  if(statusEl){
+    if(filledCount === 0 && createdCount === 0){
+      statusEl.textContent = 'Nothing to autofill yet \u2014 add crops and figures in the Marketing Chart first.';
+    } else {
+      statusEl.textContent = `Updated ${filledCount} row(s), added ${createdCount} new row(s) from Marketing Chart.`;
+    }
+  }
+}
+
 function addProductionRow(){
   const tbody = document.getElementById('plannerProductionBody');
   const tr = document.createElement('tr');
@@ -2711,7 +2779,7 @@ function addProductionRow(){
     <td><input type="number" class="pr-rev" min="0" placeholder="0"></td>
     <td><input type="number" class="pr-price" min="0" placeholder="0"></td>
     <td class="total-cell pr-target-kg">0 Kgs</td>
-    <td><input type="text" class="pr-bedsize" value="Standard Bed (1m x 10m)"></td>
+    <td><input type="text" class="pr-bedsize" list="plannerBedSizeList" value="Standard Bed (1m x 10m)"></td>
     <td><input type="number" class="pr-yieldbed" min="0" placeholder="0"></td>
     <td class="total-cell pr-beds-needed">0 Bed(s)</td>
   `;
@@ -2968,7 +3036,7 @@ function applyPlannerState(state){
       <td><input type="number" class="pr-rev" min="0" value="${escapeHtml(rowData.rev || '')}"></td>
       <td><input type="number" class="pr-price" min="0" value="${escapeHtml(rowData.price || '')}"></td>
       <td class="total-cell pr-target-kg">0 Kgs</td>
-      <td><input type="text" class="pr-bedsize" value="${escapeHtml(rowData.bedsize || 'Standard Bed (1m x 10m)')}"></td>
+      <td><input type="text" class="pr-bedsize" list="plannerBedSizeList" value="${escapeHtml(rowData.bedsize || 'Standard Bed (1m x 10m)')}"></td>
       <td><input type="number" class="pr-yieldbed" min="0" value="${escapeHtml(rowData.yieldbed || '')}"></td>
       <td class="total-cell pr-beds-needed">0 Bed(s)</td>
     `;
