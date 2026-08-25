@@ -805,6 +805,34 @@
     color:var(--bone);
     margin-bottom:8px;
   }
+  .bed-header-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
+    flex-wrap:wrap;
+  }
+  .bed-header-row .bed-range-label{margin-bottom:0;}
+  .bed-qty-wrap{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--bone-dim);
+  }
+  .bed-qty-input{
+    width:52px;
+    background:var(--soil-900);
+    border:1px solid var(--line);
+    border-radius:3px;
+    color:var(--bone);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    padding:5px 6px;
+  }
+  .bed-qty-input:focus{border-color:var(--maize);outline:none;}
   .planner-bed select{
     width:100%;
     background:var(--soil-900);
@@ -2583,6 +2611,7 @@ function renderPlannerView(){
               <th>Unit Bed Size</th>
               <th>Est. Yield/Bed (Kg)</th>
               <th>Beds Needed</th>
+              <th>Seedlings Needed</th>
             </tr>
           </thead>
           <tbody id="plannerProductionBody"></tbody>
@@ -2593,13 +2622,21 @@ function renderPlannerView(){
 
     <!-- 3. BED MAPPING -->
     <div id="p-mapping" class="planner-tab">
-      <p style="font-size:13px;color:var(--bone-dim);margin-bottom:6px;">Assign a main crop to each bed to get companion-planting and pest-control suggestions.</p>
+      <p style="font-size:13px;color:var(--bone-dim);margin-bottom:6px;">Assign a main crop to each bed group to get companion-planting and pest-control suggestions.</p>
+      <div class="save-row" style="margin-bottom:14px;">
+        <button type="button" class="planner-btn" id="transferFromProductionBtn">\u2b07 Transfer Beds from Production Plan</button>
+      </div>
+      <div class="save-status" id="bedTransferStatus"></div>
       <div class="planner-grid" id="plannerGridMap"></div>
-      <button type="button" class="planner-btn" id="addMapUnitBtn">+ Add Bed / Plot</button>
+      <button type="button" class="planner-btn" id="addMapUnitBtn">+ Add Bed / Plot Group</button>
     </div>
 
     <!-- 4. SEEDLING CALENDAR -->
     <div id="p-calendar" class="planner-tab">
+      <div class="save-row" style="margin-bottom:14px;">
+        <button type="button" class="planner-btn" id="transferSeedlingsBtn">\u2b07 Transfer Seedlings from Production Plan</button>
+      </div>
+      <div class="save-status" id="seedlingTransferStatus"></div>
       <div class="planner-table-wrap">
         <table class="planner-table">
           <thead>
@@ -2607,11 +2644,10 @@ function renderPlannerView(){
               <th>Crop / Companion</th>
               <th>Establishment</th>
               <th>First Planting Date</th>
-              <th>Harvest/Cut Interval</th>
+              <th>Seedlings Needed</th>
               <th>Nursery Sowing Date</th>
               <th>Days to Maturity</th>
               <th>Expected First Harvest</th>
-              <th>Next Batch Planting</th>
             </tr>
           </thead>
           <tbody id="plannerCalendarBody"></tbody>
@@ -2644,7 +2680,9 @@ function renderPlannerView(){
   document.getElementById('addProductionRowBtn').addEventListener('click', addProductionRow);
   document.getElementById('autofillFromMarketingBtn').addEventListener('click', autofillFromMarketing);
   document.getElementById('addMapUnitBtn').addEventListener('click', addMapUnit);
+  document.getElementById('transferFromProductionBtn').addEventListener('click', transferBedsFromProduction);
   document.getElementById('addCalendarRowBtn').addEventListener('click', addCalendarRow);
+  document.getElementById('transferSeedlingsBtn').addEventListener('click', transferSeedlingsFromProduction);
 
   wireUpPlannerSaveBar();
 }
@@ -2782,10 +2820,18 @@ function addProductionRow(){
     <td><input type="text" class="pr-bedsize" list="plannerBedSizeList" value="Standard Bed (1m x 10m)"></td>
     <td><input type="number" class="pr-yieldbed" min="0" placeholder="0"></td>
     <td class="total-cell pr-beds-needed">0 Bed(s)</td>
+    <td class="total-cell pr-seedlings">0</td>
   `;
   tbody.appendChild(tr);
   tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calcProduction));
   calcProduction();
+}
+
+function getUnitLabel(bedSizeText){
+  const t = (bedSizeText || '').toLowerCase();
+  if(t.includes('cone garden')) return 'Cone Garden';
+  if(t.includes('vertical grow bag')) return 'Vertical Grow Bag';
+  return 'Bed';
 }
 
 function calcProduction(){
@@ -2793,6 +2839,7 @@ function calcProduction(){
     const rev = parseFloat(row.querySelector('.pr-rev').value) || 0;
     const price = parseFloat(row.querySelector('.pr-price').value) || 0;
     const yieldPerBed = parseFloat(row.querySelector('.pr-yieldbed').value) || 0;
+    const unitLabel = getUnitLabel(row.querySelector('.pr-bedsize').value);
 
     let targetKg = 0;
     if(price > 0){
@@ -2800,22 +2847,27 @@ function calcProduction(){
     }
     row.querySelector('.pr-target-kg').textContent = targetKg.toLocaleString() + ' Kgs';
 
-    let bedsNeeded = 0;
+    let unitsNeeded = 0;
     if(yieldPerBed > 0 && targetKg > 0){
-      bedsNeeded = Math.ceil(targetKg / yieldPerBed);
+      unitsNeeded = Math.ceil(targetKg / yieldPerBed);
     }
-    row.querySelector('.pr-beds-needed').textContent = bedsNeeded.toLocaleString() + ' Bed(s)';
+    row.querySelector('.pr-beds-needed').textContent = unitsNeeded.toLocaleString() + ' ' + unitLabel + '(s)';
+
+    const seedlingsNeeded = unitsNeeded * 100;
+    row.querySelector('.pr-seedlings').textContent = seedlingsNeeded.toLocaleString();
   });
 }
 
 // ---- 3. Biological Bed Mapping ----
 function addMapUnit(){
   const grid = document.getElementById('plannerGridMap');
-  const count = grid.children.length + 1;
   const div = document.createElement('div');
   div.className = 'planner-bed';
   div.innerHTML = `
-    <strong>Bed / Plot ${count}</strong>
+    <div class="bed-header-row">
+      <strong class="bed-range-label">Bed 1</strong>
+      <div class="bed-qty-wrap"><input type="number" class="bed-qty-input" value="1" min="1"> units</div>
+    </div>
     <select class="bed-crop-select">
       <option value="">-- Main Crop --</option>
       <optgroup label="Traditional &amp; Leafy Greens">
@@ -2863,9 +2915,102 @@ function addMapUnit(){
     const out = div.querySelector('.bed-bio-output');
     out.innerHTML = PLANNER_BIO_MAP[this.value] || 'Select a crop above to generate companion &amp; pest control suggestions.';
   });
+  div.querySelector('.bed-qty-input').addEventListener('input', renumberBedGroups);
+  renumberBedGroups();
+}
+
+function renumberBedGroups(){
+  let runningTotal = 0;
+  document.querySelectorAll('.planner-bed').forEach(div => {
+    const qty = parseInt(div.querySelector('.bed-qty-input').value) || 1;
+    const start = runningTotal + 1;
+    const end = runningTotal + qty;
+    div.querySelector('.bed-range-label').textContent = (start === end) ? `Bed ${start}` : `Beds ${start}\u2013${end}`;
+    runningTotal = end;
+  });
+}
+
+const CROP_TO_BED_CATEGORY = {
+  'Managu (African Nightshade)': 'TradGreens', 'Terere (Amaranthus)': 'TradGreens',
+  'Saget (Spider Plant)': 'TradGreens', 'Spinach': 'TradGreens',
+  'Swiss Chard': 'TradGreens', 'Lettuce': 'TradGreens',
+  'Cowpea (Kunde)': 'Legumes', 'Soyabean': 'Legumes',
+  'Groundnuts': 'Legumes', 'Yellow Beans': 'Legumes',
+  'Sweet Potatoes / OFSP': 'Tubers',
+  'Sukuma Wiki (Kale)': 'Brassicas', 'Cabbage': 'Brassicas',
+  'Tomatoes': 'Solanaceae', 'Capsicum': 'Solanaceae', 'Eggplant': 'Solanaceae',
+  'Maize': 'Cereals',
+  'Watermelon': 'Cucurbits',
+  'Onions': 'RootsAlliums', 'Spring Onions / Leeks': 'RootsAlliums', 'Carrots': 'RootsAlliums'
+};
+
+function transferBedsFromProduction(){
+  const prodRows = Array.from(document.querySelectorAll('#plannerProductionBody tr'));
+  const grid = document.getElementById('plannerGridMap');
+  let createdCount = 0, skippedCount = 0;
+
+  prodRows.forEach(row => {
+    const crop = row.querySelector('.pr-crop').value.trim();
+    const unitsText = row.querySelector('.pr-beds-needed').textContent;
+    const unitsNeeded = parseInt(unitsText) || 0;
+    if(!crop || unitsNeeded <= 0){ skippedCount++; return; }
+
+    addMapUnit();
+    const newGroup = grid.lastElementChild;
+    newGroup.querySelector('.bed-qty-input').value = unitsNeeded;
+    const categoryValue = CROP_TO_BED_CATEGORY[crop] || '';
+    const select = newGroup.querySelector('.bed-crop-select');
+    select.value = categoryValue;
+    select.dispatchEvent(new Event('change'));
+    createdCount++;
+  });
+
+  renumberBedGroups();
+
+  const statusEl = document.getElementById('bedTransferStatus');
+  if(statusEl){
+    statusEl.textContent = createdCount === 0
+      ? 'Nothing to transfer yet \u2014 add crops and figures in Production Plan first.'
+      : `Created ${createdCount} bed group(s) from Production Plan.` + (skippedCount ? ` (${skippedCount} row(s) skipped \u2014 no units calculated yet.)` : '');
+  }
 }
 
 // ---- 4. Seedling & Succession Calendar ----
+function transferSeedlingsFromProduction(){
+  const prodRows = Array.from(document.querySelectorAll('#plannerProductionBody tr'));
+  let filledCount = 0, createdCount = 0, skippedCount = 0;
+
+  prodRows.forEach(prow => {
+    const crop = prow.querySelector('.pr-crop').value.trim();
+    const seedlingsText = prow.querySelector('.pr-seedlings').textContent;
+    const seedlingsNeeded = parseInt(seedlingsText.replace(/,/g, '')) || 0;
+    if(!crop || seedlingsNeeded <= 0){ skippedCount++; return; }
+
+    const calRows = Array.from(document.querySelectorAll('#plannerCalendarBody tr'));
+    const match = calRows.find(row =>
+      row.querySelector('.cal-crop').value.trim().toLowerCase() === crop.toLowerCase()
+    );
+
+    if(match){
+      match.querySelector('.cal-seedlings').value = seedlingsNeeded;
+      filledCount++;
+    } else {
+      addCalendarRow();
+      const newRow = document.querySelector('#plannerCalendarBody tr:last-child');
+      newRow.querySelector('.cal-crop').value = crop;
+      newRow.querySelector('.cal-seedlings').value = seedlingsNeeded;
+      createdCount++;
+    }
+  });
+
+  const statusEl = document.getElementById('seedlingTransferStatus');
+  if(statusEl){
+    statusEl.textContent = (filledCount === 0 && createdCount === 0)
+      ? 'Nothing to transfer yet \u2014 add crops and figures in Production Plan first.'
+      : `Updated ${filledCount} row(s), added ${createdCount} new row(s) from Production Plan.`;
+  }
+}
+
 function addCalendarRow(){
   const tbody = document.getElementById('plannerCalendarBody');
   const tr = document.createElement('tr');
@@ -2878,30 +3023,21 @@ function addCalendarRow(){
       </select>
     </td>
     <td><input type="date" class="cal-plantdate"></td>
-    <td>
-      <select class="cal-interval">
-        <option value="2">Every 2 Weeks</option>
-        <option value="3">Every 3 Weeks</option>
-        <option value="4">Every 4 Weeks</option>
-      </select>
-    </td>
-    <td class="total-cell cal-nursery">–</td>
+    <td><input type="number" class="cal-seedlings" min="0" placeholder="0"></td>
+    <td class="total-cell cal-nursery">\u2013</td>
     <td><input type="number" class="cal-days" placeholder="Days"></td>
-    <td class="total-cell cal-firstharvest">–</td>
-    <td class="total-cell cal-nextbatch">–</td>
+    <td class="total-cell cal-firstharvest">\u2013</td>
   `;
   tbody.appendChild(tr);
   const recalc = () => calcSuccession(tr);
   tr.querySelector('.cal-method').addEventListener('change', recalc);
   tr.querySelector('.cal-plantdate').addEventListener('change', recalc);
-  tr.querySelector('.cal-interval').addEventListener('change', recalc);
   tr.querySelector('.cal-days').addEventListener('input', recalc);
 }
 
 function calcSuccession(row){
   const method = row.querySelector('.cal-method').value;
   const dateVal = row.querySelector('.cal-plantdate').value;
-  const interval = parseInt(row.querySelector('.cal-interval').value) || 2;
   const daysToMaturity = parseInt(row.querySelector('.cal-days').value) || 0;
   if(!dateVal) return;
 
@@ -2923,10 +3059,6 @@ function calcSuccession(row){
   } else {
     harvestCell.textContent = '\u2013';
   }
-
-  const nextBatch = new Date(plantDate);
-  nextBatch.setDate(nextBatch.getDate() + (interval * 7));
-  row.querySelector('.cal-nextbatch').textContent = nextBatch.toISOString().split('T')[0];
 }
 
 // ==================== PLANNER SAVE / EXPORT / IMPORT ====================
@@ -2972,13 +3104,16 @@ function getPlannerState(){
     yieldbed: row.querySelector('.pr-yieldbed').value
   }));
 
-  const beds = Array.from(document.querySelectorAll('.bed-crop-select')).map(sel => sel.value);
+  const beds = Array.from(document.querySelectorAll('.planner-bed')).map(div => ({
+    crop: div.querySelector('.bed-crop-select').value,
+    qty: parseInt(div.querySelector('.bed-qty-input').value) || 1
+  }));
 
   const calendarRows = Array.from(document.querySelectorAll('#plannerCalendarBody tr')).map(row => ({
     crop: row.querySelector('.cal-crop').value,
     method: row.querySelector('.cal-method').value,
     plantdate: row.querySelector('.cal-plantdate').value,
-    interval: row.querySelector('.cal-interval').value,
+    seedlings: row.querySelector('.cal-seedlings').value,
     days: row.querySelector('.cal-days').value
   }));
 
@@ -3039,6 +3174,7 @@ function applyPlannerState(state){
       <td><input type="text" class="pr-bedsize" list="plannerBedSizeList" value="${escapeHtml(rowData.bedsize || 'Standard Bed (1m x 10m)')}"></td>
       <td><input type="number" class="pr-yieldbed" min="0" value="${escapeHtml(rowData.yieldbed || '')}"></td>
       <td class="total-cell pr-beds-needed">0 Bed(s)</td>
+      <td class="total-cell pr-seedlings">0</td>
     `;
     pBody.appendChild(tr);
     tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calcProduction));
@@ -3048,13 +3184,20 @@ function applyPlannerState(state){
   // --- Bed Mapping ---
   const grid = document.getElementById('plannerGridMap');
   grid.innerHTML = '';
-  (state.mapping?.beds || []).forEach(bedVal => {
+  (state.mapping?.beds || []).forEach(bedData => {
+    // Backward compatible: old saves stored beds as plain crop-value strings
+    const isLegacy = typeof bedData === 'string';
+    const cropVal = isLegacy ? bedData : bedData.crop;
+    const qtyVal = isLegacy ? 1 : (bedData.qty || 1);
+
     addMapUnit();
     const lastBed = grid.lastElementChild;
     const sel = lastBed.querySelector('.bed-crop-select');
-    sel.value = bedVal;
+    sel.value = cropVal;
     sel.dispatchEvent(new Event('change'));
+    lastBed.querySelector('.bed-qty-input').value = qtyVal;
   });
+  renumberBedGroups();
 
   // --- Calendar ---
   const cBody = document.getElementById('plannerCalendarBody');
@@ -3070,23 +3213,15 @@ function applyPlannerState(state){
         </select>
       </td>
       <td><input type="date" class="cal-plantdate" value="${escapeHtml(rowData.plantdate || '')}"></td>
-      <td>
-        <select class="cal-interval">
-          <option value="2" ${rowData.interval === '2' ? 'selected' : ''}>Every 2 Weeks</option>
-          <option value="3" ${rowData.interval === '3' ? 'selected' : ''}>Every 3 Weeks</option>
-          <option value="4" ${rowData.interval === '4' ? 'selected' : ''}>Every 4 Weeks</option>
-        </select>
-      </td>
-      <td class="total-cell cal-nursery">–</td>
+      <td><input type="number" class="cal-seedlings" min="0" value="${escapeHtml(rowData.seedlings || '')}" placeholder="0"></td>
+      <td class="total-cell cal-nursery">\u2013</td>
       <td><input type="number" class="cal-days" value="${escapeHtml(rowData.days || '')}" placeholder="Days"></td>
-      <td class="total-cell cal-firstharvest">–</td>
-      <td class="total-cell cal-nextbatch">–</td>
+      <td class="total-cell cal-firstharvest">\u2013</td>
     `;
     cBody.appendChild(tr);
     const recalc = () => calcSuccession(tr);
     tr.querySelector('.cal-method').addEventListener('change', recalc);
     tr.querySelector('.cal-plantdate').addEventListener('change', recalc);
-    tr.querySelector('.cal-interval').addEventListener('change', recalc);
     tr.querySelector('.cal-days').addEventListener('input', recalc);
     calcSuccession(tr);
   });
