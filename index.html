@@ -722,6 +722,25 @@
   }
   .planner-table input:focus, .planner-table select:focus{border-color:var(--maize);outline:none;}
   .planner-table .total-cell{font-weight:600;background:rgba(212,167,59,0.08) !important;color:var(--maize);}
+  .remove-cell{text-align:center;vertical-align:middle;}
+  .row-remove-btn{
+    background:transparent;
+    border:1px solid var(--rust);
+    color:var(--rust);
+    width:26px;
+    height:26px;
+    border-radius:4px;
+    font-size:13px;
+    line-height:1;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    flex-shrink:0;
+  }
+  .row-remove-btn:hover{background:var(--rust);color:#FFFFFF;}
+  .bed-header-row .row-remove-btn{margin-left:auto;}
 
   .planner-save-bar{
     background:var(--soil-800);
@@ -2581,7 +2600,8 @@ function renderPlannerView(){
               <th>Local Market</th>
               <th>Hotels &amp; Restaurants</th>
               <th>Aggregators/Exporters</th>
-              <th>Total</th>
+              <th class="total-col-header">Total</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="plannerMarketingBody"></tbody>
@@ -2612,6 +2632,7 @@ function renderPlannerView(){
               <th>Est. Yield/Bed (Kg)</th>
               <th>Beds Needed</th>
               <th>Seedlings Needed</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="plannerProductionBody"></tbody>
@@ -2648,6 +2669,7 @@ function renderPlannerView(){
               <th>Nursery Sowing Date</th>
               <th>Days to Maturity</th>
               <th>Expected First Harvest</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="plannerCalendarBody"></tbody>
@@ -2702,16 +2724,21 @@ function marketingChannelCellHtml(){
 function addMarketingRow(){
   const tbody = document.getElementById('plannerMarketingBody');
   const headerCols = document.querySelectorAll('#plannerMarketingHeader th').length;
-  const channelCount = headerCols - 2; // minus crop col and total col
+  const channelCount = headerCols - 3; // minus crop col, total col, remove col
   const tr = document.createElement('tr');
   let html = `<td><select class="m-crop">${plannerCropOptions()}</select></td>`;
   for(let i=0; i<channelCount; i++){
     html += `<td class="m-channel-cell">${marketingChannelCellHtml()}</td>`;
   }
   html += `<td class="total-cell m-row-total">0 Kg<br>KSh 0</td>`;
+  html += `<td class="remove-cell"><button type="button" class="row-remove-btn" data-remove-row title="Remove this row">\u2715</button></td>`;
   tr.innerHTML = html;
   tbody.appendChild(tr);
   tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calcMarketing));
+  tr.querySelector('[data-remove-row]').addEventListener('click', () => {
+    tr.remove();
+    calcMarketing();
+  });
   calcMarketing();
 }
 
@@ -2719,13 +2746,13 @@ function addMarketingChannel(){
   const channelName = prompt('Enter sales channel name (e.g. Supermarkets, Schools):');
   if(!channelName) return;
   const headerRow = document.getElementById('plannerMarketingHeader');
-  const totalTh = headerRow.children[headerRow.children.length - 1];
+  const totalTh = headerRow.querySelector('.total-col-header');
   const th = document.createElement('th');
   th.textContent = channelName;
   headerRow.insertBefore(th, totalTh);
 
   document.querySelectorAll('#plannerMarketingBody tr').forEach(row => {
-    const totalTd = row.children[row.children.length - 1];
+    const totalTd = row.querySelector('.m-row-total');
     const td = document.createElement('td');
     td.className = 'm-channel-cell';
     td.innerHTML = marketingChannelCellHtml();
@@ -2821,9 +2848,14 @@ function addProductionRow(){
     <td><input type="number" class="pr-yieldbed" min="0" placeholder="0"></td>
     <td class="total-cell pr-beds-needed">0 Bed(s)</td>
     <td class="total-cell pr-seedlings">0</td>
+    <td class="remove-cell"><button type="button" class="row-remove-btn" data-remove-row title="Remove this row">\u2715</button></td>
   `;
   tbody.appendChild(tr);
   tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calcProduction));
+  tr.querySelector('[data-remove-row]').addEventListener('click', () => {
+    tr.remove();
+    calcProduction();
+  });
   calcProduction();
 }
 
@@ -2867,6 +2899,7 @@ function addMapUnit(){
     <div class="bed-header-row">
       <strong class="bed-range-label">Bed 1</strong>
       <div class="bed-qty-wrap"><input type="number" class="bed-qty-input" value="1" min="1"> units</div>
+      <button type="button" class="row-remove-btn" data-remove-bed title="Remove this bed group">\u2715</button>
     </div>
     <select class="bed-crop-select">
       <option value="">-- Main Crop --</option>
@@ -2916,6 +2949,10 @@ function addMapUnit(){
     out.innerHTML = PLANNER_BIO_MAP[this.value] || 'Select a crop above to generate companion &amp; pest control suggestions.';
   });
   div.querySelector('.bed-qty-input').addEventListener('input', renumberBedGroups);
+  div.querySelector('[data-remove-bed]').addEventListener('click', () => {
+    div.remove();
+    renumberBedGroups();
+  });
   renumberBedGroups();
 }
 
@@ -3027,12 +3064,14 @@ function addCalendarRow(){
     <td class="total-cell cal-nursery">\u2013</td>
     <td><input type="number" class="cal-days" placeholder="Days"></td>
     <td class="total-cell cal-firstharvest">\u2013</td>
+    <td class="remove-cell"><button type="button" class="row-remove-btn" data-remove-row title="Remove this row">\u2715</button></td>
   `;
   tbody.appendChild(tr);
   const recalc = () => calcSuccession(tr);
   tr.querySelector('.cal-method').addEventListener('change', recalc);
   tr.querySelector('.cal-plantdate').addEventListener('change', recalc);
   tr.querySelector('.cal-days').addEventListener('input', recalc);
+  tr.querySelector('[data-remove-row]').addEventListener('click', () => tr.remove());
 }
 
 function calcSuccession(row){
@@ -3148,6 +3187,7 @@ function applyPlannerState(state){
     let html = `<td><select class="m-crop">${plannerCropOptions(rowData.crop)}</select></td>`;
     (rowData.cells || []).forEach(() => { html += `<td class="m-channel-cell">${marketingChannelCellHtml()}</td>`; });
     html += `<td class="total-cell m-row-total">0 Kg<br>KSh 0</td>`;
+    html += `<td class="remove-cell"><button type="button" class="row-remove-btn" data-remove-row title="Remove this row">\u2715</button></td>`;
     tr.innerHTML = html;
     mBody.appendChild(tr);
     const cellEls = tr.querySelectorAll('.m-channel-cell');
@@ -3158,6 +3198,10 @@ function applyPlannerState(state){
       cellEls[i].querySelector('.m-price').value = c.price || '';
     });
     tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calcMarketing));
+    tr.querySelector('[data-remove-row]').addEventListener('click', () => {
+      tr.remove();
+      calcMarketing();
+    });
   });
   calcMarketing();
 
@@ -3175,9 +3219,14 @@ function applyPlannerState(state){
       <td><input type="number" class="pr-yieldbed" min="0" value="${escapeHtml(rowData.yieldbed || '')}"></td>
       <td class="total-cell pr-beds-needed">0 Bed(s)</td>
       <td class="total-cell pr-seedlings">0</td>
+      <td class="remove-cell"><button type="button" class="row-remove-btn" data-remove-row title="Remove this row">\u2715</button></td>
     `;
     pBody.appendChild(tr);
     tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', calcProduction));
+    tr.querySelector('[data-remove-row]').addEventListener('click', () => {
+      tr.remove();
+      calcProduction();
+    });
   });
   calcProduction();
 
@@ -3217,12 +3266,14 @@ function applyPlannerState(state){
       <td class="total-cell cal-nursery">\u2013</td>
       <td><input type="number" class="cal-days" value="${escapeHtml(rowData.days || '')}" placeholder="Days"></td>
       <td class="total-cell cal-firstharvest">\u2013</td>
+      <td class="remove-cell"><button type="button" class="row-remove-btn" data-remove-row title="Remove this row">\u2715</button></td>
     `;
     cBody.appendChild(tr);
     const recalc = () => calcSuccession(tr);
     tr.querySelector('.cal-method').addEventListener('change', recalc);
     tr.querySelector('.cal-plantdate').addEventListener('change', recalc);
     tr.querySelector('.cal-days').addEventListener('input', recalc);
+    tr.querySelector('[data-remove-row]').addEventListener('click', () => tr.remove());
     calcSuccession(tr);
   });
 }
