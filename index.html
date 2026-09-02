@@ -676,6 +676,146 @@
   .planner-tab{display:none;}
   .planner-tab.p-active{display:block;}
 
+  .ops-nav{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  .ops-nav button{
+    flex:1;
+    min-width:130px;
+    padding:10px 8px;
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--bone-dim);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    border-radius:5px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .ops-nav button.o-active, .ops-nav button:hover{
+    background:var(--leaf);
+    border-color:var(--leaf);
+    color:var(--gold-text);
+    font-weight:600;
+  }
+  .ops-tab{display:none;}
+  .ops-tab.o-active{display:block;}
+
+  .ops-intro{
+    background:var(--soil-800);
+    border-left:4px solid var(--leaf);
+    border-radius:4px;
+    padding:14px 16px;
+    margin-bottom:20px;
+    font-size:13px;
+    line-height:1.6;
+    color:var(--bone-dim);
+  }
+  .ops-intro strong{color:var(--bone);}
+
+  .ops-section-title{
+    font-family:'Zilla Slab',serif;
+    font-size:17px;
+    font-weight:600;
+    color:var(--bone);
+    margin:20px 0 10px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+  }
+  .ops-section-title:first-of-type{border-top:none;padding-top:0;margin-top:0;}
+
+  .ops-field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  @media (max-width:520px){ .ops-field-row{grid-template-columns:1fr;} }
+  .ops-field label{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    margin-bottom:5px;
+  }
+  .ops-field .ops-hint{
+    display:block;
+    font-size:10.5px;
+    color:var(--bone-dim);
+    font-style:italic;
+    margin-top:3px;
+    line-height:1.4;
+  }
+  .ops-field input, .ops-field select{
+    width:100%;
+    box-sizing:border-box;
+    background:var(--soil-900);
+    border:1px solid var(--line);
+    border-radius:4px;
+    color:var(--bone);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13px;
+    padding:9px 10px;
+  }
+  .ops-field input:focus, .ops-field select:focus{border-color:var(--maize);outline:none;}
+
+  .ops-summary-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin:16px 0;
+  }
+  @media (min-width:520px){ .ops-summary-grid{grid-template-columns:repeat(4,1fr);} }
+  .ops-summary-card{
+    background:var(--soil-800);
+    border:1px solid var(--line);
+    border-left:3px solid var(--maize);
+    border-radius:5px;
+    padding:12px;
+  }
+  .ops-summary-card .ops-sum-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    margin-bottom:4px;
+  }
+  .ops-summary-card .ops-sum-value{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:16px;
+    font-weight:600;
+    color:var(--maize);
+  }
+  .ops-summary-card.ops-sum-profit .ops-sum-value{color:var(--leaf);}
+  .ops-summary-card.ops-sum-loss .ops-sum-value{color:var(--rust);}
+
+  .ops-ledger-bar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .ops-ledger-bar select, .ops-ledger-bar input{
+    flex:1;
+    min-width:120px;
+    box-sizing:border-box;
+    background:var(--soil-900);
+    border:1px solid var(--line);
+    border-radius:4px;
+    color:var(--bone);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13px;
+    padding:9px 10px;
+  }
+
   .planner-summary{
     background:var(--soil-800);
     border-left:5px solid var(--maize);
@@ -908,7 +1048,7 @@
     gap:14px;
     margin-bottom:8px;
   }
-  @media (min-width:640px){ .home-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (min-width:640px){ .home-grid{grid-template-columns:repeat(2,1fr);} }
 
   .home-card{
     background:var(--soil-800);
@@ -927,6 +1067,7 @@
   .home-card:nth-child(1){border-left-color:var(--leaf);}
   .home-card:nth-child(2){border-left-color:var(--sage);}
   .home-card:nth-child(3){border-left-color:var(--maize);}
+  .home-card:nth-child(4){border-left-color:var(--rust);}
   .home-card-icon{font-size:28px;margin-bottom:10px;}
   .home-card-title{
     font-family:'Zilla Slab',serif;
@@ -974,7 +1115,34 @@
     :root:not([data-theme="light"]) .theme-toggle .icon-moon{display:none;}
   }
   @media (max-width:600px){ .theme-toggle .label{display:none;} .theme-toggle{padding:8px;} }
+
+  /* ---- shared styles for embedded enterprise tools ---- */
+  .ops-guide{margin:18px 0;border:1px solid var(--line);border-radius:6px;background:var(--soil-800);}
+  .ops-guide-toggle{width:100%;text-align:left;background:transparent;border:none;color:var(--maize);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+    padding:12px 14px;cursor:pointer;}
+  .ops-guide-body{display:none;padding:0 14px 14px;font-size:13px;line-height:1.65;color:var(--bone-dim);}
+  .ops-guide-body ul{padding-left:18px;margin:8px 0;}
+  .ops-guide.o-open .ops-guide-body{display:block;}
+  .ops-chart-frame{position:relative;height:280px;background:var(--soil-800);border:1px solid var(--line);
+    border-radius:6px;padding:12px;margin:14px 0;}
+  .ops-vault{background:var(--soil-800);border:1px solid var(--line);border-radius:6px;padding:14px;margin:16px 0;}
+  .ops-vault-list{list-style:none;margin:10px 0 0;padding:0;}
+  .ops-vault-item{display:flex;gap:8px;align-items:center;justify-content:space-between;
+    padding:8px 10px;border:1px solid var(--line);border-radius:4px;margin-bottom:6px;
+    font-size:12.5px;color:var(--bone);background:var(--soil-900);}
+  .ops-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .ops-pill{background:var(--soil-800);border:1.5px solid var(--line);color:var(--bone-dim);
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.02em;text-transform:uppercase;
+    border-radius:5px;padding:8px 13px;cursor:pointer;transition:all .15s ease;}
+  .ops-pill.o-active{background:var(--maize);border-color:var(--maize);color:var(--gold-text);font-weight:600;}
+  .pr-week-cell{white-space:nowrap;}
+  .pr-week-cell input{width:56px;}
+.pr-week-cell .ops-hint{margin-left:6px;color:var(--bone-dim);font-size:11.5px;}
+.pr-week-cell .ops-hint input{margin:0 4px;}
+.ops-note{font-size:11.5px;color:var(--bone-dim);font-style:italic;line-height:1.5;margin:6px 0 12px;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light theme" title="Toggle theme">
@@ -986,7 +1154,7 @@
   <header class="app-header">
     <div class="eyebrow">Symbio Biotech</div>
     <h1>Agribusiness Enterprise Planner</h1>
-    <p class="sub">Three free tools to plan, compare, and grow a farm enterprise in Kenya. Pick where to start.</p>
+    <p class="sub">Four free tools to plan, compare, and grow a farm enterprise in Kenya. Pick where to start.</p>
   </header>
 
   <div class="home-grid" id="homeScreen">
@@ -1004,6 +1172,11 @@
       <div class="home-card-icon">📊</div>
       <div class="home-card-title">Farming for Profit Planner</div>
       <div class="home-card-desc">Marketing chart, production plan, biological bed mapping, and a seedling &amp; succession calendar.</div>
+    </div>
+    <div class="home-card" id="homeCardOps">
+      <div class="home-card-icon">📒</div>
+      <div class="home-card-title">Farm Operations and Analytics</div>
+      <div class="home-card-desc">Projections and an actuals ledger for six enterprises — cereals, horticulture, hatchery, kienyeji poultry, pigs, and compost.</div>
     </div>
   </div>
 
@@ -2628,6 +2801,7 @@ function renderPlannerView(){
               <th>Target Revenue (KSh)</th>
               <th>Est. Market Price (KSh/Kg)</th>
               <th>Target Yield (Kgs)</th>
+              <th>Target Yields in Kgs/Week</th>
               <th>Unit Bed Size</th>
               <th>Est. Yield/Bed (Kg)</th>
               <th>Beds Needed</th>
@@ -2788,14 +2962,19 @@ function getMarketingRowTotals(){
   const results = [];
   document.querySelectorAll('#plannerMarketingBody tr').forEach(row => {
     const crop = row.querySelector('.m-crop').value;
-    let rowVal = 0;
+    let rowVal = 0, weeklyKg = 0, maxWeeks = 0;
     row.querySelectorAll('.m-channel-cell').forEach(cell => {
       const wks = parseFloat(cell.querySelector('.m-wks').value) || 0;
       const kgwk = parseFloat(cell.querySelector('.m-kgwk').value) || 0;
       const price = parseFloat(cell.querySelector('.m-price').value) || 0;
       rowVal += (wks * kgwk) * price;
+      // Weekly target is the SUM of Kg/wk sold through every channel at once
+      // (e.g. 50 Kg/wk local market + 20 Kg/wk direct clients + 10 Kg/wk
+      // hotels = 80 Kg/wk), not divided across channels.
+      weeklyKg += kgwk;
+      if(wks > maxWeeks) maxWeeks = wks;
     });
-    results.push({ crop, totalVal: rowVal });
+    results.push({ crop, totalVal: rowVal, weeklyKg, weeks: maxWeeks });
   });
   return results;
 }
@@ -2804,8 +2983,8 @@ function autofillFromMarketing(){
   const marketingTotals = getMarketingRowTotals();
   let filledCount = 0, createdCount = 0, skippedCount = 0;
 
-  marketingTotals.forEach(({ crop, totalVal }) => {
-    if(!crop || totalVal <= 0){ skippedCount++; return; }
+  marketingTotals.forEach(({ crop, totalVal, weeklyKg, weeks }) => {
+    if(!crop || (totalVal <= 0 && weeklyKg <= 0)){ skippedCount++; return; }
 
     const prodRows = Array.from(document.querySelectorAll('#plannerProductionBody tr'));
     const match = prodRows.find(row =>
@@ -2814,12 +2993,16 @@ function autofillFromMarketing(){
 
     if(match){
       match.querySelector('.pr-rev').value = Math.round(totalVal);
+      if(weeklyKg > 0) match.querySelector('.pr-target-kgwk').value = Math.round(weeklyKg);
+      if(weeks > 0) match.querySelector('.pr-weeks').value = weeks;
       filledCount++;
     } else {
       addProductionRow();
       const newRow = document.querySelector('#plannerProductionBody tr:last-child');
       newRow.querySelector('.pr-crop').value = crop;
       newRow.querySelector('.pr-rev').value = Math.round(totalVal);
+      if(weeklyKg > 0) newRow.querySelector('.pr-target-kgwk').value = Math.round(weeklyKg);
+      if(weeks > 0) newRow.querySelector('.pr-weeks').value = weeks;
       createdCount++;
     }
   });
@@ -2844,6 +3027,7 @@ function addProductionRow(){
     <td><input type="number" class="pr-rev" min="0" placeholder="0"></td>
     <td><input type="number" class="pr-price" min="0" placeholder="0"></td>
     <td class="total-cell pr-target-kg">0 Kgs</td>
+    <td class="pr-week-cell"><input type="number" class="pr-target-kgwk" min="0" placeholder="0" title="Sum of Kg/wk sold across all sales channels for this crop"> Kgs/wk<span class="ops-hint">&times; <input type="number" class="pr-weeks" min="1" value="52" title="Number of production weeks"> wks</span></td>
     <td><input type="text" class="pr-bedsize" list="plannerBedSizeList" value="Standard Bed (1m x 10m)"></td>
     <td><input type="number" class="pr-yieldbed" min="0" placeholder="0"></td>
     <td class="total-cell pr-beds-needed">0 Bed(s)</td>
@@ -2873,8 +3057,18 @@ function calcProduction(){
     const yieldPerBed = parseFloat(row.querySelector('.pr-yieldbed').value) || 0;
     const unitLabel = getUnitLabel(row.querySelector('.pr-bedsize').value);
 
+    const weeklyEl = row.querySelector('.pr-target-kgwk');
+    const weekly = weeklyEl ? (parseFloat(weeklyEl.value) || 0) : 0;
+    const weeksEl = row.querySelector('.pr-weeks');
+    const weeks = weeksEl ? (parseFloat(weeksEl.value) || 0) : 0;
+
+    // Target Yield (Kgs) is driven by the weekly sales rate (summed across
+    // channels in the Marketing Chart) times the number of production weeks.
+    // Falls back to Revenue \u00f7 Price only when no weekly figure has been entered.
     let targetKg = 0;
-    if(price > 0){
+    if(weekly > 0 && weeks > 0){
+      targetKg = Math.round(weekly * weeks);
+    } else if(price > 0){
       targetKg = Math.ceil(rev / price);
     }
     row.querySelector('.pr-target-kg').textContent = targetKg.toLocaleString() + ' Kgs';
@@ -3139,6 +3333,8 @@ function getPlannerState(){
     crop: row.querySelector('.pr-crop').value,
     rev: row.querySelector('.pr-rev').value,
     price: row.querySelector('.pr-price').value,
+    targetkgwk: row.querySelector('.pr-target-kgwk') ? row.querySelector('.pr-target-kgwk').value : '',
+    weeks: row.querySelector('.pr-weeks') ? row.querySelector('.pr-weeks').value : '52',
     bedsize: row.querySelector('.pr-bedsize').value,
     yieldbed: row.querySelector('.pr-yieldbed').value
   }));
@@ -3215,6 +3411,7 @@ function applyPlannerState(state){
       <td><input type="number" class="pr-rev" min="0" value="${escapeHtml(rowData.rev || '')}"></td>
       <td><input type="number" class="pr-price" min="0" value="${escapeHtml(rowData.price || '')}"></td>
       <td class="total-cell pr-target-kg">0 Kgs</td>
+      <td class="pr-week-cell"><input type="number" class="pr-target-kgwk" min="0" value="${escapeHtml(rowData.targetkgwk || '')}" placeholder="0" title="Sum of Kg/wk sold across all sales channels for this crop"> Kgs/wk<span class="ops-hint">&times; <input type="number" class="pr-weeks" min="1" value="${escapeHtml(rowData.weeks || '52')}" title="Number of production weeks"> wks</span></td>
       <td><input type="text" class="pr-bedsize" list="plannerBedSizeList" value="${escapeHtml(rowData.bedsize || 'Standard Bed (1m x 10m)')}"></td>
       <td><input type="number" class="pr-yieldbed" min="0" value="${escapeHtml(rowData.yieldbed || '')}"></td>
       <td class="total-cell pr-beds-needed">0 Bed(s)</td>
@@ -3332,6 +3529,4247 @@ function wireUpPlannerSaveBar(){
   refreshPlannerSaveList();
 }
 
+// ==================== FARM OPERATIONS AND ANALYTICS ====================
+function renderOpsView(){
+  opsTeardown();
+  const results = document.getElementById('results');
+  const M = window.OPS_MODULES || {};
+  const TABS = [
+    ['o-cereals','Cereals','Cereals &amp; legumes projection + actuals ledger'],
+    ['o-horticulture','Horticulture','Horticulture / vegetable projection + actuals ledger'],
+    ['o-hatchery','Hatchery','Hatchery &amp; day-old chicks projection + actuals ledger'],
+    ['o-kienyeji','Kienyeji Poultry','Improved Kienyeji poultry (plus bio-manure byproduct income)'],
+    ['o-pigs','Pigs','Pig enterprise (Refinery vs Regular Commercial)'],
+    ['o-compost','Compost','Compost production &amp; sales enterprise'],
+    ['o-dailylog','Daily Log','Daily farm income &amp; expense logbook']
+  ];
+  const nav = TABS.map((t,i)=>`<button type="button" class="${i===0?'o-active':''}" data-otab="${t[0]}">${t[1]}</button>`).join('');
+  const panes = TABS.map((t,i)=>`<div id="${t[0]}" class="ops-tab${i===0?' o-active':''}">`+
+      (M[t[0]] ? '' : `<p style="color:var(--bone-dim);font-size:13px;">${t[2]} \u2014 coming in shortly.</p>`)+
+    `</div>`).join('');
+
+  results.innerHTML = `
+    <span class="back-link" id="backFromOps">\u2190 Back</span>
+    <div class="results-head">
+      <h2>Farm Operations and Analytics</h2>
+      <span>by Symbio Biotech Solutions</span>
+    </div>
+    <div class="ops-intro">
+      <strong>How to use this tool:</strong> each tab below is its own independent enterprise calculator \u2014 enter your figures to see projected revenue and costs, then log what actually happened in the Actuals Ledger to track real performance against your projection over time. The tabs don't feed into each other; pick whichever enterprise you're running.
+    </div>
+    <div class="ops-nav" id="opsNav">${nav}</div>
+    ${panes}
+  `;
+
+  document.getElementById('opsNav').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.ops-nav button').forEach(b => b.classList.remove('o-active'));
+      document.querySelectorAll('.ops-tab').forEach(t => t.classList.remove('o-active'));
+      btn.classList.add('o-active');
+      document.getElementById(btn.dataset.otab).classList.add('o-active');
+      opsMount(btn.dataset.otab);
+    });
+  });
+
+  document.getElementById('backFromOps').addEventListener('click', () => { opsTeardown(); showHome(); });
+  opsMount(TABS[0][0]);
+}
+
+const OPS_MOUNTED = {};
+function opsMount(id){
+  const mod = (window.OPS_MODULES || {})[id];
+  if(!mod || OPS_MOUNTED[id]) return;
+  const root = document.getElementById(id);
+  if(!root) return;
+  try{
+    root.innerHTML = mod.build();
+    mod.init(root);
+    OPS_MOUNTED[id] = true;
+  }catch(err){
+    console.error('Failed to mount ' + id, err);
+    root.innerHTML = '<p style="color:var(--rust);font-size:13px;">This tool failed to load. Please refresh the page.</p>';
+  }
+}
+function opsTeardown(){
+  Object.keys(OPS_MOUNTED).forEach(id => {
+    const mod = (window.OPS_MODULES || {})[id];
+    if(mod && typeof mod.destroy === 'function'){ try{ mod.destroy(); }catch(e){} }
+    delete OPS_MOUNTED[id];
+  });
+}
+
+/* ===== cereals ===== */
+window.OPS_MODULES = window.OPS_MODULES || {};
+window.OPS_MODULES['o-cereals'] = (function(){
+  'use strict';
+  const TAB = 'o-cereals';
+  let charts = [];
+
+  const primaryProfiles = {
+    maize: { name: 'Maize', yield: 18, price: 4200, compYield: 5, compPrice: 10000, inputsOrg: 6000, inputsConv: 14000, labor: 10000, storage: 1200 },
+    sorghum: { name: 'Sorghum', yield: 15, price: 3800, compYield: 5, compPrice: 8500, inputsOrg: 4500, inputsConv: 10000, labor: 8500, storage: 1000 },
+    soybeans: { name: 'Soybeans', yield: 12, price: 6500, compYield: 6, compPrice: 6500, inputsOrg: 5000, inputsConv: 11000, labor: 9000, storage: 1500 },
+    njugu_mawe: { name: 'Njugu Mawe', yield: 9, price: 10500, compYield: 4, compPrice: 10500, inputsOrg: 4500, inputsConv: 9500, labor: 9000, storage: 1200 },
+    rosecoco_beans: { name: 'Rosecoco Beans', yield: 10, price: 9500, compYield: 5, compPrice: 9500, inputsOrg: 5500, inputsConv: 12000, labor: 9500, storage: 1500 },
+    yellow_beans: { name: 'Yellow Beans', yield: 10, price: 10000, compYield: 5, compPrice: 10000, inputsOrg: 5500, inputsConv: 12000, labor: 9500, storage: 1500 },
+    groundnuts: { name: 'Groundnuts', yield: 12, price: 9000, compYield: 6, compPrice: 9000, inputsOrg: 5000, inputsConv: 11000, labor: 10000, storage: 1500 }
+  };
+
+  const companionProfiles = {
+    none: { name: 'None', yield: 0, price: 0 },
+    yellow_beans: { name: 'Yellow Beans', yield: 5, price: 10000 },
+    rosecoco_beans: { name: 'Rosecoco Beans', yield: 5, price: 9500 },
+    soybeans: { name: 'Soybeans', yield: 6, price: 6500 },
+    groundnuts: { name: 'Groundnuts', yield: 6, price: 9000 },
+    njugu_mawe: { name: 'Njugu Mawe', yield: 4, price: 10500 },
+    cowpeas: { name: 'Cowpeas', yield: 7, price: 8500 },
+    green_grams: { name: 'Green Grams', yield: 6, price: 11500 },
+    lablab: { name: 'Lablab Beans', yield: 8, price: 7500 }
+  };
+
+  const borderProfiles = {
+    none: { name: 'None', valuePerAcre: 0 },
+    sunflower: { name: 'Sunflowers', valuePerAcre: 6500 },
+    tithonia: { name: 'Tithonia', valuePerAcre: 4000 }
+  };
+
+  let entries = [];
+  let savedPlans = [];
+  let currentPrimary = 'maize';
+  let currentCompanion = 'none';
+  let currentBorder = 'none';
+  let currentModel = 'organic';
+
+  function cssVar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#888';
+  }
+
+  function pillBtns(root, prefix, map){
+    return Object.keys(map).map(k => `<button type="button" class="ops-pill" id="${TAB}-btn-${prefix}-${k}" data-key="${k}">${map[k].name}</button>`).join('');
+  }
+
+  function build(){
+    return `
+      <div class="ops-section-title">Cultivation Method</div>
+      <div class="ops-pills" id="${TAB}-model-pills">
+        <button type="button" class="ops-pill" id="${TAB}-btn-organic" data-model="organic">Organic (JADAM / IMO)</button>
+        <button type="button" class="ops-pill" id="${TAB}-btn-conventional" data-model="conventional">Conventional Fertilizers</button>
+      </div>
+      <p class="ops-note" id="${TAB}-model-badge">🌱 Active: Organic Model (JADAM / IMO)</p>
+
+      <div class="ops-guide" id="${TAB}-guide">
+        <button type="button" class="ops-guide-toggle" id="${TAB}-guide-toggle">📖 System Guide</button>
+        <div class="ops-guide-body">
+          <p><b>Floral & Biomass Borders (Sunflowers / Tithonia):</b> Attracts pollinators and predatory wasps; Tithonia accumulates potassium, phosphorus, nitrogen for liquid bio-inputs; sunflowers offer secondary revenue via seed/oil and apiary forage.</p>
+          <p><b>Legumes & Staple Integration:</b> Biological nitrogen fixation crops (yellow beans, rosecoco, soybeans, groundnuts) intercropped with cereals like maize enrich soil, combined with biological soil inoculation (JMS/IMO) in multi-tier cropping.</p>
+        </div>
+      </div>
+
+      <div class="ops-section-title">Select Primary Main Crop</div>
+      <div class="ops-pills" id="${TAB}-primary-pills">${pillBtns(null,'primary',primaryProfiles)}</div>
+
+      <div class="ops-section-title">Select Companion Intercrop</div>
+      <div class="ops-pills" id="${TAB}-comp-pills">${pillBtns(null,'comp',companionProfiles)}</div>
+
+      <div class="ops-section-title">Select Perimeter Floral & Biomass Border</div>
+      <div class="ops-pills" id="${TAB}-border-pills">${pillBtns(null,'border',borderProfiles)}</div>
+
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Intercrop Footprint Ratio <span id="${TAB}-val-intercrop-display"></span></label>
+          <input type="range" id="${TAB}-system-slider" min="0" max="50" step="10" value="0">
+          <span class="ops-hint">0% Pure Monocrop · 25% Strip Intercrop · 50% Max Companion Split</span>
+        </div>
+        <div class="ops-field">
+          <label>Land Allocation Sizing (0 to 10 Acres) <span id="${TAB}-val-acreage"></span></label>
+          <input type="range" id="${TAB}-crop-acreage" min="0" max="10" step="0.5" value="1">
+          <span class="ops-hint">0.5 Acres · 5 Acres · 10 Acres</span>
+        </div>
+      </div>
+
+      <div class="ops-section-title">Market Pricing & Production Parameters (Per Acre Baseline)</div>
+      <button type="button" class="planner-btn" id="${TAB}-reset-params">🔄 Reset to Defaults</button>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Primary Yield (90kg Bags / Acre)</label>
+          <span class="ops-hint">How many bags did you harvest per acre?</span>
+          <input type="number" id="${TAB}-param-yield">
+        </div>
+        <div class="ops-field">
+          <label>Intercrop Yield (90kg Bags / Acre)</label>
+          <span class="ops-hint">How many bags of intercrop did you harvest per acre?</span>
+          <input type="number" id="${TAB}-param-intercrop-yield">
+        </div>
+        <div class="ops-field">
+          <label>Primary Price / Bag (KES)</label>
+          <span class="ops-hint">How much did you sell each bag of your primary crop?</span>
+          <input type="number" id="${TAB}-param-price">
+        </div>
+        <div class="ops-field">
+          <label>Intercrop Price / Bag (KES)</label>
+          <span class="ops-hint">How much did you sell each bag of your intercrop?</span>
+          <input type="number" id="${TAB}-param-intercrop-price">
+        </div>
+        <div class="ops-field">
+          <label>Input Cost / Acre (KES)</label>
+          <span class="ops-hint">How much did you spend on inputs? (Seeds, fertilizers, foliars, and pesticides)</span>
+          <input type="number" id="${TAB}-param-inputs">
+        </div>
+        <div class="ops-field">
+          <label>Labor & Tillage / Acre (KES)</label>
+          <span class="ops-hint">How much did you spend on labor and tillage up to selling point?</span>
+          <input type="number" id="${TAB}-param-labor">
+        </div>
+        <div class="ops-field">
+          <label>Storage Cost Total (KES)</label>
+          <span class="ops-hint">How much does storage cost you?</span>
+          <input type="number" id="${TAB}-param-storage">
+        </div>
+        <div class="ops-field">
+          <label>Lost Merchandise (Kgs)</label>
+          <span class="ops-hint">How many kilograms were lost (spoilt, stolen, or sold at a loss)?</span>
+          <input type="number" id="${TAB}-param-lost-kgs">
+        </div>
+      </div>
+
+      <div class="ops-section-title">Saved Enterprise Plans & Scenarios Vault</div>
+      <p class="ops-note">Save your current setup (crops, ratios, pricing, and parameters) under a custom name to review or compare later while testing other scenarios.</p>
+      <div class="ops-ledger-bar">
+        <input type="text" id="${TAB}-plan-name-input" placeholder="Plan Name (e.g., Yellow beans short rain season 2026)">
+        <button type="button" class="planner-btn" id="${TAB}-save-plan">💾 Save Current Plan</button>
+      </div>
+      <div class="ops-vault" id="${TAB}-saved-plans-container"></div>
+
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Total Production Cost</div>
+          <div class="ops-sum-value" id="${TAB}-out-total-cost">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Total Projected Revenue</div>
+          <div class="ops-sum-value ops-sum-profit" id="${TAB}-out-total-rev">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Net Profit / Season</div>
+          <div class="ops-sum-value ops-sum-profit" id="${TAB}-out-net">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Return on Investment (ROI)</div>
+          <div class="ops-sum-value" id="${TAB}-out-roi">0%</div>
+        </div>
+      </div>
+
+      <div class="ops-section-title">Crop vs. Crop Revenue & Profit Comparison <span id="${TAB}-comparison-scale-label"></span> Acres</div>
+      <div class="ops-chart-frame"><canvas id="${TAB}-cropComparisonChart"></canvas></div>
+
+      <div class="ops-section-title">Record Harvest Sale or Farm Expense</div>
+      <form id="${TAB}-ledger-form" class="ops-ledger-bar">
+        <input type="date" id="${TAB}-entry-date" required>
+        <select id="${TAB}-entry-category">
+          <option value="Harvest Sale">Harvest Sale (Bags)</option>
+          <option value="Farm Expense">Farm Expense (Inputs/Labor)</option>
+          <option value="Companion Harvest">Companion Legume / Border Harvest</option>
+        </select>
+        <select id="${TAB}-entry-stream">
+          <option value="Primary Main Crop">Primary Main Crop</option>
+          <option value="Companion Intercrop">Companion Intercrop</option>
+          <option value="Perimeter Border">Perimeter Border (Sunflower/Tithonia)</option>
+          <option value="General Field Ops">General Field Ops</option>
+        </select>
+        <input type="text" id="${TAB}-entry-desc" placeholder="Details (e.g., Sold yellow beans)" required>
+        <input type="number" id="${TAB}-entry-qty" step="0.5" placeholder="Quantity (Bags/Units)">
+        <input type="number" id="${TAB}-entry-rate" step="1" placeholder="Rate or Total (KES)">
+        <button type="submit" class="planner-btn">Save Entry</button>
+      </form>
+
+      <div class="ops-section-title">Enterprise Operations Log</div>
+      <div class="ops-ledger-bar">
+        <button type="button" class="planner-btn" id="${TAB}-export-csv">📥 Export CSV</button>
+        <button type="button" class="planner-btn" id="${TAB}-clear-ledger">Clear Data</button>
+      </div>
+      <div class="planner-table-wrap">
+        <table class="planner-table">
+          <thead>
+            <tr>
+              <th>Date</th><th>Type</th><th>Production Section</th><th>Details</th>
+              <th>Qty</th><th>Rate/Amt</th><th>Total Value</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="${TAB}-ledger-body"></tbody>
+        </table>
+      </div>
+
+      <div class="ops-section-title">Actual Financial Ledger Summary</div>
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Revenue</div>
+          <div class="ops-sum-value ops-sum-profit" id="${TAB}-actual-income">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Expenses</div>
+          <div class="ops-sum-value ops-sum-loss" id="${TAB}-actual-exp">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Net Cashflow</div>
+          <div class="ops-sum-value" id="${TAB}-actual-net">KES 0</div>
+        </div>
+      </div>
+
+      <div class="ops-section-title">Revenue vs. Expenses Breakdown</div>
+      <div class="ops-chart-frame"><canvas id="${TAB}-financialChart"></canvas></div>
+    `;
+  }
+
+  function init(root){
+    entries = JSON.parse(localStorage.getItem('symbio_border_ledger')) || [];
+    savedPlans = JSON.parse(localStorage.getItem('symbio_saved_plans')) || [];
+    currentPrimary = localStorage.getItem('symbio_primary_crop') || 'maize';
+    currentCompanion = localStorage.getItem('symbio_companion_crop') || 'none';
+    currentBorder = localStorage.getItem('symbio_border_type') || 'none';
+    currentModel = localStorage.getItem('symbio_dual_model') || 'organic';
+
+    let financialChartInstance = null;
+    let cropComparisonChartInstance = null;
+
+    const $ = (sel) => root.querySelector(sel);
+    const dateInput = $('#'+TAB+'-entry-date');
+    if (dateInput) dateInput.valueAsDate = new Date();
+
+    const guideWrap = $('#'+TAB+'-guide');
+    const guideToggle = $('#'+TAB+'-guide-toggle');
+    if (guideToggle) guideToggle.addEventListener('click', () => guideWrap.classList.toggle('o-open'));
+
+    function setActivePill(prefix, map, activeKey){
+      Object.keys(map).forEach(k => {
+        const btn = root.querySelector('#'+TAB+'-btn-'+prefix+'-'+k);
+        if (btn) btn.classList.toggle('o-active', k === activeKey);
+      });
+    }
+
+    function setModelUI(model){
+      const btnOrg = $('#'+TAB+'-btn-organic');
+      const btnConv = $('#'+TAB+'-btn-conventional');
+      const badge = $('#'+TAB+'-model-badge');
+      if (btnOrg) btnOrg.classList.toggle('o-active', model === 'organic');
+      if (btnConv) btnConv.classList.toggle('o-active', model === 'conventional');
+      if (badge) badge.textContent = model === 'organic'
+        ? '🌱 Active: Organic Model (JADAM / IMO)'
+        : '🧪 Active: Conventional Fertilizer Model';
+    }
+
+    function loadStoredOrDefaults(){
+      const p = primaryProfiles[currentPrimary];
+      $('#'+TAB+'-param-yield').value = localStorage.getItem('symbio_param_yield') !== null ? localStorage.getItem('symbio_param_yield') : p.yield;
+      $('#'+TAB+'-param-intercrop-yield').value = localStorage.getItem('symbio_param_intercrop_yield') !== null ? localStorage.getItem('symbio_param_intercrop_yield') : p.compYield;
+      $('#'+TAB+'-param-price').value = localStorage.getItem('symbio_param_price') !== null ? localStorage.getItem('symbio_param_price') : p.price;
+      $('#'+TAB+'-param-intercrop-price').value = localStorage.getItem('symbio_param_intercrop_price') !== null ? localStorage.getItem('symbio_param_intercrop_price') : p.compPrice;
+      $('#'+TAB+'-param-inputs').value = localStorage.getItem('symbio_param_inputs') !== null ? localStorage.getItem('symbio_param_inputs') : ((currentModel === 'organic') ? p.inputsOrg : p.inputsConv);
+      $('#'+TAB+'-param-labor').value = localStorage.getItem('symbio_param_labor') !== null ? localStorage.getItem('symbio_param_labor') : p.labor;
+      $('#'+TAB+'-param-storage').value = localStorage.getItem('symbio_param_storage') !== null ? localStorage.getItem('symbio_param_storage') : p.storage;
+      $('#'+TAB+'-param-lost-kgs').value = localStorage.getItem('symbio_param_lost_kgs') !== null ? localStorage.getItem('symbio_param_lost_kgs') : 0;
+      calculate();
+    }
+
+    function setPrimaryCrop(cropKey){
+      currentPrimary = cropKey;
+      localStorage.setItem('symbio_primary_crop', cropKey);
+      setActivePill('primary', primaryProfiles, cropKey);
+      loadStoredOrDefaults();
+    }
+
+    function setCompanionCrop(compKey){
+      currentCompanion = compKey;
+      localStorage.setItem('symbio_companion_crop', compKey);
+      setActivePill('comp', companionProfiles, compKey);
+      if (compKey !== 'none' && companionProfiles[compKey]) {
+        $('#'+TAB+'-param-intercrop-yield').value = companionProfiles[compKey].yield;
+        $('#'+TAB+'-param-intercrop-price').value = companionProfiles[compKey].price;
+      }
+      calculate();
+    }
+
+    function setBorderType(borderKey){
+      currentBorder = borderKey;
+      localStorage.setItem('symbio_border_type', borderKey);
+      setActivePill('border', borderProfiles, borderKey);
+      calculate();
+    }
+
+    function setModel(model){
+      currentModel = model;
+      localStorage.setItem('symbio_dual_model', model);
+      setModelUI(model);
+      loadStoredOrDefaults();
+    }
+
+    function resetParametersToDefault(){
+      if (confirm('Reset all parameters to default profile values?')) {
+        ['symbio_param_yield','symbio_param_intercrop_yield','symbio_param_price','symbio_param_intercrop_price',
+         'symbio_param_inputs','symbio_param_labor','symbio_param_storage','symbio_param_lost_kgs'].forEach(k => localStorage.removeItem(k));
+        loadStoredOrDefaults();
+      }
+    }
+
+    function renderSavedPlans(){
+      const container = $('#'+TAB+'-saved-plans-container');
+      if (savedPlans.length === 0) {
+        container.innerHTML = '<p class="ops-note">No saved plans in the vault yet. Create and save one above!</p>';
+        return;
+      }
+      let html = '';
+      savedPlans.slice().reverse().forEach(p => {
+        html += `
+          <div class="ops-vault-item">
+            <div>
+              <h4>${p.name}</h4>
+              <p class="ops-note">Saved on: ${p.dateSaved} | Primary: <b>${(primaryProfiles[p.primary] && primaryProfiles[p.primary].name) || p.primary}</b> | Scale: <b>${p.acreage} Acres</b></p>
+            </div>
+            <div>
+              <button type="button" class="planner-btn" data-load="${p.id}">📂 Load Plan</button>
+              <button type="button" class="planner-btn" data-del="${p.id}">✕</button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+
+      container.querySelectorAll('[data-load]').forEach(btn => {
+        btn.addEventListener('click', () => loadPlan(Number(btn.getAttribute('data-load'))));
+      });
+      container.querySelectorAll('[data-del]').forEach(btn => {
+        btn.addEventListener('click', () => deletePlan(Number(btn.getAttribute('data-del'))));
+      });
+    }
+
+    function saveCurrentPlan(){
+      const nameInput = $('#'+TAB+'-plan-name-input');
+      const planName = nameInput.value.trim() || `Plan - ${new Date().toLocaleDateString()}`;
+      const planData = {
+        id: Date.now(),
+        name: planName,
+        dateSaved: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        primary: currentPrimary,
+        companion: currentCompanion,
+        border: currentBorder,
+        model: currentModel,
+        acreage: $('#'+TAB+'-crop-acreage').value,
+        ratio: $('#'+TAB+'-system-slider').value,
+        yield: $('#'+TAB+'-param-yield').value,
+        intercropYield: $('#'+TAB+'-param-intercrop-yield').value,
+        price: $('#'+TAB+'-param-price').value,
+        intercropPrice: $('#'+TAB+'-param-intercrop-price').value,
+        inputs: $('#'+TAB+'-param-inputs').value,
+        labor: $('#'+TAB+'-param-labor').value,
+        storage: $('#'+TAB+'-param-storage').value,
+        lostKgs: $('#'+TAB+'-param-lost-kgs').value
+      };
+      savedPlans.push(planData);
+      localStorage.setItem('symbio_saved_plans', JSON.stringify(savedPlans));
+      nameInput.value = '';
+      renderSavedPlans();
+      alert(`Plan "${planName}" successfully saved to vault!`);
+    }
+
+    function loadPlan(id){
+      const plan = savedPlans.find(p => p.id === id);
+      if (!plan) return;
+      currentPrimary = plan.primary;
+      currentCompanion = plan.companion;
+      currentBorder = plan.border;
+      currentModel = plan.model;
+
+      localStorage.setItem('symbio_primary_crop', currentPrimary);
+      localStorage.setItem('symbio_companion_crop', currentCompanion);
+      localStorage.setItem('symbio_border_type', currentBorder);
+      localStorage.setItem('symbio_dual_model', currentModel);
+
+      $('#'+TAB+'-crop-acreage').value = plan.acreage;
+      $('#'+TAB+'-system-slider').value = plan.ratio;
+      $('#'+TAB+'-param-yield').value = plan.yield;
+      $('#'+TAB+'-param-intercrop-yield').value = plan.intercropYield;
+      $('#'+TAB+'-param-price').value = plan.price;
+      $('#'+TAB+'-param-intercrop-price').value = plan.intercropPrice;
+      $('#'+TAB+'-param-inputs').value = plan.inputs;
+      $('#'+TAB+'-param-labor').value = plan.labor;
+      $('#'+TAB+'-param-storage').value = plan.storage;
+      $('#'+TAB+'-param-lost-kgs').value = plan.lostKgs;
+
+      setActivePill('primary', primaryProfiles, currentPrimary);
+      setActivePill('comp', companionProfiles, currentCompanion);
+      setActivePill('border', borderProfiles, currentBorder);
+      setModelUI(currentModel);
+
+      calculate();
+      alert(`Loaded plan: "${plan.name}"`);
+    }
+
+    function deletePlan(id){
+      if (confirm('Are you sure you want to delete this saved plan?')) {
+        savedPlans = savedPlans.filter(p => p.id !== id);
+        localStorage.setItem('symbio_saved_plans', JSON.stringify(savedPlans));
+        renderSavedPlans();
+      }
+    }
+
+    function calculate(){
+      let acreageInput = parseFloat($('#'+TAB+'-crop-acreage').value);
+      const acreage = isNaN(acreageInput) ? 1 : acreageInput;
+
+      $('#'+TAB+'-val-acreage').textContent = acreage.toFixed(1) + ' Acres';
+      $('#'+TAB+'-comparison-scale-label').textContent = acreage.toFixed(1);
+
+      const compRatio = parseFloat($('#'+TAB+'-system-slider').value) || 0;
+      $('#'+TAB+'-val-intercrop-display').textContent = compRatio + '% ' + (compRatio === 0 ? '(Monocrop)' : 'Companion Split');
+
+      let baseYield = parseFloat($('#'+TAB+'-param-yield').value) || 18;
+      let intercropYieldInput = parseFloat($('#'+TAB+'-param-intercrop-yield').value) || 5;
+      let price = parseFloat($('#'+TAB+'-param-price').value) || 4200;
+      let intercropPrice = parseFloat($('#'+TAB+'-param-intercrop-price').value) || 10000;
+      let inputsPerAcre = parseFloat($('#'+TAB+'-param-inputs').value) || 6000;
+      let laborPerAcre = parseFloat($('#'+TAB+'-param-labor').value) || 10000;
+      let storageTotal = parseFloat($('#'+TAB+'-param-storage').value) || 0;
+      let lostKgs = parseFloat($('#'+TAB+'-param-lost-kgs').value) || 0;
+
+      localStorage.setItem('symbio_param_yield', baseYield);
+      localStorage.setItem('symbio_param_intercrop_yield', intercropYieldInput);
+      localStorage.setItem('symbio_param_price', price);
+      localStorage.setItem('symbio_param_intercrop_price', intercropPrice);
+      localStorage.setItem('symbio_param_inputs', inputsPerAcre);
+      localStorage.setItem('symbio_param_labor', laborPerAcre);
+      localStorage.setItem('symbio_param_storage', storageTotal);
+      localStorage.setItem('symbio_param_lost_kgs', lostKgs);
+
+      const primaryCompetitionFactor = 1 - (compRatio / 200);
+      const primaryRevenue = baseYield * acreage * primaryCompetitionFactor * price;
+
+      let companionRevenue = 0;
+      if (currentCompanion !== 'none') {
+        const compYieldAcre = intercropYieldInput * (compRatio / 50);
+        companionRevenue = compYieldAcre * intercropPrice * acreage;
+      }
+
+      let borderRevenue = 0;
+      if (currentBorder !== 'none') {
+        borderRevenue = borderProfiles[currentBorder].valuePerAcre * acreage;
+      }
+
+      let lostMerchandiseValue = lostKgs * (price / 90);
+      const totalRev = Math.max(0, primaryRevenue + companionRevenue + borderRevenue - lostMerchandiseValue);
+
+      let totalInputs = inputsPerAcre * acreage;
+      let totalLabor = laborPerAcre * acreage;
+
+      if (currentModel === 'organic') {
+        totalInputs = Math.round(totalInputs * 0.85);
+      }
+      if (currentBorder === 'tithonia') {
+        totalInputs = Math.max(1000, totalInputs - (1500 * acreage));
+      }
+      if (compRatio > 0) {
+        totalInputs += (acreage * 1200 * (compRatio / 50));
+      }
+
+      const totalCost = totalInputs + totalLabor + storageTotal;
+      const netProfit = totalRev - totalCost;
+      const roi = totalCost > 0 ? ((netProfit / totalCost) * 100).toFixed(1) : 0;
+
+      $('#'+TAB+'-out-total-cost').textContent = 'KES ' + Math.round(totalCost).toLocaleString();
+      $('#'+TAB+'-out-total-rev').textContent = 'KES ' + Math.round(totalRev).toLocaleString();
+      $('#'+TAB+'-out-net').textContent = 'KES ' + Math.round(netProfit).toLocaleString();
+      $('#'+TAB+'-out-roi').textContent = roi + '%';
+
+      localStorage.setItem('symbio_border_acreage', acreage);
+      localStorage.setItem('symbio_border_ratio', compRatio);
+
+      updateComparisonChart(acreage);
+      renderLedger();
+    }
+
+    function addEntry(e){
+      e.preventDefault();
+      const date = $('#'+TAB+'-entry-date').value;
+      const category = $('#'+TAB+'-entry-category').value;
+      const stream = $('#'+TAB+'-entry-stream').value;
+      const desc = $('#'+TAB+'-entry-desc').value;
+      const qty = parseFloat($('#'+TAB+'-entry-qty').value) || 0;
+      const rate = parseFloat($('#'+TAB+'-entry-rate').value) || 0;
+
+      entries.push({ id: Date.now(), date, category, stream, desc, qty, rate });
+      localStorage.setItem('symbio_border_ledger', JSON.stringify(entries));
+
+      $('#'+TAB+'-entry-desc').value = '';
+      $('#'+TAB+'-entry-qty').value = '';
+      $('#'+TAB+'-entry-rate').value = '';
+      renderLedger();
+    }
+
+    function deleteEntry(id){
+      entries = entries.filter(i => i.id !== id);
+      localStorage.setItem('symbio_border_ledger', JSON.stringify(entries));
+      renderLedger();
+    }
+
+    function clearLedger(){
+      if (confirm('Clear all recorded enterprise entries?')) {
+        entries = [];
+        localStorage.removeItem('symbio_border_ledger');
+        renderLedger();
+      }
+    }
+
+    function exportToCSV(){
+      if (entries.length === 0) { alert('No ledger entries to export.'); return; }
+      let csv = 'Date,Category,Stream,Details,Quantity,Rate_or_Amount_KES,Total_Value_KES\n';
+      entries.forEach(e => {
+        let multiplier = e.qty ? e.qty : 1;
+        let total = (e.category !== 'Farm Expense') ? multiplier * e.rate : -e.rate;
+        csv += `"${e.date}","${e.category}","${e.stream}","${e.desc.replace(/"/g, '""')}",${e.qty || 0},${e.rate || 0},${total}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_border_crop_ledger_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function updateCharts(totalIncome, totalExp){
+      if (typeof Chart === 'undefined') return;
+      const canvas = $('#'+TAB+'-financialChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (financialChartInstance) { financialChartInstance.destroy(); charts = charts.filter(c => c !== financialChartInstance); }
+
+      const leaf = cssVar('--leaf');
+      const rust = cssVar('--rust');
+      const bone = cssVar('--bone');
+
+      financialChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Total Revenue', 'Total Expenses'],
+          datasets: [{
+            data: [totalIncome > 0 ? totalIncome : 1, totalExp > 0 ? totalExp : 1],
+            backgroundColor: [leaf, rust],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right', labels: { color: bone, font: { size: 11 } } } }
+        }
+      });
+      charts.push(financialChartInstance);
+    }
+
+    function updateComparisonChart(acreage){
+      if (typeof Chart === 'undefined') return;
+      const canvas = $('#'+TAB+'-cropComparisonChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (cropComparisonChartInstance) { cropComparisonChartInstance.destroy(); charts = charts.filter(c => c !== cropComparisonChartInstance); }
+
+      let labels = [];
+      let revenues = [];
+      let netProfits = [];
+      let backgroundColors = [];
+
+      const inputCostVal = parseFloat($('#'+TAB+'-param-inputs').value) || 6000;
+      const laborVal = parseFloat($('#'+TAB+'-param-labor').value) || 10000;
+      const storageVal = parseFloat($('#'+TAB+'-param-storage').value) || 0;
+
+      const gold = cssVar('--gold-text');
+      const bone = cssVar('--bone');
+      const leaf = cssVar('--leaf');
+      const line = cssVar('--line');
+
+      Object.keys(primaryProfiles).forEach(k => {
+        const p = primaryProfiles[k];
+        labels.push(p.name);
+
+        let rev = p.yield * acreage * p.price;
+        let cost = ((inputCostVal + laborVal) * acreage) + (k === currentPrimary ? storageVal : 0);
+        let net = rev - cost;
+
+        revenues.push(rev);
+        netProfits.push(net);
+
+        backgroundColors.push(k === currentPrimary ? gold : line);
+      });
+
+      cropComparisonChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Projected Revenue (KES)', data: revenues, backgroundColor: backgroundColors, borderRadius: 6 },
+            { label: 'Estimated Net Profit (KES)', data: netProfits, backgroundColor: leaf, borderRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { ticks: { color: bone, font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { color: bone, font: { size: 11 } }, grid: { color: line } }
+          },
+          plugins: { legend: { position: 'top', labels: { color: bone, font: { size: 11 } } } }
+        }
+      });
+      charts.push(cropComparisonChartInstance);
+    }
+
+    function renderLedger(){
+      let totalIncome = 0, totalExp = 0, html = '';
+      const body = $('#'+TAB+'-ledger-body');
+
+      entries.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(item => {
+        let totalVal = 0;
+        let multiplier = item.qty ? item.qty : 1;
+
+        if (item.category === 'Harvest Sale' || item.category === 'Companion Harvest') {
+          totalVal = multiplier * item.rate;
+          totalIncome += totalVal;
+        } else if (item.category === 'Farm Expense') {
+          totalExp += item.rate;
+          totalVal = -item.rate;
+        }
+
+        const cls = totalVal > 0 ? 'ops-sum-profit' : totalVal < 0 ? 'ops-sum-loss' : '';
+
+        html += `
+          <tr>
+            <td>${item.date}</td>
+            <td>${item.category}</td>
+            <td>${item.stream}</td>
+            <td>${item.desc}</td>
+            <td>${item.qty ? item.qty : '-'}</td>
+            <td>${item.rate ? 'KES ' + item.rate.toLocaleString() : '-'}</td>
+            <td class="${cls}">${totalVal !== 0 ? (totalVal > 0 ? '+' : '-') + 'KES ' + Math.abs(totalVal).toLocaleString() : 'KES 0'}</td>
+            <td><button type="button" class="row-remove-btn" data-del-entry="${item.id}">✕</button></td>
+          </tr>
+        `;
+      });
+
+      body.innerHTML = html || '<tr><td colspan="8">No enterprise activity logged yet.</td></tr>';
+      body.querySelectorAll('[data-del-entry]').forEach(btn => {
+        btn.addEventListener('click', () => deleteEntry(Number(btn.getAttribute('data-del-entry'))));
+      });
+
+      $('#'+TAB+'-actual-income').textContent = 'KES ' + Math.round(totalIncome).toLocaleString();
+      $('#'+TAB+'-actual-exp').textContent = 'KES ' + Math.round(totalExp).toLocaleString();
+      $('#'+TAB+'-actual-net').textContent = 'KES ' + Math.round(totalIncome - totalExp).toLocaleString();
+
+      updateCharts(totalIncome, totalExp);
+    }
+
+    // wire pill buttons
+    Object.keys(primaryProfiles).forEach(k => {
+      const btn = $('#'+TAB+'-btn-primary-'+k);
+      if (btn) btn.addEventListener('click', () => setPrimaryCrop(k));
+    });
+    Object.keys(companionProfiles).forEach(k => {
+      const btn = $('#'+TAB+'-btn-comp-'+k);
+      if (btn) btn.addEventListener('click', () => setCompanionCrop(k));
+    });
+    Object.keys(borderProfiles).forEach(k => {
+      const btn = $('#'+TAB+'-btn-border-'+k);
+      if (btn) btn.addEventListener('click', () => setBorderType(k));
+    });
+    $('#'+TAB+'-btn-organic').addEventListener('click', () => setModel('organic'));
+    $('#'+TAB+'-btn-conventional').addEventListener('click', () => setModel('conventional'));
+
+    $('#'+TAB+'-system-slider').addEventListener('input', calculate);
+    $('#'+TAB+'-crop-acreage').addEventListener('input', calculate);
+    ['param-yield','param-intercrop-yield','param-price','param-intercrop-price','param-inputs','param-labor','param-storage','param-lost-kgs'].forEach(id => {
+      const el = $('#'+TAB+'-'+id);
+      if (el) el.addEventListener('input', calculate);
+    });
+
+    $('#'+TAB+'-reset-params').addEventListener('click', resetParametersToDefault);
+    $('#'+TAB+'-save-plan').addEventListener('click', saveCurrentPlan);
+
+    $('#'+TAB+'-entry-category').addEventListener('change', () => {
+      const cat = $('#'+TAB+'-entry-category').value;
+      const rate = $('#'+TAB+'-entry-rate');
+      const isExpense = (cat === 'Farm Expense');
+      rate.placeholder = isExpense ? 'Total Expense (KES)' : 'Unit Rate or Total (KES)';
+    });
+
+    $('#'+TAB+'-ledger-form').addEventListener('submit', addEntry);
+    $('#'+TAB+'-export-csv').addEventListener('click', exportToCSV);
+    $('#'+TAB+'-clear-ledger').addEventListener('click', clearLedger);
+
+    if (localStorage.getItem('symbio_border_acreage') !== null) {
+      $('#'+TAB+'-crop-acreage').value = localStorage.getItem('symbio_border_acreage');
+    }
+    if (localStorage.getItem('symbio_border_ratio') !== null) {
+      $('#'+TAB+'-system-slider').value = localStorage.getItem('symbio_border_ratio');
+    }
+
+    setPrimaryCrop(currentPrimary);
+    setCompanionCrop(currentCompanion);
+    setBorderType(currentBorder);
+    setModel(currentModel);
+    renderSavedPlans();
+  }
+
+  function destroy(){
+    charts.forEach(c => { try { c.destroy(); } catch(e){} });
+    charts = [];
+  }
+
+  return { build, init, destroy };
+})();
+
+/* ===== horticulture ===== */
+window.OPS_MODULES = window.OPS_MODULES || {};
+window.OPS_MODULES['o-horticulture'] = (function(){
+  'use strict';
+  const LS_LEDGER = 'symbio_ledger_data';
+  const LS_SYSTEM = 'symbio_system_type';
+  const LS_BEDS = 'symbio_beds';
+  const LS_PRICE = 'symbio_price';
+  const LS_CAPEX = 'symbio_capex';
+  const LS_OPEX = 'symbio_opex';
+  const LS_SCENARIOS = 'symbio_horticulture_scenarios';
+  let charts = [];
+  let entries = [];
+
+  const SYSTEM_PRESETS = {
+    ground: {
+      name: 'Ground Beds',
+      unitLabel: 'Beds Count',
+      baseCapex: 97000,
+      baseOpex: 9200,
+      monthlyKgPerUnit: 12.5,
+      plantsPerUnit: 200,
+      desc: 'Standard 1m x 10m ground beds require direct ground labor, higher weed management, and higher irrigation volumes.'
+    },
+    bags: {
+      name: 'Real IPM Vertical Bags',
+      unitLabel: 'Bags Count',
+      baseCapex: 32000,
+      baseOpex: 5400,
+      monthlyKgPerUnit: 11.5,
+      plantsPerUnit: 90,
+      desc: 'Real IPM vertical bags conserve moisture beneath the canopy, drastically reduce weeding labor, and optimize JADAM drenching.'
+    },
+    cones: {
+      name: 'Cone / Multi-Storey',
+      unitLabel: 'Cones Count',
+      baseCapex: 52000,
+      baseOpex: 5800,
+      monthlyKgPerUnit: 12.5,
+      plantsPerUnit: 110,
+      desc: 'Multi-storey cone gardens create a dense microclimate canopy that retains soil moisture and minimizes weeding work.'
+    },
+    hybrid: {
+      name: 'Hybrid Mix',
+      unitLabel: 'Total Hybrid Units',
+      baseCapex: 70000,
+      baseOpex: 7200,
+      monthlyKgPerUnit: 12.0,
+      plantsPerUnit: 100,
+      desc: 'Combines traditional ground beds with vertical bags or cone gardens to maximize spatial efficiency and labor balance.'
+    }
+  };
+
+  function build(){
+    return `
+      <div class="ops-guide" id="o-hort-guide">
+        <button type="button" class="ops-guide-toggle planner-btn" id="o-hort-guide-toggle">📖 User Guide &amp; Key Terms</button>
+        <div class="ops-guide-body">
+          <h3 class="ops-section-title">Financial Guide &amp; Key Terms</h3>
+          <div class="ops-field-row">
+            <div class="ops-field">
+              <label>CapEx &amp; OpEx Terminology</label>
+              <ul>
+                <li><b>Base CapEx:</b> Benchmark setup cost (standard baseline for 20 units).</li>
+                <li><b>Scaled CapEx:</b> Actual capital needed to start your selected number of units.</li>
+                <li><b>Base OpEx:</b> Benchmark monthly operating cost baseline.</li>
+                <li><b>Scaled OpEx:</b> Actual monthly money needed for ongoing labor, water, and inputs.</li>
+              </ul>
+            </div>
+            <div class="ops-field">
+              <label>System Efficiency Edge</label>
+              <ul>
+                <li><b>Vertical Bags &amp; Cones:</b> Retain soil moisture beneath dense crop canopies and eliminate open weeding space, drastically lowering monthly OpEx.</li>
+                <li><b>Break-Even Yield Threshold:</b> Minimum yield needed monthly to clear OpEx (Scaled OpEx ÷ Price per KG).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ops-vault">
+        <h3 class="ops-section-title">📂 Scenario &amp; Plan Vault</h3>
+        <div class="ops-ledger-bar">
+          <input type="text" id="o-hort-vault-name" placeholder="Enter scenario name (e.g., Q3 High Yield)">
+          <button type="button" class="planner-btn" id="o-hort-vault-save">Save Current Scenario</button>
+        </div>
+        <div class="ops-vault-list" id="o-hort-vault-list"></div>
+      </div>
+
+      <h3 class="ops-section-title">Crop Analytics and Financials</h3>
+      <span class="ops-note" id="o-hort-savings-badge">💧 35% Water &amp; Labor Savings Active</span>
+
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Farming System Type</label>
+          <select id="o-hort-system-type">
+            <option value="ground">Ground Beds (1m x 10m Standard)</option>
+            <option value="bags">Real IPM Vertical Grow Bags (80-100 Plants)</option>
+            <option value="cones">Cone / Multi-Storey Gardens (100-120 Plants)</option>
+            <option value="hybrid">Hybrid System (Custom Combination of Systems)</option>
+          </select>
+          <span class="ops-hint" id="o-hort-system-desc-text">Standard 1m x 10m ground beds require direct ground labor, higher weed management, and higher irrigation volumes.</span>
+        </div>
+      </div>
+
+      <div id="o-hort-single-system-controls" class="ops-field-row">
+        <div class="ops-field">
+          <label><span id="o-hort-label-unit-count">Units Count</span>: <span id="o-hort-val-beds">20</span></label>
+          <input type="range" id="o-hort-beds" min="0" max="200" value="20">
+        </div>
+        <div class="ops-field">
+          <label>Blended Price / KG (KES): <span id="o-hort-val-price">55</span></label>
+          <input type="range" id="o-hort-price" min="0" max="200" value="55">
+        </div>
+        <div class="ops-field">
+          <label>Base CapEx (KES)</label>
+          <input type="number" id="o-hort-base-capex" value="97000">
+        </div>
+        <div class="ops-field">
+          <label>Base OpEx/Mo (KES)</label>
+          <input type="number" id="o-hort-base-opex" value="9200">
+        </div>
+      </div>
+
+      <div id="o-hort-hybrid-controls" class="ops-field-row">
+        <div class="ops-field">
+          <label>Ground Beds: <span id="o-hort-val-hy-beds">10</span></label>
+          <input type="range" id="o-hort-hy-beds" min="0" max="200" value="10">
+        </div>
+        <div class="ops-field">
+          <label>Vertical Grow Bags: <span id="o-hort-val-hy-bags">5</span></label>
+          <input type="range" id="o-hort-hy-bags" min="0" max="200" value="5">
+        </div>
+        <div class="ops-field">
+          <label>Cone Gardens: <span id="o-hort-val-hy-cones">5</span></label>
+          <input type="range" id="o-hort-hy-cones" min="0" max="200" value="5">
+        </div>
+      </div>
+
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Startup Capital (CapEx)</span>
+          <span class="ops-sum-value" id="o-hort-out-capex">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Monthly Budget (OpEx)</span>
+          <span class="ops-sum-value" id="o-hort-out-opex">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Peak Monthly Harvest</span>
+          <span class="ops-sum-value" id="o-hort-calc-kg-peak">0 kg</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Peak Monthly Revenue</span>
+          <span class="ops-sum-value ops-sum-profit" id="o-hort-calc-income-peak">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Break-Even Threshold</span>
+          <span class="ops-sum-value" id="o-hort-out-breakeven-kg">0 kg / Mo</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Est. Seedling Need</span>
+          <span class="ops-sum-value" id="o-hort-out-seedlings">0 Seedlings</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Year 1 Net Profit</span>
+          <span class="ops-sum-value" id="o-hort-out-net">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Year 3 Cumulative Net Profit</span>
+          <span class="ops-sum-value" id="o-hort-out-net-3yr">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Est. Payback Period</span>
+          <span class="ops-sum-value" id="o-hort-out-breakeven">0 Months</span>
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Record Daily Activity</h3>
+      <form id="o-hort-ledger-form">
+        <div class="ops-ledger-bar">
+          <input type="date" id="o-hort-entry-date" required>
+          <select id="o-hort-entry-category">
+            <option value="Harvest & Sale">Harvest &amp; Sale</option>
+            <option value="Harvest Only">Harvest Only</option>
+            <option value="Expense">Expense</option>
+            <option value="General Activity">General Activity</option>
+          </select>
+          <select id="o-hort-entry-system">
+            <option value="Ground Bed">Ground Bed</option>
+            <option value="Vertical Bag">Vertical Bag</option>
+            <option value="Cone Garden">Cone Garden</option>
+            <option value="General / Farm-wide">General / Farm-wide</option>
+          </select>
+          <select id="o-hort-entry-crop">
+            <option value="Sukuma Wiki">Sukuma Wiki</option>
+            <option value="Spinach">Spinach</option>
+            <option value="Managu / Nightshade">Managu / Nightshade</option>
+            <option value="Terere / Amaranth">Terere / Amaranth</option>
+            <option value="Tomatoes">Tomatoes</option>
+            <option value="Indigenous Greens">Indigenous Greens</option>
+            <option value="General / Mixed">General / Mixed</option>
+          </select>
+          <input type="text" id="o-hort-entry-desc" placeholder="Details (e.g. Bag 3 harvest)" required>
+          <input type="number" id="o-hort-entry-qty" step="0.1" placeholder="Qty (kg)">
+          <input type="number" id="o-hort-entry-rate" step="1" placeholder="Rate / Amount">
+          <button type="submit" class="planner-btn">Save Entry</button>
+        </div>
+      </form>
+
+      <div class="planner-table-wrap">
+        <div class="ops-ledger-bar">
+          <h3 class="ops-section-title">Symbio Operations Log</h3>
+          <button type="button" class="planner-btn" id="o-hort-export">📥 Export CSV</button>
+          <button type="button" class="planner-btn" id="o-hort-clear">Clear Data</button>
+        </div>
+        <table class="planner-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>System</th>
+              <th>Crop</th>
+              <th>Details</th>
+              <th>Qty</th>
+              <th>Rate/Amt</th>
+              <th>Total Value</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="o-hort-ledger-body"></tbody>
+        </table>
+      </div>
+
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Harvested</span>
+          <span class="ops-sum-value" id="o-hort-actual-kg">0.0 kg</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Revenue</span>
+          <span class="ops-sum-value ops-sum-profit" id="o-hort-actual-income">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Expenses</span>
+          <span class="ops-sum-value ops-sum-loss" id="o-hort-actual-exp">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Net Cashflow</span>
+          <span class="ops-sum-value" id="o-hort-actual-net">KES 0</span>
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Financial Cashflow Overview</h3>
+      <div class="ops-chart-frame">
+        <canvas id="o-hort-financial-chart"></canvas>
+      </div>
+
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <h3 class="ops-section-title">System Performance Comparison</h3>
+          <div class="planner-table-wrap">
+            <table class="planner-table">
+              <thead>
+                <tr>
+                  <th>System</th>
+                  <th>Harvested</th>
+                  <th>Revenue</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody id="o-hort-system-summary-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ops-field">
+          <h3 class="ops-section-title">Crop Performance Comparison</h3>
+          <div class="planner-table-wrap">
+            <table class="planner-table">
+              <thead>
+                <tr>
+                  <th>Crop Variety</th>
+                  <th>Harvested</th>
+                  <th>Revenue</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody id="o-hort-crop-summary-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <h3 class="ops-section-title">Harvest Volume Share by System</h3>
+          <div class="ops-chart-frame">
+            <canvas id="o-hort-system-chart"></canvas>
+          </div>
+        </div>
+        <div class="ops-field">
+          <h3 class="ops-section-title">Revenue Share by Crop</h3>
+          <div class="ops-chart-frame">
+            <canvas id="o-hort-crop-chart"></canvas>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function init(root){
+    entries = JSON.parse(localStorage.getItem(LS_LEDGER)) || [];
+
+    const $ = (sel) => root.querySelector(sel);
+
+    const guideWrap = $('#o-hort-guide');
+    const guideToggle = $('#o-hort-guide-toggle');
+    guideToggle.addEventListener('click', () => {
+      guideWrap.classList.toggle('o-open');
+    });
+
+    const vaultNameInput = $('#o-hort-vault-name');
+    const vaultSaveBtn = $('#o-hort-vault-save');
+    const vaultList = $('#o-hort-vault-list');
+
+    const savingsBadge = $('#o-hort-savings-badge');
+    const systemType = $('#o-hort-system-type');
+    const systemDescText = $('#o-hort-system-desc-text');
+    const labelUnitCount = $('#o-hort-label-unit-count');
+    const singleSystemControls = $('#o-hort-single-system-controls');
+    const hybridControls = $('#o-hort-hybrid-controls');
+
+    const beds = $('#o-hort-beds');
+    const price = $('#o-hort-price');
+    const baseCapex = $('#o-hort-base-capex');
+    const baseOpex = $('#o-hort-base-opex');
+    const valBeds = $('#o-hort-val-beds');
+    const valPrice = $('#o-hort-val-price');
+
+    const hyBeds = $('#o-hort-hy-beds');
+    const hyBags = $('#o-hort-hy-bags');
+    const hyCones = $('#o-hort-hy-cones');
+    const valHyBeds = $('#o-hort-val-hy-beds');
+    const valHyBags = $('#o-hort-val-hy-bags');
+    const valHyCones = $('#o-hort-val-hy-cones');
+
+    const calcKgPeak = $('#o-hort-calc-kg-peak');
+    const calcIncomePeak = $('#o-hort-calc-income-peak');
+    const outCapex = $('#o-hort-out-capex');
+    const outOpex = $('#o-hort-out-opex');
+    const outBreakevenKg = $('#o-hort-out-breakeven-kg');
+    const outSeedlings = $('#o-hort-out-seedlings');
+    const outNet = $('#o-hort-out-net');
+    const outNet3yr = $('#o-hort-out-net-3yr');
+    const outBreakeven = $('#o-hort-out-breakeven');
+
+    const ledgerForm = $('#o-hort-ledger-form');
+    const entryDate = $('#o-hort-entry-date');
+    const entryCategory = $('#o-hort-entry-category');
+    const entrySystem = $('#o-hort-entry-system');
+    const entryCrop = $('#o-hort-entry-crop');
+    const entryDesc = $('#o-hort-entry-desc');
+    const entryQty = $('#o-hort-entry-qty');
+    const entryRate = $('#o-hort-entry-rate');
+
+    const ledgerBody = $('#o-hort-ledger-body');
+    const exportBtn = $('#o-hort-export');
+    const clearBtn = $('#o-hort-clear');
+
+    const actualKg = $('#o-hort-actual-kg');
+    const actualIncome = $('#o-hort-actual-income');
+    const actualExp = $('#o-hort-actual-exp');
+    const actualNet = $('#o-hort-actual-net');
+
+    const systemSummaryBody = $('#o-hort-system-summary-body');
+    const cropSummaryBody = $('#o-hort-crop-summary-body');
+
+    entryDate.valueAsDate = new Date();
+
+    function onSystemTypeChange(fromLoad){
+      const sysType = systemType.value;
+      const preset = SYSTEM_PRESETS[sysType];
+
+      systemDescText.innerText = preset.desc;
+      labelUnitCount.innerText = preset.unitLabel;
+
+      if (sysType === 'bags' || sysType === 'cones' || sysType === 'hybrid') {
+        savingsBadge.style.display = '';
+      } else {
+        savingsBadge.style.display = 'none';
+      }
+
+      if (!fromLoad) {
+        baseCapex.value = preset.baseCapex;
+        baseOpex.value = preset.baseOpex;
+      }
+
+      if (sysType === 'hybrid') {
+        hybridControls.style.display = '';
+        beds.max = 600;
+        beds.disabled = true;
+        updateHybridTotal();
+      } else {
+        hybridControls.style.display = 'none';
+        beds.max = 200;
+        beds.disabled = false;
+        if (parseInt(beds.value) > 200) {
+          beds.value = 200;
+        }
+        calculate();
+      }
+    }
+
+    function updateHybridTotal(){
+      const hBeds = parseInt(hyBeds.value) || 0;
+      const hBags = parseInt(hyBags.value) || 0;
+      const hCones = parseInt(hyCones.value) || 0;
+
+      valHyBeds.innerText = hBeds;
+      valHyBags.innerText = hBags;
+      valHyCones.innerText = hCones;
+
+      const totalHybridUnits = hBeds + hBags + hCones;
+      beds.value = totalHybridUnits;
+
+      calculate();
+    }
+
+    function adjustFields(){
+      const cat = entryCategory.value;
+      entryQty.disabled = (cat === 'Expense' || cat === 'General Activity');
+      entryRate.placeholder = cat === 'Expense' ? 'Amount (KES)' : 'Rate (KES/kg)';
+    }
+
+    function calculate(){
+      const sysType = systemType.value;
+      const bedsVal = parseInt(beds.value) || 0;
+      const priceVal = parseInt(price.value) || 0;
+      const rawCapex = parseFloat(baseCapex.value) || 0;
+      const rawOpex = parseFloat(baseOpex.value) || 0;
+
+      localStorage.setItem(LS_SYSTEM, sysType);
+      localStorage.setItem(LS_BEDS, bedsVal);
+      localStorage.setItem(LS_PRICE, priceVal);
+      localStorage.setItem(LS_CAPEX, rawCapex);
+      localStorage.setItem(LS_OPEX, rawOpex);
+
+      valBeds.innerText = bedsVal;
+      valPrice.innerText = priceVal;
+
+      let peakKg = 0;
+      let estSeedlings = 0;
+
+      if (sysType === 'hybrid') {
+        const hBeds = parseInt(hyBeds.value) || 0;
+        const hBags = parseInt(hyBags.value) || 0;
+        const hCones = parseInt(hyCones.value) || 0;
+        peakKg = (hBeds * 12.5) + (hBags * 11.5) + (hCones * 12.5);
+        estSeedlings = (hBeds * 200) + (hBags * 90) + (hCones * 110);
+      } else {
+        const monthlyKgUnit = SYSTEM_PRESETS[sysType].monthlyKgPerUnit;
+        const plantsUnit = SYSTEM_PRESETS[sysType].plantsPerUnit;
+        peakKg = bedsVal * monthlyKgUnit;
+        estSeedlings = bedsVal * plantsUnit;
+      }
+
+      const scale = bedsVal > 0 ? (bedsVal / 20) : 0;
+      const scaledCapex = Math.round(rawCapex * scale);
+      const scaledOpex = Math.round(rawOpex * scale);
+
+      const breakEvenKg = priceVal > 0 ? Math.ceil(scaledOpex / priceVal) : 0;
+
+      const peakMonthlyRev = peakKg * priceVal;
+      const netMonthlyPeak = peakMonthlyRev - scaledOpex;
+
+      const estAnnualNet = (peakMonthlyRev * 7) - scaledCapex - (scaledOpex * 12);
+      const est3YrNet = (peakMonthlyRev * 21) - scaledCapex - (scaledOpex * 36);
+
+      let paybackMonths = netMonthlyPeak > 0 ? (scaledCapex / netMonthlyPeak).toFixed(1) : 'N/A';
+
+      calcKgPeak.innerText = Math.round(peakKg).toLocaleString() + ' kg';
+      calcIncomePeak.innerText = 'KES ' + Math.round(peakMonthlyRev).toLocaleString();
+      outCapex.innerText = 'KES ' + scaledCapex.toLocaleString();
+      outOpex.innerText = 'KES ' + scaledOpex.toLocaleString();
+      outBreakevenKg.innerText = breakEvenKg.toLocaleString() + ' kg / Mo';
+      outSeedlings.innerText = estSeedlings.toLocaleString() + ' Seedlings';
+      outNet.innerText = 'KES ' + Math.round(estAnnualNet).toLocaleString();
+      outNet3yr.innerText = 'KES ' + Math.round(est3YrNet).toLocaleString();
+      outBreakeven.innerText = paybackMonths !== 'N/A' ? paybackMonths + ' Months' : 'N/A';
+
+      renderLedger();
+    }
+
+    function addEntry(e){
+      e.preventDefault();
+      const date = entryDate.value;
+      const category = entryCategory.value;
+      const system = entrySystem.value;
+      const crop = entryCrop.value;
+      const desc = entryDesc.value;
+      const qty = parseFloat(entryQty.value) || 0;
+      const rate = parseFloat(entryRate.value) || 0;
+
+      entries.push({ id: Date.now(), date, category, system, crop, desc, qty, rate });
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+
+      entryDesc.value = '';
+      entryQty.value = '';
+      entryRate.value = '';
+      renderLedger();
+    }
+
+    function deleteEntry(id){
+      entries = entries.filter(i => i.id !== id);
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+      renderLedger();
+    }
+
+    function clearLedger(){
+      if (confirm('Clear all recorded farm entries? This cannot be undone.')) {
+        entries = [];
+        localStorage.removeItem(LS_LEDGER);
+        renderLedger();
+      }
+    }
+
+    function exportToCSV(){
+      if (entries.length === 0) { alert('No ledger entries to export.'); return; }
+      let csv = 'Date,Category,System,Crop,Details,Quantity_kg,Rate_or_Amount_KES,Total_Value_KES\n';
+      entries.forEach(e => {
+        let total = e.category === 'Harvest & Sale' ? e.qty * e.rate : (e.category === 'Expense' ? -e.rate : 0);
+        csv += `"${e.date}","${e.category}","${e.system || 'Ground Bed'}","${e.crop}","${e.desc.replace(/"/g, '""')}",${e.qty || 0},${e.rate || 0},${total}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_farm_ledger_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function getVaultScenarios(){
+      return JSON.parse(localStorage.getItem(LS_SCENARIOS)) || {};
+    }
+
+    function saveVaultScenario(){
+      const name = vaultNameInput.value.trim();
+      if (!name) { alert('Please enter a scenario name.'); return; }
+      const scenarios = getVaultScenarios();
+      scenarios[name] = {
+        systemType: systemType.value,
+        beds: beds.value,
+        price: price.value,
+        capex: baseCapex.value,
+        opex: baseOpex.value,
+        hyBeds: hyBeds.value,
+        hyBags: hyBags.value,
+        hyCones: hyCones.value,
+        entries: entries,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+      vaultNameInput.value = '';
+      renderVaultScenarios();
+      alert(`Scenario "${name}" saved to vault successfully!`);
+    }
+
+    function loadVaultScenario(name){
+      const scenarios = getVaultScenarios();
+      const s = scenarios[name];
+      if (s) {
+        systemType.value = s.systemType;
+        beds.value = s.beds;
+        price.value = s.price;
+        baseCapex.value = s.capex;
+        baseOpex.value = s.opex;
+        hyBeds.value = s.hyBeds || 10;
+        hyBags.value = s.hyBags || 5;
+        hyCones.value = s.hyCones || 5;
+        entries = s.entries || [];
+        localStorage.setItem(LS_SYSTEM, s.systemType);
+        localStorage.setItem(LS_BEDS, s.beds);
+        localStorage.setItem(LS_PRICE, s.price);
+        localStorage.setItem(LS_CAPEX, s.capex);
+        localStorage.setItem(LS_OPEX, s.opex);
+        localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+        onSystemTypeChange(true);
+        alert(`Scenario "${name}" loaded successfully!`);
+      }
+    }
+
+    function deleteVaultScenario(name){
+      if (confirm(`Delete scenario "${name}"?`)) {
+        const scenarios = getVaultScenarios();
+        delete scenarios[name];
+        localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+        renderVaultScenarios();
+      }
+    }
+
+    function renderVaultScenarios(){
+      const scenarios = getVaultScenarios();
+      const keys = Object.keys(scenarios);
+      vaultList.innerHTML = '';
+      if (keys.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'ops-note';
+        p.textContent = 'No saved scenarios in vault.';
+        vaultList.appendChild(p);
+        return;
+      }
+      keys.forEach(key => {
+        const dateStr = new Date(scenarios[key].timestamp).toLocaleDateString();
+        const item = document.createElement('div');
+        item.className = 'ops-vault-item';
+        item.innerHTML = `
+          <div>
+            <span>${key}</span>
+            <span class="ops-note">(${dateStr})</span>
+          </div>
+          <div class="ops-ledger-bar">
+            <button type="button" class="planner-btn" data-action="load" data-name="${key}">Load</button>
+            <button type="button" class="planner-btn" data-action="delete" data-name="${key}">Delete</button>
+          </div>
+        `;
+        vaultList.appendChild(item);
+      });
+      vaultList.querySelectorAll('[data-action="load"]').forEach(btn => {
+        btn.addEventListener('click', () => loadVaultScenario(btn.getAttribute('data-name')));
+      });
+      vaultList.querySelectorAll('[data-action="delete"]').forEach(btn => {
+        btn.addEventListener('click', () => deleteVaultScenario(btn.getAttribute('data-name')));
+      });
+    }
+
+    function cssVar(name){
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function updateCharts(income, expense, systemData, cropData){
+      if (typeof Chart === 'undefined') return;
+      charts.forEach(c => { try{ c.destroy(); }catch(e){} });
+      charts = [];
+
+      const leaf = cssVar('--leaf');
+      const gold = cssVar('--gold-text');
+      const rust = cssVar('--rust');
+      const maize = cssVar('--maize');
+      const bone = cssVar('--bone');
+      const line = cssVar('--line');
+
+      const financialCanvas = $('#o-hort-financial-chart');
+      const financialChart = new Chart(financialCanvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['Actual Financials'],
+          datasets: [
+            { label: 'Revenue (KES)', data: [income], backgroundColor: gold, borderRadius: 6 },
+            { label: 'Expenses (KES)', data: [expense], backgroundColor: rust, borderRadius: 6 },
+            { label: 'Net Cashflow (KES)', data: [income - expense], backgroundColor: leaf, borderRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: bone, font: { size: 11 } } } },
+          scales: { y: { ticks: { color: bone }, grid: { color: line } }, x: { display: false } }
+        }
+      });
+      charts.push(financialChart);
+
+      const sysLabels = Object.keys(systemData);
+      const sysKgs = sysLabels.map(k => systemData[k].kg);
+      const systemCanvas = $('#o-hort-system-chart');
+      const systemChart = new Chart(systemCanvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: sysLabels.length ? sysLabels : ['No Data'],
+          datasets: [{
+            data: sysKgs.length && sysKgs.some(r => r > 0) ? sysKgs : [1],
+            backgroundColor: [gold, leaf, maize, rust],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right', labels: { color: bone, font: { size: 11 } } } }
+        }
+      });
+      charts.push(systemChart);
+
+      const cropLabels = Object.keys(cropData);
+      const cropRevenues = cropLabels.map(k => cropData[k].revenue);
+      const cropCanvas = $('#o-hort-crop-chart');
+      const cropChart = new Chart(cropCanvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: cropLabels.length ? cropLabels : ['No Data'],
+          datasets: [{
+            data: cropRevenues.length && cropRevenues.some(r => r > 0) ? cropRevenues : [1],
+            backgroundColor: [gold, leaf, maize, rust, bone, line],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right', labels: { color: bone, font: { size: 11 } } } }
+        }
+      });
+      charts.push(cropChart);
+    }
+
+    function renderLedger(){
+      let totalKg = 0, totalIncome = 0, totalExp = 0;
+      let cropStats = {};
+      let systemStats = {
+        'Ground Bed': { kg: 0, revenue: 0 },
+        'Vertical Bag': { kg: 0, revenue: 0 },
+        'Cone Garden': { kg: 0, revenue: 0 },
+        'General / Farm-wide': { kg: 0, revenue: 0 }
+      };
+
+      ledgerBody.innerHTML = '';
+      const sorted = entries.slice().sort((a,b) => new Date(b.date) - new Date(a.date));
+
+      if (sorted.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="9">No activity logged yet.</td>';
+        ledgerBody.appendChild(tr);
+      } else {
+        sorted.forEach(item => {
+          let totalVal = 0;
+          const crop = item.crop || 'General / Mixed';
+          const sys = item.system || 'Ground Bed';
+
+          if (!cropStats[crop]) cropStats[crop] = { kg: 0, revenue: 0 };
+          if (!systemStats[sys]) systemStats[sys] = { kg: 0, revenue: 0 };
+
+          if (item.category === 'Harvest & Sale') {
+            totalKg += item.qty;
+            totalVal = item.qty * item.rate;
+            totalIncome += totalVal;
+            cropStats[crop].kg += item.qty;
+            cropStats[crop].revenue += totalVal;
+            systemStats[sys].kg += item.qty;
+            systemStats[sys].revenue += totalVal;
+          } else if (item.category === 'Harvest Only') {
+            totalKg += item.qty;
+            cropStats[crop].kg += item.qty;
+            systemStats[sys].kg += item.qty;
+          } else if (item.category === 'Expense') {
+            totalExp += item.rate;
+            totalVal = -item.rate;
+          }
+
+          const valClass = totalVal > 0 ? 'ops-sum-profit' : (totalVal < 0 ? 'ops-sum-loss' : '');
+          const valText = totalVal !== 0 ? (totalVal > 0 ? '+' : '-') + 'KES ' + Math.abs(totalVal).toLocaleString() : '-';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${item.date}</td>
+            <td>${item.category}</td>
+            <td>${sys}</td>
+            <td>${crop}</td>
+            <td>${item.desc}</td>
+            <td>${item.qty ? item.qty + ' kg' : '-'}</td>
+            <td>${item.rate ? (item.category === 'Expense' ? 'KES ' : 'KES/kg ') + item.rate : '-'}</td>
+            <td class="${valClass}">${valText}</td>
+            <td class="row-remove-cell"></td>
+          `;
+          const delBtn = document.createElement('button');
+          delBtn.className = 'row-remove-btn';
+          delBtn.type = 'button';
+          delBtn.textContent = '✕';
+          delBtn.addEventListener('click', () => deleteEntry(item.id));
+          tr.querySelector('.row-remove-cell').appendChild(delBtn);
+          ledgerBody.appendChild(tr);
+        });
+      }
+
+      let sysHtml = '';
+      Object.keys(systemStats).forEach(sName => {
+        const s = systemStats[sName];
+        if (s.kg > 0 || s.revenue > 0) {
+          const share = totalKg > 0 ? ((s.kg / totalKg) * 100).toFixed(1) : '0.0';
+          sysHtml += `
+            <tr>
+              <td>${sName}</td>
+              <td>${s.kg.toFixed(1)} kg</td>
+              <td>KES ${Math.round(s.revenue).toLocaleString()}</td>
+              <td>${share}%</td>
+            </tr>
+          `;
+        }
+      });
+
+      let cropHtml = '';
+      Object.keys(cropStats).forEach(cName => {
+        const c = cropStats[cName];
+        const share = totalIncome > 0 ? ((c.revenue / totalIncome) * 100).toFixed(1) : '0.0';
+        cropHtml += `
+          <tr>
+            <td>${cName}</td>
+            <td>${c.kg.toFixed(1)} kg</td>
+            <td>KES ${Math.round(c.revenue).toLocaleString()}</td>
+            <td>${share}%</td>
+          </tr>
+        `;
+      });
+
+      systemSummaryBody.innerHTML = sysHtml || '<tr><td colspan="4">No system activity logged yet.</td></tr>';
+      cropSummaryBody.innerHTML = cropHtml || '<tr><td colspan="4">No crop performance data recorded yet.</td></tr>';
+
+      actualKg.innerText = totalKg.toFixed(1) + ' kg';
+      actualIncome.innerText = 'KES ' + Math.round(totalIncome).toLocaleString();
+      actualExp.innerText = 'KES ' + Math.round(totalExp).toLocaleString();
+      actualNet.innerText = 'KES ' + Math.round(totalIncome - totalExp).toLocaleString();
+
+      updateCharts(totalIncome, totalExp, systemStats, cropStats);
+    }
+
+    function loadState(){
+      const savedSys = localStorage.getItem(LS_SYSTEM);
+      const savedBeds = localStorage.getItem(LS_BEDS);
+      const savedPrice = localStorage.getItem(LS_PRICE);
+      const savedCapex = localStorage.getItem(LS_CAPEX);
+      const savedOpex = localStorage.getItem(LS_OPEX);
+
+      if (savedSys) systemType.value = savedSys;
+      if (savedBeds) beds.value = savedBeds;
+      if (savedPrice) price.value = savedPrice;
+      if (savedCapex) baseCapex.value = savedCapex;
+      if (savedOpex) baseOpex.value = savedOpex;
+
+      onSystemTypeChange(true);
+    }
+
+    systemType.addEventListener('change', () => onSystemTypeChange(false));
+    beds.addEventListener('input', calculate);
+    price.addEventListener('input', calculate);
+    baseCapex.addEventListener('input', calculate);
+    baseOpex.addEventListener('input', calculate);
+    hyBeds.addEventListener('input', updateHybridTotal);
+    hyBags.addEventListener('input', updateHybridTotal);
+    hyCones.addEventListener('input', updateHybridTotal);
+    entryCategory.addEventListener('change', adjustFields);
+    ledgerForm.addEventListener('submit', addEntry);
+    exportBtn.addEventListener('click', exportToCSV);
+    clearBtn.addEventListener('click', clearLedger);
+    vaultSaveBtn.addEventListener('click', saveVaultScenario);
+
+
+    loadState();
+    adjustFields();
+    renderVaultScenarios();
+  }
+
+  function destroy(){
+    charts.forEach(c => { try{ c.destroy(); }catch(e){} });
+    charts = [];
+  }
+
+  return { build, init, destroy };
+})();
+
+/* ===== hatchery ===== */
+window.OPS_MODULES = window.OPS_MODULES || {};
+window.OPS_MODULES['o-hatchery'] = (function(){
+  'use strict';
+  const LS_LEDGER = 'symbio_standalone_hatchery_ledger';
+  const LS_SCENARIOS = 'symbio_standalone_hatchery_scenarios';
+  const LS_HENS = 'symbio_h_hens';
+  const LS_ROOSTERS = 'symbio_h_roosters';
+  const LS_CAP = 'symbio_h_cap';
+  const LS_CYC = 'symbio_h_cyc';
+  const LS_HRATE = 'symbio_h_hrate';
+  let charts = [];
+  let entries = [];
+
+  function build(){
+    return `
+      <div class="ops-guide" id="o-hatchery-guide">
+        <button type="button" class="ops-guide-toggle planner-btn" id="o-hatchery-guide-toggle">📖 Hatchery Guide</button>
+        <div class="ops-guide-body">
+          <h3 class="ops-section-title">Hatchery Sourcing & Operation Protocol</h3>
+          <div class="ops-field-row">
+            <div class="ops-field">
+              <label>1. Sourcing Model (Breeders = 0?)</label>
+              <ul>
+                <li><b>Standalone Hatchery:</b> Set breeder sliders to 0 if you purchase all hatching eggs from vetted outgrower farms.</li>
+                <li><b>Outgrower Quality:</b> Ensure eggs are uniform (50g–60g) with high shell integrity and verified flock health.</li>
+              </ul>
+            </div>
+            <div class="ops-field">
+              <label>2. Incubation & Setting</label>
+              <ul>
+                <li><b>Cycles:</b> Run setters continuously on a 21-day cycle, maintaining precise temperature (37.5°C) and humidity.</li>
+                <li><b>Candling:</b> Perform candling on Day 7 and Day 18 to remove infertile eggs and clear setters.</li>
+              </ul>
+            </div>
+            <div class="ops-field">
+              <label>3. DOC Quality & Dispatch</label>
+              <ul>
+                <li><b>Grading:</b> Inspect active chicks for unhealed navels, alertness, and strong legs before boxing.</li>
+                <li><b>Biosecurity:</b> Fumigate setters and hatchers between every single batch to eliminate vertical pathogens.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ops-vault">
+        <h3 class="ops-section-title">📂 Scenario & Plan Vault</h3>
+        <div class="ops-ledger-bar">
+          <input type="text" id="o-hatchery-scenario-name" placeholder="e.g., Expansion Phase 1 - 1000 Capacity">
+          <button type="button" class="planner-btn" id="o-hatchery-save-scenario">Save Scenario</button>
+        </div>
+        <div class="ops-field-row">
+          <div class="ops-field">
+            <label for="o-hatchery-scenario-select">Load / Switch Scenario</label>
+            <select id="o-hatchery-scenario-select">
+              <option value="">-- Select Saved Scenario --</option>
+            </select>
+          </div>
+        </div>
+        <div class="ops-vault-list" id="o-hatchery-vault-list"></div>
+      </div>
+
+      <h3 class="ops-section-title">Optional Internal Breeder Flock (Set to 0 if Buying Eggs)</h3>
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Total Internal Breeders</span>
+          <span class="ops-sum-value" id="o-hatchery-total-breeder-count">0 Head</span>
+        </div>
+      </div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Breeder Hens (Female): <span id="o-hatchery-val-hens">0</span></label>
+          <input type="range" id="o-hatchery-flock-hens" min="0" max="1000" step="10" value="0">
+        </div>
+        <div class="ops-field">
+          <label>Breeder Roosters (Male): <span id="o-hatchery-val-roosters">0</span></label>
+          <input type="range" id="o-hatchery-flock-roosters" min="0" max="100" step="2" value="0">
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Incubator Capacity & Hatch Parameters</h3>
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Est. Annual DOC Output</span>
+          <span class="ops-sum-value" id="o-hatchery-val-annual-chicks">0 Head</span>
+        </div>
+      </div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label for="o-hatchery-hatch-capacity">Incubator Setter Capacity (Eggs)</label>
+          <input type="number" id="o-hatchery-hatch-capacity" value="500" step="50">
+        </div>
+        <div class="ops-field">
+          <label for="o-hatchery-hatch-cycles">Settings / Hatches Per Year</label>
+          <input type="number" id="o-hatchery-hatch-cycles" value="17" min="1" max="24">
+        </div>
+        <div class="ops-field">
+          <label for="o-hatchery-hatch-rate-pct">Average Hatchability Rate (%)</label>
+          <input type="number" id="o-hatchery-hatch-rate-pct" value="78" min="40" max="98">
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Pricing & Operational Cost Structure</h3>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label for="o-hatchery-price-chick">Day-Old Chick (DOC) Price (KES)</label>
+          <input type="number" id="o-hatchery-price-chick" value="130">
+        </div>
+        <div class="ops-field">
+          <label for="o-hatchery-price-purchased-egg">Purchased Hatching Egg Cost (KES)</label>
+          <input type="number" id="o-hatchery-price-purchased-egg" value="35">
+        </div>
+        <div class="ops-field">
+          <label for="o-hatchery-price-spent-bird">Spent Breeder Carcass Price (KES)</label>
+          <input type="number" id="o-hatchery-price-spent-bird" value="650">
+        </div>
+        <div class="ops-field">
+          <label for="o-hatchery-base-capex">Base Hatchery CapEx (KES)</label>
+          <input type="number" id="o-hatchery-base-capex" value="200000">
+        </div>
+      </div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label for="o-hatchery-base-opex">Annual Fixed OpEx / Utilities / Power (KES)</label>
+          <input type="number" id="o-hatchery-base-opex" value="90000">
+        </div>
+        <div class="ops-field">
+          <label for="o-hatchery-egg-fertility-pct">Internal Egg Fertility Rate (%) [If Breeders &gt; 0]</label>
+          <input type="number" id="o-hatchery-egg-fertility-pct" value="88" min="50" max="100">
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Projected Metrics</h3>
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Startup Investment (CapEx)</span>
+          <span class="ops-sum-value" id="o-hatchery-out-capex">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Annual Running Cost (OpEx + Eggs)</span>
+          <span class="ops-sum-value" id="o-hatchery-out-opex">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Annual Gross Revenue</span>
+          <span class="ops-sum-value ops-sum-profit" id="o-hatchery-out-annual-rev">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Year 1 Net Profit</span>
+          <span class="ops-sum-value ops-sum-profit" id="o-hatchery-out-net">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Year 3 Cumulative Net Profit</span>
+          <span class="ops-sum-value ops-sum-profit" id="o-hatchery-out-net-3yr">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Est. Payback Period</span>
+          <span class="ops-sum-value" id="o-hatchery-out-payback">0 Months</span>
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Record Hatchery Batch or Expense</h3>
+      <form id="o-hatchery-ledger-form">
+        <div class="ops-ledger-bar">
+          <input type="date" id="o-hatchery-entry-date" required>
+          <select id="o-hatchery-entry-category">
+            <option value="DOC Batch Sale">Day-Old Chicks Sale</option>
+            <option value="Hatchery Expense">Hatchery Expense / Utility / Egg Purchase</option>
+            <option value="Spent Breeder Sale">Spent Breeder Bird Sale</option>
+          </select>
+          <select id="o-hatchery-entry-stream">
+            <option value="Stream 1: DOC Sales">Stream 1: DOC Sales</option>
+            <option value="Stream 2: Egg Purchases & Power">Stream 2: Egg Purchases & Power</option>
+            <option value="Stream 3: Breeder Culling">Stream 3: Breeder Culling</option>
+          </select>
+          <input type="text" id="o-hatchery-entry-desc" placeholder="Details (e.g., Batch #4 Hatch - 380 chicks)" required>
+          <input type="number" id="o-hatchery-entry-qty" step="1" placeholder="Quantity / Head">
+          <input type="number" id="o-hatchery-entry-rate" step="1" placeholder="Unit Rate or Total (KES)">
+          <button type="submit" class="planner-btn">Save Entry</button>
+        </div>
+      </form>
+
+      <div class="planner-table-wrap">
+        <div class="ops-ledger-bar">
+          <h3 class="ops-section-title">Hatchery Operations Ledger</h3>
+          <button type="button" class="planner-btn" id="o-hatchery-export">📥 Export CSV</button>
+          <button type="button" class="planner-btn" id="o-hatchery-clear">Clear Data</button>
+        </div>
+        <table class="planner-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Revenue Stream</th>
+              <th>Details</th>
+              <th>Qty</th>
+              <th>Rate/Amt</th>
+              <th>Total Value</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="o-hatchery-ledger-body"></tbody>
+        </table>
+      </div>
+
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Revenue</span>
+          <span class="ops-sum-value ops-sum-profit" id="o-hatchery-actual-income">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Expenses</span>
+          <span class="ops-sum-value ops-sum-loss" id="o-hatchery-actual-exp">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Net Cashflow</span>
+          <span class="ops-sum-value" id="o-hatchery-actual-net">KES 0</span>
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Revenue Stream Breakdown</h3>
+      <div class="ops-chart-frame">
+        <canvas id="o-hatchery-financial-chart"></canvas>
+      </div>
+    `;
+  }
+
+  function init(root){
+    entries = JSON.parse(localStorage.getItem(LS_LEDGER)) || [];
+    let scenarios = JSON.parse(localStorage.getItem(LS_SCENARIOS)) || {};
+
+    const $ = (sel) => root.querySelector(sel);
+
+    const guideWrap = $('#o-hatchery-guide');
+    const guideToggle = $('#o-hatchery-guide-toggle');
+    guideToggle.addEventListener('click', () => {
+      guideWrap.classList.toggle('o-open');
+    });
+
+    const scenarioName = $('#o-hatchery-scenario-name');
+    const saveScenarioBtn = $('#o-hatchery-save-scenario');
+    const scenarioSelect = $('#o-hatchery-scenario-select');
+    const vaultList = $('#o-hatchery-vault-list');
+
+    const flockHens = $('#o-hatchery-flock-hens');
+    const flockRoosters = $('#o-hatchery-flock-roosters');
+    const valHens = $('#o-hatchery-val-hens');
+    const valRoosters = $('#o-hatchery-val-roosters');
+    const totalBreederCount = $('#o-hatchery-total-breeder-count');
+
+    const hatchCapacity = $('#o-hatchery-hatch-capacity');
+    const hatchCycles = $('#o-hatchery-hatch-cycles');
+    const hatchRatePct = $('#o-hatchery-hatch-rate-pct');
+    const valAnnualChicks = $('#o-hatchery-val-annual-chicks');
+
+    const priceChick = $('#o-hatchery-price-chick');
+    const pricePurchasedEgg = $('#o-hatchery-price-purchased-egg');
+    const priceSpentBird = $('#o-hatchery-price-spent-bird');
+    const baseCapex = $('#o-hatchery-base-capex');
+    const baseOpex = $('#o-hatchery-base-opex');
+    const eggFertilityPct = $('#o-hatchery-egg-fertility-pct');
+
+    const outCapex = $('#o-hatchery-out-capex');
+    const outOpex = $('#o-hatchery-out-opex');
+    const outAnnualRev = $('#o-hatchery-out-annual-rev');
+    const outNet = $('#o-hatchery-out-net');
+    const outNet3yr = $('#o-hatchery-out-net-3yr');
+    const outPayback = $('#o-hatchery-out-payback');
+
+    const ledgerForm = $('#o-hatchery-ledger-form');
+    const entryDate = $('#o-hatchery-entry-date');
+    const entryCategory = $('#o-hatchery-entry-category');
+    const entryStream = $('#o-hatchery-entry-stream');
+    const entryDesc = $('#o-hatchery-entry-desc');
+    const entryQty = $('#o-hatchery-entry-qty');
+    const entryRate = $('#o-hatchery-entry-rate');
+
+    const ledgerBody = $('#o-hatchery-ledger-body');
+    const exportBtn = $('#o-hatchery-export');
+    const clearBtn = $('#o-hatchery-clear');
+
+    const actualIncome = $('#o-hatchery-actual-income');
+    const actualExp = $('#o-hatchery-actual-exp');
+    const actualNet = $('#o-hatchery-actual-net');
+
+    entryDate.valueAsDate = new Date();
+
+    function adjustFields(){
+      const cat = entryCategory.value;
+      entryQty.disabled = (cat === 'Hatchery Expense');
+      entryRate.placeholder = cat === 'Hatchery Expense' ? 'Total Expense / Egg Purchase (KES)' : 'Unit Rate or Total (KES)';
+    }
+
+    function calculate(){
+      const hens = parseInt(flockHens.value) || 0;
+      const roosters = parseInt(flockRoosters.value) || 0;
+      const totalBreeders = hens + roosters;
+
+      valHens.innerText = hens;
+      valRoosters.innerText = roosters;
+      totalBreederCount.innerText = totalBreeders + ' Head';
+
+      const hatchCap = parseInt(hatchCapacity.value) || 500;
+      const hatchCyc = parseInt(hatchCycles.value) || 17;
+      const hatchRate = parseFloat(hatchRatePct.value) || 78;
+      const eggFertility = parseFloat(eggFertilityPct.value) || 88;
+
+      const maxSetterCapacityYear = hatchCap * hatchCyc;
+
+      const annualEggsProduced = hens * 180;
+      const annualFertileEggsInternal = annualEggsProduced * (eggFertility / 100);
+      const internalEggsSet = Math.min(annualFertileEggsInternal, maxSetterCapacityYear);
+      const externalEggsNeeded = Math.max(0, maxSetterCapacityYear - internalEggsSet);
+
+      const annualChicks = Math.round((internalEggsSet + externalEggsNeeded) * (hatchRate / 100));
+      valAnnualChicks.innerText = annualChicks.toLocaleString() + ' Head';
+
+      const pChick = parseFloat(priceChick.value) || 130;
+      const pPurchasedEgg = parseFloat(pricePurchasedEgg.value) || 35;
+      const pSpentBird = parseFloat(priceSpentBird.value) || 650;
+
+      const bCapex = parseFloat(baseCapex.value) || 200000;
+      const bOpex = parseFloat(baseOpex.value) || 90000;
+
+      const annualEggPurchaseCost = externalEggsNeeded * pPurchasedEgg;
+
+      const capex = Math.round(bCapex + (totalBreeders > 0 ? (totalBreeders / 100) * 40000 : 0));
+      const opex = Math.round(bOpex + annualEggPurchaseCost + (totalBreeders > 0 ? (totalBreeders / 100) * 35000 : 0));
+
+      const revChicks = annualChicks * pChick;
+      const revSpentBirds = totalBreeders * pSpentBird;
+
+      const totalRev = revChicks + revSpentBirds;
+      const netYear1 = totalRev - capex - opex;
+      const net3Yr = (totalRev * 3) - capex - (opex * 3);
+      const netMonthly = (totalRev - opex) / 12;
+      const payback = netMonthly > 0 ? (capex / netMonthly).toFixed(1) : 'N/A';
+
+      outCapex.innerText = 'KES ' + capex.toLocaleString();
+      outOpex.innerText = 'KES ' + opex.toLocaleString();
+      outAnnualRev.innerText = 'KES ' + Math.round(totalRev).toLocaleString();
+      outNet.innerText = 'KES ' + Math.round(netYear1).toLocaleString();
+      outNet3yr.innerText = 'KES ' + Math.round(net3Yr).toLocaleString();
+      outPayback.innerText = payback !== 'N/A' ? payback + ' Months' : 'N/A';
+
+      localStorage.setItem(LS_HENS, hens);
+      localStorage.setItem(LS_ROOSTERS, roosters);
+      localStorage.setItem(LS_CAP, hatchCap);
+      localStorage.setItem(LS_CYC, hatchCyc);
+      localStorage.setItem(LS_HRATE, hatchRate);
+
+      renderLedger();
+    }
+
+    function saveScenario(){
+      const name = scenarioName.value.trim();
+      if (!name) { alert('Please enter a scenario name.'); return; }
+      scenarios[name] = {
+        hens: flockHens.value,
+        roosters: flockRoosters.value,
+        capacity: hatchCapacity.value,
+        cycles: hatchCycles.value,
+        ratePct: hatchRatePct.value,
+        priceChick: priceChick.value,
+        priceEgg: pricePurchasedEgg.value,
+        priceSpent: priceSpentBird.value,
+        capex: baseCapex.value,
+        opex: baseOpex.value,
+        fertility: eggFertilityPct.value
+      };
+      localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+      scenarioName.value = '';
+      updateScenarioDropdown();
+      renderVaultList();
+      alert(`Scenario "${name}" saved successfully!`);
+    }
+
+    function updateScenarioDropdown(){
+      let html = '<option value="">-- Select Saved Scenario --</option>';
+      for (let name in scenarios) {
+        html += `<option value="${name}">${name}</option>`;
+      }
+      scenarioSelect.innerHTML = html;
+    }
+
+    function loadScenarioByName(name){
+      if (!name || !scenarios[name]) return;
+      const data = scenarios[name];
+      flockHens.value = data.hens;
+      flockRoosters.value = data.roosters;
+      hatchCapacity.value = data.capacity;
+      hatchCycles.value = data.cycles;
+      hatchRatePct.value = data.ratePct;
+      priceChick.value = data.priceChick;
+      pricePurchasedEgg.value = data.priceEgg;
+      priceSpentBird.value = data.priceSpent;
+      baseCapex.value = data.capex;
+      baseOpex.value = data.opex;
+      eggFertilityPct.value = data.fertility;
+      calculate();
+    }
+
+    function deleteScenario(name){
+      if (confirm(`Delete scenario "${name}"?`)) {
+        delete scenarios[name];
+        localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+        updateScenarioDropdown();
+        renderVaultList();
+      }
+    }
+
+    function renderVaultList(){
+      const keys = Object.keys(scenarios);
+      vaultList.innerHTML = '';
+      if (keys.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'ops-note';
+        p.textContent = 'No saved scenarios in vault.';
+        vaultList.appendChild(p);
+        return;
+      }
+      keys.forEach(key => {
+        const item = document.createElement('div');
+        item.className = 'ops-vault-item';
+        item.innerHTML = `
+          <div><span>${key}</span></div>
+          <div class="ops-ledger-bar">
+            <button type="button" class="planner-btn" data-action="load" data-name="${key}">Load</button>
+            <button type="button" class="planner-btn" data-action="delete" data-name="${key}">Delete</button>
+          </div>
+        `;
+        vaultList.appendChild(item);
+      });
+      vaultList.querySelectorAll('[data-action="load"]').forEach(btn => {
+        btn.addEventListener('click', () => loadScenarioByName(btn.getAttribute('data-name')));
+      });
+      vaultList.querySelectorAll('[data-action="delete"]').forEach(btn => {
+        btn.addEventListener('click', () => deleteScenario(btn.getAttribute('data-name')));
+      });
+    }
+
+    function addEntry(e){
+      e.preventDefault();
+      const date = entryDate.value;
+      const category = entryCategory.value;
+      const stream = entryStream.value;
+      const desc = entryDesc.value;
+      const qty = parseFloat(entryQty.value) || 1;
+      const rate = parseFloat(entryRate.value) || 0;
+
+      entries.push({ id: Date.now(), date, category, stream, desc, qty, rate });
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+
+      entryDesc.value = '';
+      entryQty.value = '';
+      entryRate.value = '';
+      renderLedger();
+    }
+
+    function deleteEntry(id){
+      entries = entries.filter(i => i.id !== id);
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+      renderLedger();
+    }
+
+    function clearLedger(){
+      if (confirm('Clear all recorded hatchery ledger entries?')) {
+        entries = [];
+        localStorage.removeItem(LS_LEDGER);
+        renderLedger();
+      }
+    }
+
+    function exportToCSV(){
+      if (entries.length === 0) { alert('No ledger entries to export.'); return; }
+      let csv = 'Date,Category,Stream,Details,Quantity,Rate_or_Amount_KES,Total_Value_KES\n';
+      entries.forEach(e => {
+        let total = e.category !== 'Hatchery Expense' ? e.qty * e.rate : -e.rate;
+        csv += `"${e.date}","${e.category}","${e.stream}","${e.desc.replace(/"/g, '""')}",${e.qty || 0},${e.rate || 0},${total}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_commercial_hatchery_ledger_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function cssVar(name){
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function updateCharts(streamData){
+      if (typeof Chart === 'undefined') return;
+      const canvas = $('#o-hatchery-financial-chart');
+      charts.forEach(c => { try{ c.destroy(); }catch(e){} });
+      charts = [];
+
+      const gold = cssVar('--gold-text');
+      const leaf = cssVar('--leaf');
+      const soil = cssVar('--soil-900');
+      const bone = cssVar('--bone');
+
+      const labels = Object.keys(streamData);
+      const revenues = labels.map(l => streamData[l]);
+
+      const ctx = canvas.getContext('2d');
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels.length ? labels : ['No Revenue Data'],
+          datasets: [{
+            data: revenues.length && revenues.some(r => r > 0) ? revenues : [1],
+            backgroundColor: [gold, leaf, soil],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right', labels: { color: bone, font: { size: 11 } } } }
+        }
+      });
+      charts.push(chart);
+    }
+
+    function renderLedger(){
+      let totalIncome = 0, totalExp = 0;
+      let streamStats = {
+        'DOC Batch Sale': 0,
+        'Spent Breeder Sale': 0
+      };
+
+      ledgerBody.innerHTML = '';
+      const sorted = entries.slice().sort((a,b) => new Date(b.date) - new Date(a.date));
+
+      if (sorted.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="8">No hatchery activity logged yet.</td>';
+        ledgerBody.appendChild(tr);
+      } else {
+        sorted.forEach(item => {
+          let totalVal = 0;
+          if (item.category !== 'Hatchery Expense') {
+            totalVal = item.qty * item.rate;
+            totalIncome += totalVal;
+            if (streamStats[item.category] !== undefined) {
+              streamStats[item.category] += totalVal;
+            }
+          } else {
+            totalExp += item.rate;
+            totalVal = -item.rate;
+          }
+
+          const tr = document.createElement('tr');
+          const valClass = totalVal > 0 ? 'ops-sum-profit' : (totalVal < 0 ? 'ops-sum-loss' : '');
+          const valText = totalVal !== 0 ? (totalVal > 0 ? '+' : '-') + 'KES ' + Math.abs(totalVal).toLocaleString() : '-';
+          tr.innerHTML = `
+            <td>${item.date}</td>
+            <td>${item.category}</td>
+            <td>${item.stream}</td>
+            <td>${item.desc}</td>
+            <td>${item.qty ? item.qty : '-'}</td>
+            <td>${item.rate ? 'KES ' + item.rate.toLocaleString() : '-'}</td>
+            <td class="${valClass}">${valText}</td>
+            <td class="row-remove-cell"></td>
+          `;
+          const delBtn = document.createElement('button');
+          delBtn.className = 'row-remove-btn';
+          delBtn.type = 'button';
+          delBtn.textContent = '✕';
+          delBtn.addEventListener('click', () => deleteEntry(item.id));
+          tr.querySelector('.row-remove-cell').appendChild(delBtn);
+          ledgerBody.appendChild(tr);
+        });
+      }
+
+      actualIncome.innerText = 'KES ' + Math.round(totalIncome).toLocaleString();
+      actualExp.innerText = 'KES ' + Math.round(totalExp).toLocaleString();
+      actualNet.innerText = 'KES ' + Math.round(totalIncome - totalExp).toLocaleString();
+
+      updateCharts(streamStats);
+    }
+
+    flockHens.addEventListener('input', calculate);
+    flockRoosters.addEventListener('input', calculate);
+    hatchCapacity.addEventListener('input', calculate);
+    hatchCycles.addEventListener('input', calculate);
+    hatchRatePct.addEventListener('input', calculate);
+    priceChick.addEventListener('input', calculate);
+    pricePurchasedEgg.addEventListener('input', calculate);
+    priceSpentBird.addEventListener('input', calculate);
+    baseCapex.addEventListener('input', calculate);
+    baseOpex.addEventListener('input', calculate);
+    eggFertilityPct.addEventListener('input', calculate);
+
+    entryCategory.addEventListener('change', adjustFields);
+    ledgerForm.addEventListener('submit', addEntry);
+    exportBtn.addEventListener('click', exportToCSV);
+    clearBtn.addEventListener('click', clearLedger);
+
+    saveScenarioBtn.addEventListener('click', saveScenario);
+    scenarioSelect.addEventListener('change', () => loadScenarioByName(scenarioSelect.value));
+
+    if (localStorage.getItem(LS_HENS) !== null) flockHens.value = localStorage.getItem(LS_HENS);
+    if (localStorage.getItem(LS_ROOSTERS) !== null) flockRoosters.value = localStorage.getItem(LS_ROOSTERS);
+    if (localStorage.getItem(LS_CAP)) hatchCapacity.value = localStorage.getItem(LS_CAP);
+    if (localStorage.getItem(LS_CYC)) hatchCycles.value = localStorage.getItem(LS_CYC);
+    if (localStorage.getItem(LS_HRATE)) hatchRatePct.value = localStorage.getItem(LS_HRATE);
+
+    updateScenarioDropdown();
+    renderVaultList();
+    calculate();
+    adjustFields();
+  }
+
+  function destroy(){
+    charts.forEach(c => { try{ c.destroy(); }catch(e){} });
+    charts = [];
+  }
+
+  return { build, init, destroy };
+})();
+
+/* ===== kienyeji ===== */
+window.OPS_MODULES = window.OPS_MODULES || {};
+window.OPS_MODULES['o-kienyeji'] = (function(){
+  'use strict';
+  const LS_LEDGER = 'symbio_poultry_ledger';
+  const LS_SCENARIOS = 'symbio_poultry_scenarios';
+  let charts = [];
+
+  function build(){
+    return `
+    <div class="ops-guide" id="o-kienyeji-guide">
+      <button type="button" class="ops-guide-toggle planner-btn" id="o-kienyeji-guide-toggle">📖 System Guide</button>
+      <div class="ops-guide-body">
+        <h3 class="ops-section-title">Poultry & Bio-Manure Architecture</h3>
+        <div class="ops-field-row">
+          <div class="ops-field">
+            <p><b>Flock & Production Strategy</b></p>
+            <ul>
+              <li><b>Improved Kienyeji:</b> Hardy dual-purpose birds providing both steady egg production and fast-growing meat carcasses.</li>
+              <li><b>Breeding Ratio:</b> Maintain active roosters relative to laying hens to harvest high-value <i>fertile hatching eggs</i>.</li>
+              <li><b>Housing:</b> Standard conventional housing cleaned regularly with solid waste transferred to external composting stations.</li>
+            </ul>
+          </div>
+          <div class="ops-field">
+            <p><b>JMS & LAB Manure Odour Control</b></p>
+            <ul>
+              <li><b>External Treatment:</b> Swept litter and manure piled outside are sprayed with LAB to drop pH and suppress ammonia-producing bacteria.</li>
+              <li><b>Microbial Activation:</b> JMS (JADAM Microbial Solution) is sprayed to accelerate decomposition and sanitize the manure.</li>
+              <li><b>Compost Revenue:</b> Odourless, fully matured organic manure bagged and sold to local crop farmers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ops-vault">
+      <h2 class="ops-section-title">📂 Scenario & Plan Vault</h2>
+      <div class="ops-ledger-bar">
+        <button type="button" class="planner-btn" id="o-kienyeji-export-vault">Export Vault JSON</button>
+        <label class="planner-btn">Import Vault <input type="file" id="o-kienyeji-import-file" accept=".json" style="display:none"></label>
+      </div>
+      <div class="ops-field-row">
+        <div class="ops-field" style="flex:2;">
+          <label for="o-kienyeji-scenario-name">Save Current Setup as Scenario</label>
+          <div class="ops-ledger-bar">
+            <input type="text" id="o-kienyeji-scenario-name" placeholder="e.g., Commercial Flock Expansion - 200 Layers">
+            <button type="button" class="planner-btn" id="o-kienyeji-save-scenario">Save Scenario</button>
+          </div>
+        </div>
+        <div class="ops-field">
+          <label for="o-kienyeji-scenario-select">Load / Switch Scenario</label>
+          <select id="o-kienyeji-scenario-select">
+            <option value="">-- Select Saved Scenario --</option>
+          </select>
+        </div>
+      </div>
+      <div class="ops-vault-list" id="o-kienyeji-vault-list"></div>
+    </div>
+
+    <div>
+      <div class="ops-field-row" style="justify-content:space-between;align-items:center;">
+        <h2 class="ops-section-title">Flock Composition Sizing (Sliders)</h2>
+        <span class="ops-pill o-active">Total Flock Active: <span id="o-kienyeji-total-flock-count">65</span> Head</span>
+      </div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Laying Hens / Breeders <span id="o-kienyeji-val-layers">50</span></label>
+          <input type="range" id="o-kienyeji-flock-layers" min="10" max="300" step="5" value="50">
+        </div>
+        <div class="ops-field">
+          <label>Breeding Roosters <span id="o-kienyeji-val-roosters">5</span></label>
+          <input type="range" id="o-kienyeji-flock-roosters" min="1" max="30" step="1" value="5">
+        </div>
+        <div class="ops-field">
+          <label>Growing Meat Birds / Broilers <span id="o-kienyeji-val-meat">10</span></label>
+          <input type="range" id="o-kienyeji-flock-meat" min="0" max="200" step="5" value="10">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="ops-section-title">Dynamic Pricing & Operating Costs</h2>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label for="o-kienyeji-price-table-egg">Table Egg Tray (30 pcs)</label>
+          <input type="number" id="o-kienyeji-price-table-egg" value="450">
+        </div>
+        <div class="ops-field">
+          <label for="o-kienyeji-price-fertile-egg">Fertile Hatching Egg (1 pc)</label>
+          <input type="number" id="o-kienyeji-price-fertile-egg" value="40">
+        </div>
+        <div class="ops-field">
+          <label for="o-kienyeji-price-meat-bird">Mature Bird / Carcass (KES)</label>
+          <input type="number" id="o-kienyeji-price-meat-bird" value="800">
+        </div>
+        <div class="ops-field">
+          <label for="o-kienyeji-price-manure">Treated Manure Bag (KES)</label>
+          <input type="number" id="o-kienyeji-price-manure" value="250">
+        </div>
+        <div class="ops-field">
+          <label for="o-kienyeji-price-chick">Day-Old Chick (Optional)</label>
+          <input type="number" id="o-kienyeji-price-chick" value="120">
+        </div>
+      </div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label for="o-kienyeji-base-capex">Base CapEx / Startup Assets (KES)</label>
+          <input type="number" id="o-kienyeji-base-capex" value="85000">
+        </div>
+        <div class="ops-field">
+          <label for="o-kienyeji-base-opex">Annual Running Costs / OpEx (KES)</label>
+          <input type="number" id="o-kienyeji-base-opex" value="60000">
+        </div>
+      </div>
+    </div>
+
+    <div class="ops-summary-grid">
+      <div class="ops-summary-card">
+        <span class="ops-sum-label">Startup Capital (CapEx)</span>
+        <span class="ops-sum-value" id="o-kienyeji-out-capex">KES 0</span>
+      </div>
+      <div class="ops-summary-card">
+        <span class="ops-sum-label">Annual Running Cost (OpEx)</span>
+        <span class="ops-sum-value" id="o-kienyeji-out-opex">KES 0</span>
+      </div>
+      <div class="ops-summary-card">
+        <span class="ops-sum-label">Annual Gross Revenue</span>
+        <span class="ops-sum-value ops-sum-profit" id="o-kienyeji-out-annual-rev">KES 0</span>
+      </div>
+      <div class="ops-summary-card">
+        <span class="ops-sum-label">Year 1 Net Profit</span>
+        <span class="ops-sum-value ops-sum-profit" id="o-kienyeji-out-net">KES 0</span>
+      </div>
+      <div class="ops-summary-card">
+        <span class="ops-sum-label">Year 3 Cumulative Net Profit</span>
+        <span class="ops-sum-value ops-sum-profit" id="o-kienyeji-out-net-3yr">KES 0</span>
+      </div>
+      <div class="ops-summary-card">
+        <span class="ops-sum-label">Est. Payback Period</span>
+        <span class="ops-sum-value" id="o-kienyeji-out-payback">0 Months</span>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="ops-section-title">Record Poultry Activity or Sale</h2>
+      <form id="o-kienyeji-ledger-form" class="ops-ledger-bar">
+        <input type="date" id="o-kienyeji-entry-date" required>
+        <select id="o-kienyeji-entry-category">
+          <option value="Table Eggs Sale">Table Eggs Sale</option>
+          <option value="Fertile Eggs Sale">Fertile Hatching Eggs Sale</option>
+          <option value="Meat Bird Sale">Meat Bird Sale</option>
+          <option value="JMS Manure Sale">JMS Treated Manure Sale</option>
+          <option value="Poultry Expense">Poultry Farm Expense</option>
+        </select>
+        <select id="o-kienyeji-entry-stream">
+          <option value="Stream 1: Table Eggs">Stream 1: Table Eggs</option>
+          <option value="Stream 2: Hatching Eggs">Stream 2: Hatching Eggs</option>
+          <option value="Stream 3: Meat Production">Stream 3: Meat Production</option>
+          <option value="Stream 4: Bio-Manure Fertilizer">Stream 4: Bio-Manure Fertilizer</option>
+          <option value="General Ops">General Ops</option>
+        </select>
+        <input type="text" id="o-kienyeji-entry-desc" placeholder="Details (e.g., Sold 5 trays)" required>
+        <input type="number" id="o-kienyeji-entry-qty" step="1" placeholder="Quantity / Units">
+        <input type="number" id="o-kienyeji-entry-rate" step="1" placeholder="Rate or Total (KES)">
+        <button type="submit" class="planner-btn">Save Entry</button>
+      </form>
+    </div>
+
+    <div class="planner-table-wrap">
+      <div class="ops-field-row" style="justify-content:space-between;align-items:center;">
+        <h3 class="ops-section-title">Poultry Operations Log</h3>
+        <div class="ops-ledger-bar">
+          <button type="button" class="planner-btn" id="o-kienyeji-export-csv">📥 Export CSV</button>
+          <button type="button" class="planner-btn" id="o-kienyeji-clear-ledger">Clear Data</button>
+        </div>
+      </div>
+      <table class="planner-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Production Stream</th>
+            <th>Details</th>
+            <th>Qty</th>
+            <th>Rate/Amt</th>
+            <th>Total Value</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="o-kienyeji-ledger-body"></tbody>
+      </table>
+    </div>
+
+    <div class="ops-field-row">
+      <div class="ops-field">
+        <h3 class="ops-section-title">Actual Financial Summary</h3>
+        <div class="ops-summary-grid">
+          <div class="ops-summary-card">
+            <span class="ops-sum-label">Actual Revenue</span>
+            <span class="ops-sum-value ops-sum-profit" id="o-kienyeji-actual-income">KES 0</span>
+          </div>
+          <div class="ops-summary-card">
+            <span class="ops-sum-label">Actual Expenses</span>
+            <span class="ops-sum-value ops-sum-loss" id="o-kienyeji-actual-exp">KES 0</span>
+          </div>
+          <div class="ops-summary-card">
+            <span class="ops-sum-label">Net Cashflow</span>
+            <span class="ops-sum-value" id="o-kienyeji-actual-net">KES 0</span>
+          </div>
+        </div>
+      </div>
+      <div class="ops-field" style="flex:2;">
+        <h3 class="ops-section-title">Revenue Stream Breakdown</h3>
+        <div class="ops-chart-frame">
+          <canvas id="o-kienyeji-financialChart"></canvas>
+        </div>
+      </div>
+    </div>
+    `;
+  }
+
+  function init(root){
+    let entries = JSON.parse(localStorage.getItem(LS_LEDGER)) || [];
+    let scenarios = JSON.parse(localStorage.getItem(LS_SCENARIOS)) || {};
+    let financialChartInstance = null;
+
+    const $ = (sel) => root.querySelector(sel);
+
+    const dateEl = $('#o-kienyeji-entry-date');
+    if (dateEl) dateEl.valueAsDate = new Date();
+
+    const guideWrap = $('#o-kienyeji-guide');
+    const guideToggle = $('#o-kienyeji-guide-toggle');
+    if (guideToggle) guideToggle.addEventListener('click', () => guideWrap.classList.toggle('o-open'));
+
+    function cssVar(name, fallback){
+      const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return v || fallback;
+    }
+
+    function calculate(){
+      const layers = parseInt($('#o-kienyeji-flock-layers').value) || 50;
+      const roosters = parseInt($('#o-kienyeji-flock-roosters').value) || 5;
+      const meat = parseInt($('#o-kienyeji-flock-meat').value) || 10;
+      const totalFlock = layers + roosters + meat;
+
+      $('#o-kienyeji-val-layers').innerText = layers;
+      $('#o-kienyeji-val-roosters').innerText = roosters;
+      $('#o-kienyeji-val-meat').innerText = meat;
+      $('#o-kienyeji-total-flock-count').innerText = totalFlock;
+
+      const pTableEgg = parseFloat($('#o-kienyeji-price-table-egg').value) || 450;
+      const pFertileEgg = parseFloat($('#o-kienyeji-price-fertile-egg').value) || 40;
+      const pMeatBird = parseFloat($('#o-kienyeji-price-meat-bird').value) || 800;
+      const pManure = parseFloat($('#o-kienyeji-price-manure').value) || 250;
+
+      const baseCapex = parseFloat($('#o-kienyeji-base-capex').value) || 85000;
+      const baseOpex = parseFloat($('#o-kienyeji-base-opex').value) || 60000;
+
+      const capex = Math.round(baseCapex * (totalFlock / 65));
+      const opex = Math.round(baseOpex * (totalFlock / 65));
+
+      const annualTableEggsTrays = (layers * 150) / 30;
+      const annualFertileEggs = (layers * 60);
+      const annualMeatSold = meat * 3;
+      const annualManureBags = Math.round(totalFlock * 1.5);
+
+      const revTableEggs = annualTableEggsTrays * pTableEgg;
+      const revFertileEggs = annualFertileEggs * pFertileEgg;
+      const revMeat = annualMeatSold * pMeatBird;
+      const revManure = annualManureBags * pManure;
+
+      const totalRev = revTableEggs + revFertileEggs + revMeat + revManure;
+      const netYear1 = totalRev - capex - opex;
+      const net3Yr = (totalRev * 3) - capex - (opex * 3);
+      const netMonthly = (totalRev - opex) / 12;
+      const payback = netMonthly > 0 ? (capex / netMonthly).toFixed(1) : 'N/A';
+
+      $('#o-kienyeji-out-capex').innerText = 'KES ' + capex.toLocaleString();
+      $('#o-kienyeji-out-opex').innerText = 'KES ' + opex.toLocaleString();
+      $('#o-kienyeji-out-annual-rev').innerText = 'KES ' + Math.round(totalRev).toLocaleString();
+      $('#o-kienyeji-out-net').innerText = 'KES ' + Math.round(netYear1).toLocaleString();
+      $('#o-kienyeji-out-net-3yr').innerText = 'KES ' + Math.round(net3Yr).toLocaleString();
+      $('#o-kienyeji-out-payback').innerText = payback !== 'N/A' ? payback + ' Months' : 'N/A';
+
+      localStorage.setItem('symbio_poultry_layers', layers);
+      localStorage.setItem('symbio_poultry_roosters', roosters);
+      localStorage.setItem('symbio_poultry_meat', meat);
+      localStorage.setItem('symbio_poultry_p1', pTableEgg);
+      localStorage.setItem('symbio_poultry_p2', pFertileEgg);
+      localStorage.setItem('symbio_poultry_p3', pMeatBird);
+      localStorage.setItem('symbio_poultry_p4', pManure);
+
+      renderLedger();
+    }
+
+    function adjustFields(){
+      const cat = $('#o-kienyeji-entry-category').value;
+      const qty = $('#o-kienyeji-entry-qty');
+      const rate = $('#o-kienyeji-entry-rate');
+      qty.disabled = (cat === 'Poultry Expense');
+      rate.placeholder = cat === 'Poultry Expense' ? 'Total Expense (KES)' : 'Unit Rate or Total (KES)';
+    }
+
+    function updateScenarioDropdown(){
+      const select = $('#o-kienyeji-scenario-select');
+      let html = '<option value="">-- Select Saved Scenario --</option>';
+      for (let name in scenarios) {
+        html += `<option value="${name}">${name}</option>`;
+      }
+      select.innerHTML = html;
+    }
+
+    function saveScenario(){
+      const nameEl = $('#o-kienyeji-scenario-name');
+      const name = nameEl.value.trim();
+      if (!name) { alert("Please enter a scenario name."); return; }
+      scenarios[name] = {
+        layers: $('#o-kienyeji-flock-layers').value,
+        roosters: $('#o-kienyeji-flock-roosters').value,
+        meat: $('#o-kienyeji-flock-meat').value,
+        pTableEgg: $('#o-kienyeji-price-table-egg').value,
+        pFertileEgg: $('#o-kienyeji-price-fertile-egg').value,
+        pMeatBird: $('#o-kienyeji-price-meat-bird').value,
+        pManure: $('#o-kienyeji-price-manure').value,
+        pChick: $('#o-kienyeji-price-chick').value,
+        baseCapex: $('#o-kienyeji-base-capex').value,
+        baseOpex: $('#o-kienyeji-base-opex').value
+      };
+      localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+      nameEl.value = '';
+      updateScenarioDropdown();
+      alert(`Scenario "${name}" saved successfully!`);
+    }
+
+    function loadScenario(){
+      const name = $('#o-kienyeji-scenario-select').value;
+      if (!name || !scenarios[name]) return;
+      const data = scenarios[name];
+      $('#o-kienyeji-flock-layers').value = data.layers;
+      $('#o-kienyeji-flock-roosters').value = data.roosters;
+      $('#o-kienyeji-flock-meat').value = data.meat;
+      $('#o-kienyeji-price-table-egg').value = data.pTableEgg;
+      $('#o-kienyeji-price-fertile-egg').value = data.pFertileEgg;
+      $('#o-kienyeji-price-meat-bird').value = data.pMeatBird;
+      $('#o-kienyeji-price-manure').value = data.pManure;
+      $('#o-kienyeji-price-chick').value = data.pChick;
+      $('#o-kienyeji-base-capex').value = data.baseCapex;
+      $('#o-kienyeji-base-opex').value = data.baseOpex;
+      calculate();
+    }
+
+    function exportVault(){
+      if (Object.keys(scenarios).length === 0) { alert("No saved scenarios to export."); return; }
+      const blob = new Blob([JSON.stringify(scenarios, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_poultry_scenarios_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    }
+
+    function importVault(event){
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e){
+        try {
+          const imported = JSON.parse(e.target.result);
+          scenarios = Object.assign({}, scenarios, imported);
+          localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+          updateScenarioDropdown();
+          alert("Scenarios imported successfully!");
+        } catch(err) {
+          alert("Invalid JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function addEntry(e){
+      e.preventDefault();
+      const date = $('#o-kienyeji-entry-date').value;
+      const category = $('#o-kienyeji-entry-category').value;
+      const stream = $('#o-kienyeji-entry-stream').value;
+      const desc = $('#o-kienyeji-entry-desc').value;
+      const qty = parseFloat($('#o-kienyeji-entry-qty').value) || 1;
+      const rate = parseFloat($('#o-kienyeji-entry-rate').value) || 0;
+
+      entries.push({ id: Date.now(), date, category, stream, desc, qty, rate });
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+
+      $('#o-kienyeji-entry-desc').value = '';
+      $('#o-kienyeji-entry-qty').value = '';
+      $('#o-kienyeji-entry-rate').value = '';
+      renderLedger();
+    }
+
+    function deleteEntry(id){
+      entries = entries.filter(i => i.id !== id);
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+      renderLedger();
+    }
+
+    function clearLedger(){
+      if (confirm("Clear all recorded poultry operations entries?")) {
+        entries = [];
+        localStorage.removeItem(LS_LEDGER);
+        renderLedger();
+      }
+    }
+
+    function exportToCSV(){
+      if (entries.length === 0) { alert("No ledger entries to export."); return; }
+      let csv = "Date,Category,Stream,Details,Quantity,Rate_or_Amount_KES,Total_Value_KES\n";
+      entries.forEach(e => {
+        let total = e.category !== 'Poultry Expense' ? e.qty * e.rate : -e.rate;
+        csv += `"${e.date}","${e.category}","${e.stream}","${e.desc.replace(/"/g, '""')}",${e.qty || 0},${e.rate || 0},${total}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_poultry_ledger_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    }
+
+    function updateCharts(streamData, totalExp){
+      if (typeof Chart === 'undefined') return;
+      const canvas = $('#o-kienyeji-financialChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (financialChartInstance) { try { financialChartInstance.destroy(); } catch(e){} }
+
+      const labels = Object.keys(streamData);
+      const revenues = labels.map(l => streamData[l]);
+
+      const gold = cssVar('--gold-text', '');
+      const leaf = cssVar('--leaf', '');
+      const soil900 = cssVar('--soil-900', '');
+      const maize = cssVar('--maize', '');
+      const rust = cssVar('--rust', '');
+      const bone = cssVar('--bone', '');
+
+      financialChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels.length ? labels : ['No Revenue Data'],
+          datasets: [{
+            data: revenues.length && revenues.some(r => r > 0) ? revenues : [1],
+            backgroundColor: [gold, leaf, soil900, maize, rust],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right', labels: { color: bone, font: { size: 11 } } } }
+        }
+      });
+      charts.push(financialChartInstance);
+    }
+
+    function renderLedger(){
+      let totalIncome = 0, totalExp = 0, html = '';
+      let streamStats = {
+        'Table Eggs Sale': 0,
+        'Fertile Eggs Sale': 0,
+        'Meat Bird Sale': 0,
+        'JMS Manure Sale': 0
+      };
+
+      entries.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(item => {
+        let totalVal = 0;
+        if (item.category !== 'Poultry Expense') {
+          totalVal = item.qty * item.rate;
+          totalIncome += totalVal;
+          if (streamStats[item.category] !== undefined) {
+            streamStats[item.category] += totalVal;
+          }
+        } else {
+          totalExp += item.rate;
+          totalVal = -item.rate;
+        }
+
+        html += `
+          <tr>
+            <td>${item.date}</td>
+            <td>${item.category}</td>
+            <td>${item.stream}</td>
+            <td>${item.desc}</td>
+            <td>${item.qty ? item.qty : '-'}</td>
+            <td>${item.rate ? 'KES ' + item.rate.toLocaleString() : '-'}</td>
+            <td class="${totalVal > 0 ? 'ops-sum-profit' : totalVal < 0 ? 'ops-sum-loss' : ''}">
+              ${totalVal !== 0 ? (totalVal > 0 ? '+' : '-') + 'KES ' + Math.abs(totalVal).toLocaleString() : '-'}
+            </td>
+            <td><button type="button" class="row-remove-btn" data-id="${item.id}">✕</button></td>
+          </tr>
+        `;
+      });
+
+      const body = $('#o-kienyeji-ledger-body');
+      body.innerHTML = html || '<tr><td colspan="8">No poultry activity logged yet.</td></tr>';
+      body.querySelectorAll('.row-remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => deleteEntry(Number(btn.dataset.id)));
+      });
+
+      $('#o-kienyeji-actual-income').innerText = 'KES ' + Math.round(totalIncome).toLocaleString();
+      $('#o-kienyeji-actual-exp').innerText = 'KES ' + Math.round(totalExp).toLocaleString();
+      $('#o-kienyeji-actual-net').innerText = 'KES ' + Math.round(totalIncome - totalExp).toLocaleString();
+
+      updateCharts(streamStats, totalExp);
+    }
+
+    // Wire events
+    ['#o-kienyeji-flock-layers','#o-kienyeji-flock-roosters','#o-kienyeji-flock-meat',
+     '#o-kienyeji-price-table-egg','#o-kienyeji-price-fertile-egg','#o-kienyeji-price-meat-bird',
+     '#o-kienyeji-price-manure','#o-kienyeji-base-capex','#o-kienyeji-base-opex'].forEach(sel => {
+      const el = $(sel);
+      if (el) el.addEventListener('input', calculate);
+    });
+
+    const catEl = $('#o-kienyeji-entry-category');
+    if (catEl) catEl.addEventListener('change', adjustFields);
+
+    const form = $('#o-kienyeji-ledger-form');
+    if (form) form.addEventListener('submit', addEntry);
+
+    const exportVaultBtn = $('#o-kienyeji-export-vault');
+    if (exportVaultBtn) exportVaultBtn.addEventListener('click', exportVault);
+
+    const importFile = $('#o-kienyeji-import-file');
+    if (importFile) importFile.addEventListener('change', importVault);
+
+    const saveScenarioBtn = $('#o-kienyeji-save-scenario');
+    if (saveScenarioBtn) saveScenarioBtn.addEventListener('click', saveScenario);
+
+    const scenarioSelect = $('#o-kienyeji-scenario-select');
+    if (scenarioSelect) scenarioSelect.addEventListener('change', loadScenario);
+
+    const exportCsvBtn = $('#o-kienyeji-export-csv');
+    if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportToCSV);
+
+    const clearLedgerBtn = $('#o-kienyeji-clear-ledger');
+    if (clearLedgerBtn) clearLedgerBtn.addEventListener('click', clearLedger);
+
+    // Restore saved slider/price values
+    if (localStorage.getItem('symbio_poultry_layers')) $('#o-kienyeji-flock-layers').value = localStorage.getItem('symbio_poultry_layers');
+    if (localStorage.getItem('symbio_poultry_roosters')) $('#o-kienyeji-flock-roosters').value = localStorage.getItem('symbio_poultry_roosters');
+    if (localStorage.getItem('symbio_poultry_meat')) $('#o-kienyeji-flock-meat').value = localStorage.getItem('symbio_poultry_meat');
+    if (localStorage.getItem('symbio_poultry_p1')) $('#o-kienyeji-price-table-egg').value = localStorage.getItem('symbio_poultry_p1');
+    if (localStorage.getItem('symbio_poultry_p2')) $('#o-kienyeji-price-fertile-egg').value = localStorage.getItem('symbio_poultry_p2');
+    if (localStorage.getItem('symbio_poultry_p3')) $('#o-kienyeji-price-meat-bird').value = localStorage.getItem('symbio_poultry_p3');
+    if (localStorage.getItem('symbio_poultry_p4')) $('#o-kienyeji-price-manure').value = localStorage.getItem('symbio_poultry_p4');
+
+    updateScenarioDropdown();
+    calculate();
+    adjustFields();
+  }
+
+  function destroy(){
+    charts.forEach(c => { try { c.destroy(); } catch(e){} });
+    charts = [];
+  }
+
+  return { build, init, destroy };
+})();
+
+/* ===== pigs ===== */
+window.OPS_MODULES = window.OPS_MODULES || {};
+window.OPS_MODULES['o-pigs'] = (function(){
+  'use strict';
+  const LS_LEDGER = 'symbio_pig_ledger';
+  const LS_SCENARIOS = 'symbio_pig_scenarios';
+  const LS_MODEL = 'symbio_pig_model';
+  let charts = [];
+  let entries = [];
+  let scenarios = {};
+  let currentModel = 'refinery';
+
+  function build(){
+    return `
+      <div class="ops-guide" id="o-pigs-guide">
+        <button type="button" class="ops-guide-toggle planner-btn" id="o-pigs-guide-toggle">📖 System Guide</button>
+        <div class="ops-guide-body">
+          <div class="ops-field-row">
+            <div class="ops-field">
+              <label>Symbio Refinery Model</label>
+              <p class="ops-note">Housing: Deep-litter pit (sawdust/rice husk + LAB serum). Zero washing, zero odor. Feeding: 70/30 fermented forage and agro-industrial byproducts via anaerobic drum fermentation. Revenue Streams: Weaners, pregnant sows, carcasses, external stud services, and spent deep-litter bioreactor compost.</p>
+            </div>
+            <div class="ops-field">
+              <label>Regular Commercial Model</label>
+              <p class="ops-note">Housing: Conventional concrete floored pens requiring daily washing and slurry management. Feeding: Standard commercial feeds (higher feed expenditure). Revenue Streams: Standard focus on weaner piglets and meat/carcass sales; excludes spent litter compost monetization.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ops-section-title">📂 Scenario &amp; Plan Vault</div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Save Current Setup as Scenario</label>
+          <input type="text" id="o-pigs-scenario-name" placeholder="e.g., Commercial Pig Breeding Expansion - 15 Sows">
+        </div>
+        <div class="ops-field">
+          <label>&nbsp;</label>
+          <button type="button" class="planner-btn" id="o-pigs-save-scenario">Save Scenario</button>
+        </div>
+        <div class="ops-field">
+          <label>Load / Switch Scenario</label>
+          <select id="o-pigs-scenario-select">
+            <option value="">-- Select Saved Scenario --</option>
+          </select>
+        </div>
+      </div>
+      <div class="ops-field-row">
+        <button type="button" class="planner-btn" id="o-pigs-export-vault">Export Vault JSON</button>
+        <label class="planner-btn" style="cursor:pointer;">Import Vault
+          <input type="file" id="o-pigs-import-file" accept=".json" style="display:none;">
+        </label>
+      </div>
+
+      <div class="ops-section-title">Select Production Architecture</div>
+      <p class="ops-note">Switch between closed-loop bio-refinery economics and traditional commercial pig farming.</p>
+      <div class="ops-pills">
+        <button type="button" class="ops-pill o-active" id="o-pigs-btn-refinery" data-model="refinery">Refinery Model</button>
+        <button type="button" class="ops-pill" id="o-pigs-btn-regular" data-model="regular">Regular Model</button>
+      </div>
+      <p class="ops-note" id="o-pigs-model-badge">⚙️ Active: Refinery Model</p>
+
+      <div class="ops-section-title">Herd Composition Sizing</div>
+      <p class="ops-note">Total Herd Active: <span id="o-pigs-total-herd-count">10</span> Head</p>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Breeding Sows / Gilts: <span id="o-pigs-val-sows">6</span></label>
+          <input type="range" id="o-pigs-herd-sows" min="1" max="30" step="1" value="6">
+        </div>
+        <div class="ops-field">
+          <label>Elite Stud Boars: <span id="o-pigs-val-boars">1</span></label>
+          <input type="range" id="o-pigs-herd-boars" min="1" max="5" step="1" value="1">
+        </div>
+        <div class="ops-field">
+          <label>Finishing / Meat Pigs: <span id="o-pigs-val-meat">3</span></label>
+          <input type="range" id="o-pigs-herd-meat" min="0" max="60" step="1" value="3">
+        </div>
+      </div>
+
+      <div class="ops-section-title">Dynamic Pricing &amp; Operating Costs</div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Piglet Price (KES)</label>
+          <input type="number" id="o-pigs-price-piglet" value="5000">
+        </div>
+        <div class="ops-field">
+          <label>Pregnant Sow Price (KES)</label>
+          <input type="number" id="o-pigs-price-sow" value="45000">
+        </div>
+        <div class="ops-field">
+          <label>Carcass Rate / KG (KES)</label>
+          <input type="number" id="o-pigs-price-meat" value="250">
+        </div>
+        <div class="ops-field">
+          <label>Stud Service Fee (KES)</label>
+          <input type="number" id="o-pigs-price-stud" value="1500">
+        </div>
+        <div class="ops-field">
+          <label>Compost Bag Price (KES)</label>
+          <input type="number" id="o-pigs-price-compost" value="500">
+        </div>
+      </div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Base CapEx / Startup Assets (KES)</label>
+          <input type="number" id="o-pigs-base-capex" value="240000">
+        </div>
+        <div class="ops-field">
+          <label>Annual Running Costs / OpEx (KES)</label>
+          <input type="number" id="o-pigs-base-opex" value="130000">
+        </div>
+      </div>
+
+      <div class="ops-section-title">Projected Metrics</div>
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Startup Capital (CapEx)</div>
+          <div class="ops-sum-value" id="o-pigs-out-capex">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Annual Running Cost (OpEx)</div>
+          <div class="ops-sum-value" id="o-pigs-out-opex">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Annual Gross Revenue</div>
+          <div class="ops-sum-value ops-sum-profit" id="o-pigs-out-annual-rev">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Year 1 Net Profit</div>
+          <div class="ops-sum-value ops-sum-profit" id="o-pigs-out-net">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Year 3 Cumulative Net Profit</div>
+          <div class="ops-sum-value ops-sum-profit" id="o-pigs-out-net-3yr">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Est. Payback Period</div>
+          <div class="ops-sum-value" id="o-pigs-out-payback">0 Months</div>
+        </div>
+      </div>
+
+      <div class="ops-section-title">Record Enterprise Activity or Sale</div>
+      <form id="o-pigs-ledger-form" class="ops-ledger-bar">
+        <input type="date" id="o-pigs-entry-date" required>
+        <select id="o-pigs-entry-category">
+          <option value="Piglet Sale">Piglet Sale</option>
+          <option value="Pregnant Sow Sale">Pregnant Sow Sale</option>
+          <option value="Carcass / Meat Sale">Carcass / Meat Sale</option>
+          <option value="External Stud Service">External Stud Service (Revenue)</option>
+          <option value="Internal Sow Service">Internal Sow Service (Record Only)</option>
+          <option value="Compost Sale">Compost Sale</option>
+          <option value="Refinery Expense">Farm Expense</option>
+        </select>
+        <select id="o-pigs-entry-stream">
+          <option value="Line 1: Piglet Factory">Line 1: Piglet Factory</option>
+          <option value="Line 2: Premium Sows">Line 2: Premium Sows</option>
+          <option value="Line 3: Elite Studs">Line 3: Elite Studs</option>
+          <option value="Line 4: Fast-Track Meat">Line 4: Fast-Track Meat</option>
+          <option value="Bioreactor Compost">Bioreactor Compost</option>
+          <option value="General Ops">General Ops</option>
+        </select>
+        <input type="text" id="o-pigs-entry-desc" placeholder="Details (e.g., Service for outside farmer)" required>
+        <input type="number" id="o-pigs-entry-qty" step="1" placeholder="Quantity / Head (Opt)">
+        <input type="number" id="o-pigs-entry-rate" step="1" placeholder="Rate or Total (KES)">
+        <button type="submit" class="planner-btn">Save Entry</button>
+      </form>
+
+      <div class="ops-section-title">Enterprise Operations Log</div>
+      <div class="ops-field-row">
+        <button type="button" class="planner-btn" id="o-pigs-export-csv">📥 Export CSV</button>
+        <button type="button" class="planner-btn" id="o-pigs-clear-ledger">Clear Data</button>
+      </div>
+      <div class="planner-table-wrap">
+        <table class="planner-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Production Line</th>
+              <th>Details</th>
+              <th>Qty</th>
+              <th>Rate/Amt</th>
+              <th>Total Value</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="o-pigs-ledger-body"></tbody>
+        </table>
+      </div>
+
+      <div class="ops-section-title">Actual Financial Summary</div>
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Revenue</div>
+          <div class="ops-sum-value ops-sum-profit" id="o-pigs-actual-income">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Expenses</div>
+          <div class="ops-sum-value ops-sum-loss" id="o-pigs-actual-exp">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Net Cashflow</div>
+          <div class="ops-sum-value" id="o-pigs-actual-net">KES 0</div>
+        </div>
+      </div>
+
+      <div class="ops-section-title">Revenue Stream Breakdown</div>
+      <div class="ops-chart-frame">
+        <canvas id="o-pigs-financial-chart"></canvas>
+      </div>
+    `;
+  }
+
+  function init(root){
+    entries = JSON.parse(localStorage.getItem(LS_LEDGER)) || [];
+    scenarios = JSON.parse(localStorage.getItem(LS_SCENARIOS)) || {};
+    currentModel = localStorage.getItem(LS_MODEL) || 'refinery';
+
+    const $ = (sel) => root.querySelector(sel);
+
+    const dateInput = $('#o-pigs-entry-date');
+    if (dateInput) dateInput.valueAsDate = new Date();
+
+    const guide = $('#o-pigs-guide');
+    const guideToggle = $('#o-pigs-guide-toggle');
+    if (guideToggle) guideToggle.addEventListener('click', () => guide.classList.toggle('o-open'));
+
+    const btnRefinery = $('#o-pigs-btn-refinery');
+    const btnRegular = $('#o-pigs-btn-regular');
+    const badge = $('#o-pigs-model-badge');
+
+    function setModel(model){
+      currentModel = model;
+      localStorage.setItem(LS_MODEL, model);
+      if (model === 'refinery') {
+        btnRefinery.classList.add('o-active');
+        btnRegular.classList.remove('o-active');
+        badge.textContent = '⚙️ Active: Refinery Model';
+      } else {
+        btnRegular.classList.add('o-active');
+        btnRefinery.classList.remove('o-active');
+        badge.textContent = '📋 Active: Regular Commercial Model';
+      }
+      calculate();
+    }
+
+    if (btnRefinery) btnRefinery.addEventListener('click', () => setModel('refinery'));
+    if (btnRegular) btnRegular.addEventListener('click', () => setModel('regular'));
+
+    function adjustFields(){
+      const cat = $('#o-pigs-entry-category').value;
+      const qty = $('#o-pigs-entry-qty');
+      const rate = $('#o-pigs-entry-rate');
+      qty.disabled = (cat === 'Refinery Expense');
+      rate.placeholder = cat === 'Refinery Expense' ? 'Total Expense (KES)' : 'Unit Rate or Total (KES)';
+    }
+    const entryCategory = $('#o-pigs-entry-category');
+    if (entryCategory) entryCategory.addEventListener('change', adjustFields);
+
+    function calculate(){
+      const sows = parseInt($('#o-pigs-herd-sows').value) || 6;
+      const boars = parseInt($('#o-pigs-herd-boars').value) || 1;
+      const meat = parseInt($('#o-pigs-herd-meat').value) || 3;
+      const totalHerd = sows + boars + meat;
+
+      $('#o-pigs-val-sows').textContent = sows;
+      $('#o-pigs-val-boars').textContent = boars;
+      $('#o-pigs-val-meat').textContent = meat;
+      $('#o-pigs-total-herd-count').textContent = totalHerd;
+
+      const pPiglet = parseFloat($('#o-pigs-price-piglet').value) || 5000;
+      const pSow = parseFloat($('#o-pigs-price-sow').value) || 45000;
+      const pMeat = parseFloat($('#o-pigs-price-meat').value) || 250;
+      const pStud = parseFloat($('#o-pigs-price-stud').value) || 1500;
+      const pCompost = parseFloat($('#o-pigs-price-compost').value) || 500;
+
+      const baseCapex = parseFloat($('#o-pigs-base-capex').value) || 240000;
+      const baseOpex = parseFloat($('#o-pigs-base-opex').value) || 130000;
+
+      const capex = Math.round(baseCapex * (totalHerd / 10));
+      const opexMultiplier = currentModel === 'refinery' ? 1.0 : 1.25;
+      const opex = Math.round(baseOpex * (totalHerd / 10) * opexMultiplier);
+
+      const annualPiglets = sows * 16;
+      const annualCarcassSales = meat * 2 * 60;
+      const annualStudServices = boars * 24;
+      const annualCompostBags = currentModel === 'refinery' ? totalHerd * 12 : 0;
+
+      const revPiglets = annualPiglets * pPiglet;
+      const revMeat = annualCarcassSales * pMeat;
+      const revStud = annualStudServices * pStud;
+      const revCompost = annualCompostBags * pCompost;
+
+      const totalRev = revPiglets + revMeat + revStud + revCompost;
+      const netYear1 = totalRev - capex - opex;
+      const net3Yr = (totalRev * 3) - capex - (opex * 3);
+      const netMonthly = (totalRev - opex) / 12;
+      const payback = netMonthly > 0 ? (capex / netMonthly).toFixed(1) : 'N/A';
+
+      $('#o-pigs-out-capex').textContent = 'KES ' + capex.toLocaleString();
+      $('#o-pigs-out-opex').textContent = 'KES ' + opex.toLocaleString();
+      $('#o-pigs-out-annual-rev').textContent = 'KES ' + Math.round(totalRev).toLocaleString();
+      $('#o-pigs-out-net').textContent = 'KES ' + Math.round(netYear1).toLocaleString();
+      $('#o-pigs-out-net-3yr').textContent = 'KES ' + Math.round(net3Yr).toLocaleString();
+      $('#o-pigs-out-payback').textContent = payback !== 'N/A' ? payback + ' Months' : 'N/A';
+
+      localStorage.setItem('symbio_pig_sows', sows);
+      localStorage.setItem('symbio_pig_boars', boars);
+      localStorage.setItem('symbio_pig_meat', meat);
+      localStorage.setItem('symbio_pig_p1', pPiglet);
+      localStorage.setItem('symbio_pig_p2', pSow);
+      localStorage.setItem('symbio_pig_p3', pMeat);
+      localStorage.setItem('symbio_pig_p4', pStud);
+      localStorage.setItem('symbio_pig_p5', pCompost);
+
+      renderLedger();
+    }
+
+    ['o-pigs-herd-sows','o-pigs-herd-boars','o-pigs-herd-meat','o-pigs-price-piglet','o-pigs-price-sow','o-pigs-price-meat','o-pigs-price-stud','o-pigs-price-compost','o-pigs-base-capex','o-pigs-base-opex'].forEach(id => {
+      const el = $('#' + id);
+      if (el) el.addEventListener('input', calculate);
+    });
+
+    function saveScenario(){
+      const nameInput = $('#o-pigs-scenario-name');
+      const name = nameInput.value.trim();
+      if (!name) { alert('Please enter a scenario name.'); return; }
+      scenarios[name] = {
+        model: currentModel,
+        sows: $('#o-pigs-herd-sows').value,
+        boars: $('#o-pigs-herd-boars').value,
+        meat: $('#o-pigs-herd-meat').value,
+        pPiglet: $('#o-pigs-price-piglet').value,
+        pSow: $('#o-pigs-price-sow').value,
+        pMeat: $('#o-pigs-price-meat').value,
+        pStud: $('#o-pigs-price-stud').value,
+        pCompost: $('#o-pigs-price-compost').value,
+        baseCapex: $('#o-pigs-base-capex').value,
+        baseOpex: $('#o-pigs-base-opex').value
+      };
+      localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+      nameInput.value = '';
+      updateScenarioDropdown();
+      alert(`Scenario "${name}" saved successfully!`);
+    }
+    const saveScenarioBtn = $('#o-pigs-save-scenario');
+    if (saveScenarioBtn) saveScenarioBtn.addEventListener('click', saveScenario);
+
+    function updateScenarioDropdown(){
+      const select = $('#o-pigs-scenario-select');
+      let html = '<option value="">-- Select Saved Scenario --</option>';
+      for (let name in scenarios) {
+        html += `<option value="${name}">${name}</option>`;
+      }
+      select.innerHTML = html;
+    }
+
+    function loadScenario(){
+      const name = $('#o-pigs-scenario-select').value;
+      if (!name || !scenarios[name]) return;
+      const data = scenarios[name];
+      setModel(data.model || 'refinery');
+      $('#o-pigs-herd-sows').value = data.sows;
+      $('#o-pigs-herd-boars').value = data.boars;
+      $('#o-pigs-herd-meat').value = data.meat;
+      $('#o-pigs-price-piglet').value = data.pPiglet;
+      $('#o-pigs-price-sow').value = data.pSow;
+      $('#o-pigs-price-meat').value = data.pMeat;
+      $('#o-pigs-price-stud').value = data.pStud;
+      $('#o-pigs-price-compost').value = data.pCompost;
+      $('#o-pigs-base-capex').value = data.baseCapex;
+      $('#o-pigs-base-opex').value = data.baseOpex;
+      calculate();
+    }
+    const scenarioSelect = $('#o-pigs-scenario-select');
+    if (scenarioSelect) scenarioSelect.addEventListener('change', loadScenario);
+
+    function exportVault(){
+      if (Object.keys(scenarios).length === 0) { alert('No saved scenarios to export.'); return; }
+      const blob = new Blob([JSON.stringify(scenarios, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_pig_scenarios_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+    }
+    const exportVaultBtn = $('#o-pigs-export-vault');
+    if (exportVaultBtn) exportVaultBtn.addEventListener('click', exportVault);
+
+    function importVault(event){
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e){
+        try {
+          const imported = JSON.parse(e.target.result);
+          scenarios = Object.assign({}, scenarios, imported);
+          localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+          updateScenarioDropdown();
+          alert('Scenarios imported successfully!');
+        } catch(err) {
+          alert('Invalid JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+    const importFile = $('#o-pigs-import-file');
+    if (importFile) importFile.addEventListener('change', importVault);
+
+    function addEntry(e){
+      e.preventDefault();
+      const date = $('#o-pigs-entry-date').value;
+      const category = $('#o-pigs-entry-category').value;
+      const stream = $('#o-pigs-entry-stream').value;
+      const desc = $('#o-pigs-entry-desc').value;
+      const qty = parseFloat($('#o-pigs-entry-qty').value) || 1;
+      const rate = parseFloat($('#o-pigs-entry-rate').value) || 0;
+
+      entries.push({ id: Date.now(), date, category, stream, desc, qty, rate });
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+
+      $('#o-pigs-entry-desc').value = '';
+      $('#o-pigs-entry-qty').value = '';
+      $('#o-pigs-entry-rate').value = '';
+      renderLedger();
+    }
+    const ledgerForm = $('#o-pigs-ledger-form');
+    if (ledgerForm) ledgerForm.addEventListener('submit', addEntry);
+
+    function deleteEntry(id){
+      entries = entries.filter(i => i.id !== id);
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+      renderLedger();
+    }
+
+    function clearLedger(){
+      if (confirm('Clear all recorded pig enterprise entries?')) {
+        entries = [];
+        localStorage.removeItem(LS_LEDGER);
+        renderLedger();
+      }
+    }
+    const clearLedgerBtn = $('#o-pigs-clear-ledger');
+    if (clearLedgerBtn) clearLedgerBtn.addEventListener('click', clearLedger);
+
+    function exportToCSV(){
+      if (entries.length === 0) { alert('No ledger entries to export.'); return; }
+      let csv = 'Date,Category,Stream,Details,Quantity,Rate_or_Amount_KES,Total_Value_KES\n';
+      entries.forEach(e => {
+        let total = e.category !== 'Refinery Expense' ? e.qty * e.rate : -e.rate;
+        csv += `"${e.date}","${e.category}","${e.stream}","${e.desc.replace(/"/g, '""')}",${e.qty || 0},${e.rate || 0},${total}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_pig_farming_ledger_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+    const exportCsvBtn = $('#o-pigs-export-csv');
+    if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportToCSV);
+
+    function getCssVar(name, fallback){
+      const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return v || fallback;
+    }
+
+    function updateCharts(streamData){
+      if (typeof Chart === 'undefined') return;
+      const canvas = $('#o-pigs-financial-chart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      charts.forEach(c => { try { c.destroy(); } catch(e){} });
+      charts = [];
+
+      const labels = Object.keys(streamData);
+      const revenues = labels.map(l => streamData[l]);
+
+      const colors = [
+        getCssVar('--gold-text', '#d4af37'),
+        getCssVar('--leaf', '#52796f'),
+        getCssVar('--soil-800', '#1e382b'),
+        getCssVar('--maize', '#b8860b'),
+        getCssVar('--rust', '#319795')
+      ];
+
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels.length ? labels : ['No Revenue Data'],
+          datasets: [{
+            data: revenues.length && revenues.some(r => r > 0) ? revenues : [1],
+            backgroundColor: colors,
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'right', labels: { color: getCssVar('--bone', '#a0aec0'), font: { size: 11 } } } }
+        }
+      });
+      charts.push(chart);
+    }
+
+    function renderLedger(){
+      let totalIncome = 0, totalExp = 0, html = '';
+      let streamStats = {
+        'Piglet Sale': 0,
+        'Pregnant Sow Sale': 0,
+        'Carcass / Meat Sale': 0,
+        'External Stud Service': 0,
+        'Compost Sale': 0
+      };
+
+      entries.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(item => {
+        let totalVal = 0;
+        if (item.category !== 'Refinery Expense' && item.category !== 'Internal Sow Service') {
+          totalVal = item.qty * item.rate;
+          totalIncome += totalVal;
+          if (streamStats[item.category] !== undefined) {
+            streamStats[item.category] += totalVal;
+          }
+        } else if (item.category === 'Refinery Expense') {
+          totalExp += item.rate;
+          totalVal = -item.rate;
+        }
+
+        const valClass = totalVal > 0 ? 'ops-sum-profit' : totalVal < 0 ? 'ops-sum-loss' : '';
+        html += `
+          <tr>
+            <td>${item.date}</td>
+            <td>${item.category}</td>
+            <td>${item.stream}</td>
+            <td>${item.desc}</td>
+            <td>${item.qty ? item.qty : '-'}</td>
+            <td>${item.rate ? 'KES ' + item.rate.toLocaleString() : '-'}</td>
+            <td class="${valClass}">
+              ${totalVal !== 0 ? (totalVal > 0 ? '+' : '-') + 'KES ' + Math.abs(totalVal).toLocaleString() : '-'}
+            </td>
+            <td><button type="button" class="row-remove-btn" data-id="${item.id}">✕</button></td>
+          </tr>
+        `;
+      });
+
+      const body = $('#o-pigs-ledger-body');
+      body.innerHTML = html || '<tr><td colspan="8">No enterprise activity logged yet.</td></tr>';
+      body.querySelectorAll('.row-remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => deleteEntry(Number(btn.getAttribute('data-id'))));
+      });
+
+      $('#o-pigs-actual-income').textContent = 'KES ' + Math.round(totalIncome).toLocaleString();
+      $('#o-pigs-actual-exp').textContent = 'KES ' + Math.round(totalExp).toLocaleString();
+      $('#o-pigs-actual-net').textContent = 'KES ' + Math.round(totalIncome - totalExp).toLocaleString();
+
+      updateCharts(streamStats);
+    }
+
+    if (localStorage.getItem('symbio_pig_sows')) $('#o-pigs-herd-sows').value = localStorage.getItem('symbio_pig_sows');
+    if (localStorage.getItem('symbio_pig_boars')) $('#o-pigs-herd-boars').value = localStorage.getItem('symbio_pig_boars');
+    if (localStorage.getItem('symbio_pig_meat')) $('#o-pigs-herd-meat').value = localStorage.getItem('symbio_pig_meat');
+    if (localStorage.getItem('symbio_pig_p1')) $('#o-pigs-price-piglet').value = localStorage.getItem('symbio_pig_p1');
+    if (localStorage.getItem('symbio_pig_p2')) $('#o-pigs-price-sow').value = localStorage.getItem('symbio_pig_p2');
+    if (localStorage.getItem('symbio_pig_p3')) $('#o-pigs-price-meat').value = localStorage.getItem('symbio_pig_p3');
+    if (localStorage.getItem('symbio_pig_p4')) $('#o-pigs-price-stud').value = localStorage.getItem('symbio_pig_p4');
+    if (localStorage.getItem('symbio_pig_p5')) $('#o-pigs-price-compost').value = localStorage.getItem('symbio_pig_p5');
+
+    setModel(currentModel);
+    updateScenarioDropdown();
+    calculate();
+    adjustFields();
+  }
+
+  function destroy(){
+    charts.forEach(c => { try { c.destroy(); } catch(e){} });
+    charts = [];
+  }
+
+  return { build, init, destroy };
+})();
+
+/* ===== compost ===== */
+window.OPS_MODULES = window.OPS_MODULES || {};
+window.OPS_MODULES['o-compost'] = (function(){
+  'use strict';
+  const LS_LEDGER = 'symbio_compost_ledger';
+  const LS_SCENARIOS = 'symbio_compost_scenarios';
+  const LS_BAGS = 'symbio_compost_bags';
+  const LS_CYCLE = 'symbio_compost_cycle';
+  const LS_PRICE = 'symbio_compost_price';
+  const LS_OPEX = 'symbio_compost_opex';
+  let charts = [];
+  let entries = [];
+
+  function build(){
+    return `
+      <div class="ops-guide" id="o-compost-guide">
+        <button type="button" class="ops-guide-toggle planner-btn" id="o-compost-guide-toggle">📖 Protocol Guide</button>
+        <div class="ops-guide-body">
+          <h3 class="ops-section-title">Composting Protocol & Financial Guide</h3>
+          <div class="ops-field-row">
+            <div class="ops-field">
+              <label>Biological Phases (30–45 Days)</label>
+              <ul>
+                <li><b>Day 0 (Build):</b> Layer carbon, manure, and inoculated JMS for rapid thermophilic breakdown.</li>
+                <li><b>Days 1–14 (Hot Phase):</b> Peak heat (50–65°C). Avoid adding LAB or FAA while hot to protect microbes.</li>
+                <li><b>Week 2–3 (Boost):</b> Apply FAA, charged biochar, and LAB serum after pile cools below 43°C.</li>
+                <li><b>Week 3–6 (Curing):</b> Regular turning and maintenance doses until earthy and stable.</li>
+              </ul>
+            </div>
+            <div class="ops-field">
+              <label>Production & Revenue Logic</label>
+              <ul>
+                <li><b>Batch Output:</b> 40 bags (50kg each) produced every 60 days.</li>
+                <li><b>Pricing:</b> KES 2,000 per 50kg premium nutrient-dense bag.</li>
+                <li><b>Charged Biochar:</b> Prevents nutrient leaching and boosts cation exchange capacity in local conditions.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ops-vault">
+        <h3 class="ops-section-title">📂 Scenario & Plan Vault</h3>
+        <div class="ops-ledger-bar">
+          <input type="text" id="o-compost-vault-name" placeholder="Enter scenario name (e.g., Q3 High Yield)">
+          <button type="button" class="planner-btn" id="o-compost-vault-save">Save Current Scenario</button>
+        </div>
+        <div class="ops-vault-list" id="o-compost-vault-list"></div>
+      </div>
+
+      <h3 class="ops-section-title">Nutrient-Enhanced Compost Production & Sales Analytics (30–45 Day Protocol)</h3>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label>Batch Size (50kg Bags): <span id="o-compost-val-bags">40</span></label>
+          <input type="range" id="o-compost-batch-bags" min="10" max="200" step="5" value="40">
+        </div>
+        <div class="ops-field">
+          <label>Cycle Duration (Days): <span id="o-compost-val-cycle">60</span></label>
+          <input type="range" id="o-compost-cycle-days" min="30" max="90" step="5" value="60">
+        </div>
+        <div class="ops-field">
+          <label>Price per Bag (KES): <span id="o-compost-val-price">2000</span></label>
+          <input type="range" id="o-compost-price-bag" min="500" max="5000" step="100" value="2000">
+        </div>
+        <div class="ops-field">
+          <label>Batch OpEx / Inputs (KES)</label>
+          <input type="number" id="o-compost-batch-opex" value="15000">
+        </div>
+      </div>
+
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Batches Per Year</span>
+          <span class="ops-sum-value" id="o-compost-out-batches">6.1 Batches</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Annual Output (Bags)</span>
+          <span class="ops-sum-value" id="o-compost-out-annual-bags">240 Bags</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Annual Gross Revenue</span>
+          <span class="ops-sum-value" id="o-compost-out-annual-rev">KES 480,000</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Annual Net Profit</span>
+          <span class="ops-sum-value" id="o-compost-out-annual-net">KES 390,000</span>
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Record Compost Batch or Sale</h3>
+      <form id="o-compost-ledger-form">
+        <div class="ops-ledger-bar">
+          <input type="date" id="o-compost-entry-date" required>
+          <select id="o-compost-entry-category">
+            <option value="Batch Harvest & Sale">Batch Harvest & Sale</option>
+            <option value="Batch Inoculation">Batch Inoculation</option>
+            <option value="Compost Expense">Compost Expense</option>
+            <option value="General Maintenance">General Maintenance</option>
+          </select>
+          <select id="o-compost-entry-phase">
+            <option value="Day 0 Build">Day 0 Build & JMS</option>
+            <option value="Hot Phase (Days 1-14)">Hot Phase (Days 1-14)</option>
+            <option value="Nutrient Boost (Wk 2-3)">Nutrient Boost (Wk 2-3)</option>
+            <option value="Curing & Sales (Wk 3-6)">Curing & Sales (Wk 3-6)</option>
+          </select>
+          <input type="text" id="o-compost-entry-desc" placeholder="Details (e.g., Batch #3 finished)" required>
+          <input type="number" id="o-compost-entry-qty" step="1" placeholder="Bags Sold/Produced">
+          <input type="number" id="o-compost-entry-rate" step="1" placeholder="Rate / Cost (KES)">
+          <button type="submit" class="planner-btn">Save Entry</button>
+        </div>
+      </form>
+
+      <div class="planner-table-wrap">
+        <div class="ops-ledger-bar">
+          <h3 class="ops-section-title">Compost Production & Sales Log</h3>
+          <button type="button" class="planner-btn" id="o-compost-export">📥 Export CSV</button>
+          <button type="button" class="planner-btn" id="o-compost-clear">Clear Data</button>
+        </div>
+        <table class="planner-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Phase</th>
+              <th>Details</th>
+              <th>Bags</th>
+              <th>Rate/Amt</th>
+              <th>Total Value</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="o-compost-ledger-body"></tbody>
+        </table>
+      </div>
+
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Total Bags Sold</span>
+          <span class="ops-sum-value" id="o-compost-actual-bags">0 Bags</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Revenue</span>
+          <span class="ops-sum-value ops-sum-profit" id="o-compost-actual-income">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Actual Expenses</span>
+          <span class="ops-sum-value ops-sum-loss" id="o-compost-actual-exp">KES 0</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Net Cashflow</span>
+          <span class="ops-sum-value" id="o-compost-actual-net">KES 0</span>
+        </div>
+      </div>
+
+      <h3 class="ops-section-title">Financial Cashflow Overview</h3>
+      <div class="ops-chart-frame">
+        <canvas id="o-compost-financial-chart"></canvas>
+      </div>
+    `;
+  }
+
+  function init(root){
+    entries = JSON.parse(localStorage.getItem(LS_LEDGER)) || [];
+
+    const $ = (sel) => root.querySelector(sel);
+
+    const guideWrap = $('#o-compost-guide');
+    const guideToggle = $('#o-compost-guide-toggle');
+    guideToggle.addEventListener('click', () => {
+      guideWrap.classList.toggle('o-open');
+    });
+
+    const vaultNameInput = $('#o-compost-vault-name');
+    const vaultSaveBtn = $('#o-compost-vault-save');
+    const vaultList = $('#o-compost-vault-list');
+
+    const batchBags = $('#o-compost-batch-bags');
+    const cycleDays = $('#o-compost-cycle-days');
+    const priceBag = $('#o-compost-price-bag');
+    const batchOpex = $('#o-compost-batch-opex');
+    const valBags = $('#o-compost-val-bags');
+    const valCycle = $('#o-compost-val-cycle');
+    const valPrice = $('#o-compost-val-price');
+
+    const outBatches = $('#o-compost-out-batches');
+    const outAnnualBags = $('#o-compost-out-annual-bags');
+    const outAnnualRev = $('#o-compost-out-annual-rev');
+    const outAnnualNet = $('#o-compost-out-annual-net');
+
+    const ledgerForm = $('#o-compost-ledger-form');
+    const entryDate = $('#o-compost-entry-date');
+    const entryCategory = $('#o-compost-entry-category');
+    const entryPhase = $('#o-compost-entry-phase');
+    const entryDesc = $('#o-compost-entry-desc');
+    const entryQty = $('#o-compost-entry-qty');
+    const entryRate = $('#o-compost-entry-rate');
+
+    const ledgerBody = $('#o-compost-ledger-body');
+    const exportBtn = $('#o-compost-export');
+    const clearBtn = $('#o-compost-clear');
+
+    const actualBags = $('#o-compost-actual-bags');
+    const actualIncome = $('#o-compost-actual-income');
+    const actualExp = $('#o-compost-actual-exp');
+    const actualNet = $('#o-compost-actual-net');
+
+    entryDate.valueAsDate = new Date();
+
+    function adjustFields(){
+      const cat = entryCategory.value;
+      entryQty.disabled = (cat === 'Compost Expense' || cat === 'General Maintenance');
+      entryRate.placeholder = cat === 'Compost Expense' ? 'Total Expense (KES)' : 'Rate / Cost (KES)';
+    }
+
+    function calculate(){
+      const bags = parseInt(batchBags.value) || 40;
+      const cycle = parseInt(cycleDays.value) || 60;
+      const price = parseInt(priceBag.value) || 2000;
+      const opex = parseFloat(batchOpex.value) || 15000;
+
+      localStorage.setItem(LS_BAGS, bags);
+      localStorage.setItem(LS_CYCLE, cycle);
+      localStorage.setItem(LS_PRICE, price);
+      localStorage.setItem(LS_OPEX, opex);
+
+      valBags.innerText = bags;
+      valCycle.innerText = cycle;
+      valPrice.innerText = price;
+
+      const batchesPerYear = (365 / cycle);
+      const annualBags = Math.round(batchesPerYear * bags);
+      const annualRev = annualBags * price;
+      const annualOpex = Math.round(batchesPerYear * opex);
+      const annualNet = annualRev - annualOpex;
+
+      outBatches.innerText = batchesPerYear.toFixed(1) + ' Batches';
+      outAnnualBags.innerText = annualBags.toLocaleString() + ' Bags';
+      outAnnualRev.innerText = 'KES ' + Math.round(annualRev).toLocaleString();
+      outAnnualNet.innerText = 'KES ' + Math.round(annualNet).toLocaleString();
+
+      renderLedger();
+    }
+
+    function addEntry(e){
+      e.preventDefault();
+      const date = entryDate.value;
+      const category = entryCategory.value;
+      const phase = entryPhase.value;
+      const desc = entryDesc.value;
+      const qty = parseFloat(entryQty.value) || 0;
+      const rate = parseFloat(entryRate.value) || 0;
+
+      entries.push({ id: Date.now(), date, category, phase, desc, qty, rate });
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+
+      entryDesc.value = '';
+      entryQty.value = '';
+      entryRate.value = '';
+      renderLedger();
+    }
+
+    function deleteEntry(id){
+      entries = entries.filter(i => i.id !== id);
+      localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+      renderLedger();
+    }
+
+    function clearLedger(){
+      if(confirm('Clear all recorded compost entries?')){
+        entries = [];
+        localStorage.removeItem(LS_LEDGER);
+        renderLedger();
+      }
+    }
+
+    function getVaultScenarios(){
+      return JSON.parse(localStorage.getItem(LS_SCENARIOS)) || {};
+    }
+
+    function saveVaultScenario(){
+      const name = vaultNameInput.value.trim();
+      if (!name) { alert('Please enter a scenario name.'); return; }
+      const scenarios = getVaultScenarios();
+      scenarios[name] = {
+        bags: batchBags.value,
+        cycle: cycleDays.value,
+        price: priceBag.value,
+        opex: batchOpex.value,
+        entries: entries,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+      vaultNameInput.value = '';
+      renderVaultScenarios();
+      alert(`Scenario "${name}" saved to vault successfully!`);
+    }
+
+    function loadVaultScenario(name){
+      const scenarios = getVaultScenarios();
+      const s = scenarios[name];
+      if (s) {
+        batchBags.value = s.bags;
+        cycleDays.value = s.cycle;
+        priceBag.value = s.price;
+        batchOpex.value = s.opex;
+        entries = s.entries || [];
+        localStorage.setItem(LS_BAGS, s.bags);
+        localStorage.setItem(LS_CYCLE, s.cycle);
+        localStorage.setItem(LS_PRICE, s.price);
+        localStorage.setItem(LS_OPEX, s.opex);
+        localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
+        calculate();
+        alert(`Scenario "${name}" loaded successfully!`);
+      }
+    }
+
+    function deleteVaultScenario(name){
+      if (confirm(`Delete scenario "${name}"?`)) {
+        const scenarios = getVaultScenarios();
+        delete scenarios[name];
+        localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+        renderVaultScenarios();
+      }
+    }
+
+    function renderVaultScenarios(){
+      const scenarios = getVaultScenarios();
+      const keys = Object.keys(scenarios);
+      vaultList.innerHTML = '';
+      if (keys.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'ops-note';
+        p.textContent = 'No saved scenarios in vault.';
+        vaultList.appendChild(p);
+        return;
+      }
+      keys.forEach(key => {
+        const dateStr = new Date(scenarios[key].timestamp).toLocaleDateString();
+        const item = document.createElement('div');
+        item.className = 'ops-vault-item';
+        item.innerHTML = `
+          <div>
+            <span>${key}</span>
+            <span class="ops-note">(${dateStr})</span>
+          </div>
+          <div class="ops-ledger-bar">
+            <button type="button" class="planner-btn" data-action="load" data-name="${key}">Load</button>
+            <button type="button" class="planner-btn" data-action="delete" data-name="${key}">Delete</button>
+          </div>
+        `;
+        vaultList.appendChild(item);
+      });
+      vaultList.querySelectorAll('[data-action="load"]').forEach(btn => {
+        btn.addEventListener('click', () => loadVaultScenario(btn.getAttribute('data-name')));
+      });
+      vaultList.querySelectorAll('[data-action="delete"]').forEach(btn => {
+        btn.addEventListener('click', () => deleteVaultScenario(btn.getAttribute('data-name')));
+      });
+    }
+
+    function exportToCSV(){
+      if (entries.length === 0) { alert('No ledger entries to export.'); return; }
+      let csv = 'Date,Category,Phase,Details,Bags,Rate_or_Amount_KES,Total_Value_KES\n';
+      entries.forEach(e => {
+        let total = e.category === 'Batch Harvest & Sale' ? e.qty * e.rate : (e.category === 'Compost Expense' ? -e.rate : 0);
+        csv += `"${e.date}","${e.category}","${e.phase}","${e.desc.replace(/"/g, '""')}",${e.qty || 0},${e.rate || 0},${total}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `symbio_compost_ledger_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function cssVar(name){
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function updateCharts(income, expense){
+      if (typeof Chart === 'undefined') return;
+      const canvas = $('#o-compost-financial-chart');
+      charts.forEach(c => { try{ c.destroy(); }catch(e){} });
+      charts = [];
+      const leaf = cssVar('--leaf');
+      const gold = cssVar('--gold-text');
+      const rust = cssVar('--rust');
+      const bone = cssVar('--bone');
+      const line = cssVar('--line');
+      const ctx = canvas.getContext('2d');
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Actual Compost Financials'],
+          datasets: [
+            { label: 'Revenue (KES)', data: [income], backgroundColor: gold, borderRadius: 6 },
+            { label: 'Expenses (KES)', data: [expense], backgroundColor: rust, borderRadius: 6 },
+            { label: 'Net Cashflow (KES)', data: [income - expense], backgroundColor: leaf, borderRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: bone, font: { size: 11 } } } },
+          scales: { y: { ticks: { color: bone }, grid: { color: line } }, x: { display: false } }
+        }
+      });
+      charts.push(chart);
+    }
+
+    function renderLedger(){
+      let totalBags = 0, totalIncome = 0, totalExp = 0;
+      ledgerBody.innerHTML = '';
+
+      const sorted = entries.slice().sort((a,b) => new Date(b.date) - new Date(a.date));
+
+      if (sorted.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="8">No compost activity logged yet.</td>';
+        ledgerBody.appendChild(tr);
+      } else {
+        sorted.forEach(item => {
+          let totalVal = 0;
+          if (item.category === 'Batch Harvest & Sale') {
+            totalBags += item.qty;
+            totalVal = item.qty * item.rate;
+            totalIncome += totalVal;
+          } else if (item.category === 'Compost Expense') {
+            totalExp += item.rate;
+            totalVal = -item.rate;
+          }
+
+          const tr = document.createElement('tr');
+          const valClass = totalVal > 0 ? 'ops-sum-profit' : (totalVal < 0 ? 'ops-sum-loss' : '');
+          const valText = totalVal !== 0 ? (totalVal > 0 ? '+' : '-') + 'KES ' + Math.abs(totalVal).toLocaleString() : '-';
+          tr.innerHTML = `
+            <td>${item.date}</td>
+            <td>${item.category}</td>
+            <td>${item.phase}</td>
+            <td>${item.desc}</td>
+            <td>${item.qty ? item.qty + ' Bags' : '-'}</td>
+            <td>${item.rate ? 'KES ' + item.rate.toLocaleString() : '-'}</td>
+            <td class="${valClass}">${valText}</td>
+            <td class="row-remove-cell"></td>
+          `;
+          const delBtn = document.createElement('button');
+          delBtn.className = 'row-remove-btn';
+          delBtn.type = 'button';
+          delBtn.textContent = '✕';
+          delBtn.addEventListener('click', () => deleteEntry(item.id));
+          tr.querySelector('.row-remove-cell').appendChild(delBtn);
+          ledgerBody.appendChild(tr);
+        });
+      }
+
+      actualBags.innerText = totalBags.toLocaleString() + ' Bags';
+      actualIncome.innerText = 'KES ' + Math.round(totalIncome).toLocaleString();
+      actualExp.innerText = 'KES ' + Math.round(totalExp).toLocaleString();
+      actualNet.innerText = 'KES ' + Math.round(totalIncome - totalExp).toLocaleString();
+
+      updateCharts(totalIncome, totalExp);
+    }
+
+    batchBags.addEventListener('input', calculate);
+    cycleDays.addEventListener('input', calculate);
+    priceBag.addEventListener('input', calculate);
+    batchOpex.addEventListener('input', calculate);
+    entryCategory.addEventListener('change', adjustFields);
+    ledgerForm.addEventListener('submit', addEntry);
+    exportBtn.addEventListener('click', exportToCSV);
+    clearBtn.addEventListener('click', clearLedger);
+    vaultSaveBtn.addEventListener('click', saveVaultScenario);
+
+    if (localStorage.getItem(LS_BAGS)) batchBags.value = localStorage.getItem(LS_BAGS);
+    if (localStorage.getItem(LS_CYCLE)) cycleDays.value = localStorage.getItem(LS_CYCLE);
+    if (localStorage.getItem(LS_PRICE)) priceBag.value = localStorage.getItem(LS_PRICE);
+    if (localStorage.getItem(LS_OPEX)) batchOpex.value = localStorage.getItem(LS_OPEX);
+
+    calculate();
+    adjustFields();
+    renderVaultScenarios();
+  }
+
+  function destroy(){
+    charts.forEach(c => { try{ c.destroy(); }catch(e){} });
+    charts = [];
+  }
+
+  return { build, init, destroy };
+})();
+
+/* ===== dailylog ===== */
+window.OPS_MODULES = window.OPS_MODULES || {};
+window.OPS_MODULES['o-dailylog'] = (function(){
+  'use strict';
+  const LS_ENTRIES = 'symbio_entries';
+  const LS_SCENARIOS = 'symbio_operations_scenarios';
+  let charts = [];
+  let entries = [];
+
+  function build(){
+    return `
+      <div class="ops-section-title">Scenario & Plan Vault</div>
+      <div class="ops-field-row">
+        <div class="ops-field">
+          <label for="o-dailylog-scenarioName">Plan name</label>
+          <input type="text" id="o-dailylog-scenarioName" placeholder="Plan name (e.g., Q3 Baseline)">
+        </div>
+        <button type="button" class="planner-btn" id="o-dailylog-saveScenarioBtn">Save Plan</button>
+      </div>
+      <div class="ops-vault">
+        <div class="ops-vault-list" id="o-dailylog-scenarioVaultList"></div>
+      </div>
+
+      <div class="ops-section-title">New Entry</div>
+      <form id="o-dailylog-entryForm">
+        <div class="ops-field-row">
+          <div class="ops-field">
+            <label for="o-dailylog-entryDate">Date</label>
+            <input type="date" id="o-dailylog-entryDate" required>
+          </div>
+          <div class="ops-field">
+            <label for="o-dailylog-entryType">Type</label>
+            <select id="o-dailylog-entryType" required>
+              <option value="Harvest & Sale">Harvest & Sale</option>
+              <option value="Planting">Planting</option>
+              <option value="Input Application">Input Application</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ops-field-row">
+          <div class="ops-field">
+            <label for="o-dailylog-entrySystem">System</label>
+            <select id="o-dailylog-entrySystem" required>
+              <option value="Ground Bed">Ground Bed</option>
+              <option value="Vertical Bag">Vertical Bag</option>
+              <option value="Cone Garden">Cone Garden</option>
+              <option value="Nursery Shed">Nursery Shed</option>
+            </select>
+          </div>
+          <div class="ops-field">
+            <label for="o-dailylog-entryCrop">Crop</label>
+            <select id="o-dailylog-entryCrop" required>
+              <option value="Sukuma Wiki">Sukuma Wiki</option>
+              <option value="Spinach">Spinach</option>
+              <option value="African Nightshade">African Nightshade (Managu)</option>
+              <option value="Tomato">Tomato</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ops-field-row">
+          <div class="ops-field">
+            <label for="o-dailylog-entryQty">Harvest (kg)</label>
+            <input type="number" step="0.1" id="o-dailylog-entryQty" placeholder="0.0" value="0">
+          </div>
+          <div class="ops-field">
+            <label for="o-dailylog-entryRev">Revenue (KES)</label>
+            <input type="number" id="o-dailylog-entryRev" placeholder="0" value="0">
+          </div>
+        </div>
+
+        <div class="ops-field-row">
+          <div class="ops-field">
+            <label for="o-dailylog-entryExp">Expenses (KES)</label>
+            <input type="number" id="o-dailylog-entryExp" placeholder="0" value="0">
+          </div>
+          <div class="ops-field">
+            <label for="o-dailylog-entryDetails">Details</label>
+            <input type="text" id="o-dailylog-entryDetails" placeholder="e.g., Bag 3">
+          </div>
+        </div>
+
+        <button type="submit" class="planner-btn">Save Entry</button>
+      </form>
+
+      <div class="ops-summary-grid">
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Harvested</div>
+          <div class="ops-sum-value" id="o-dailylog-totalQty">0.0 kg</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Revenue</div>
+          <div class="ops-sum-value" id="o-dailylog-totalRev">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Expenses</div>
+          <div class="ops-sum-value" id="o-dailylog-totalExp">KES 0</div>
+        </div>
+        <div class="ops-summary-card">
+          <div class="ops-sum-label">Actual Net Cashflow</div>
+          <div class="ops-sum-value" id="o-dailylog-netCash">KES 0</div>
+        </div>
+      </div>
+
+      <div class="ops-section-title">Symbio Operations Log</div>
+      <div class="ops-ledger-bar">
+        <button type="button" class="planner-btn" id="o-dailylog-exportBtn">Export CSV</button>
+        <button type="button" class="planner-btn" id="o-dailylog-clearBtn">Clear</button>
+      </div>
+
+      <div class="planner-table-wrap">
+        <table class="planner-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>System</th>
+              <th>Crop</th>
+              <th>Details</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="o-dailylog-logTableBody"></tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function getScenarios(){
+    return JSON.parse(localStorage.getItem(LS_SCENARIOS)) || {};
+  }
+
+  function init(root){
+    entries = JSON.parse(localStorage.getItem(LS_ENTRIES)) || [
+      { date: '2026-08-23', type: 'Harvest & Sale', system: 'Ground Bed', crop: 'Sukuma Wiki', qty: 15.0, rev: 1100, exp: 0, details: 'Bag 3' },
+      { date: '2026-08-22', type: 'Harvest & Sale', system: 'Vertical Bag', crop: 'Sukuma Wiki', qty: 10.0, rev: 800, exp: 0, details: 'Bag 5 and 6' }
+    ];
+
+    const entryDate = root.querySelector('#o-dailylog-entryDate');
+    entryDate.valueAsDate = new Date();
+
+    function renderApp(){
+      const tbody = root.querySelector('#o-dailylog-logTableBody');
+      tbody.innerHTML = '';
+
+      let totalQ = 0;
+      let totalR = 0;
+      let totalE = 0;
+
+      entries.forEach((item, idx) => {
+        totalQ += parseFloat(item.qty || 0);
+        totalR += parseFloat(item.rev || 0);
+        totalE += parseFloat(item.exp || 0);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.type.replace('&', '&amp;')}</td>
+          <td>${item.system}</td>
+          <td>${item.crop}</td>
+          <td>${item.details || '-'}</td>
+          <td><button type="button" class="row-remove-btn" data-idx="${idx}">&times;</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      root.querySelector('#o-dailylog-totalQty').innerText = totalQ.toFixed(1) + ' kg';
+      root.querySelector('#o-dailylog-totalRev').innerText = 'KES ' + totalR.toLocaleString();
+      root.querySelector('#o-dailylog-totalExp').innerText = 'KES ' + totalE.toLocaleString();
+
+      const net = totalR - totalE;
+      const netEl = root.querySelector('#o-dailylog-netCash');
+      netEl.innerText = 'KES ' + net.toLocaleString();
+      netEl.className = 'ops-sum-value ' + (net >= 0 ? 'ops-sum-profit' : 'ops-sum-loss');
+
+      localStorage.setItem(LS_ENTRIES, JSON.stringify(entries));
+
+      tbody.querySelectorAll('.row-remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = parseInt(btn.getAttribute('data-idx'), 10);
+          entries.splice(i, 1);
+          renderApp();
+        });
+      });
+    }
+
+    function saveEntry(e){
+      e.preventDefault();
+      const newEntry = {
+        date: root.querySelector('#o-dailylog-entryDate').value,
+        type: root.querySelector('#o-dailylog-entryType').value,
+        system: root.querySelector('#o-dailylog-entrySystem').value,
+        crop: root.querySelector('#o-dailylog-entryCrop').value,
+        qty: parseFloat(root.querySelector('#o-dailylog-entryQty').value) || 0,
+        rev: parseFloat(root.querySelector('#o-dailylog-entryRev').value) || 0,
+        exp: parseFloat(root.querySelector('#o-dailylog-entryExp').value) || 0,
+        details: root.querySelector('#o-dailylog-entryDetails').value
+      };
+
+      entries.unshift(newEntry);
+      renderApp();
+      root.querySelector('#o-dailylog-entryForm').reset();
+      root.querySelector('#o-dailylog-entryDate').valueAsDate = new Date();
+    }
+
+    function clearData(){
+      if (confirm('Are you sure you want to clear all operation log entries?')) {
+        entries = [];
+        renderApp();
+      }
+    }
+
+    function saveScenario(){
+      const nameInput = root.querySelector('#o-dailylog-scenarioName');
+      const name = nameInput.value.trim();
+      if (!name) {
+        alert('Please enter a scenario name.');
+        return;
+      }
+      const scenarios = getScenarios();
+      scenarios[name] = {
+        entries: entries,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+      nameInput.value = '';
+      renderScenarios();
+      alert(`Scenario "${name}" saved successfully!`);
+    }
+
+    function loadScenario(name){
+      const scenarios = getScenarios();
+      if (scenarios[name]) {
+        entries = scenarios[name].entries;
+        renderApp();
+        alert(`Scenario "${name}" loaded successfully!`);
+      }
+    }
+
+    function deleteScenario(name){
+      if (confirm(`Delete scenario "${name}"?`)) {
+        const scenarios = getScenarios();
+        delete scenarios[name];
+        localStorage.setItem(LS_SCENARIOS, JSON.stringify(scenarios));
+        renderScenarios();
+      }
+    }
+
+    function renderScenarios(){
+      const container = root.querySelector('#o-dailylog-scenarioVaultList');
+      const scenarios = getScenarios();
+      const keys = Object.keys(scenarios);
+      if (keys.length === 0) {
+        container.innerHTML = '<p class="ops-note">No saved scenarios in vault.</p>';
+        return;
+      }
+      container.innerHTML = '';
+      keys.forEach(key => {
+        const dateStr = new Date(scenarios[key].timestamp).toLocaleDateString();
+        const item = document.createElement('div');
+        item.className = 'ops-vault-item';
+        item.innerHTML = `
+          <span><b>${key}</b> <span class="ops-note">(${dateStr})</span></span>
+          <div>
+            <button type="button" class="planner-btn" data-action="load" data-key="${key}">Load</button>
+            <button type="button" class="planner-btn" data-action="delete" data-key="${key}">Delete</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+      container.querySelectorAll('button[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-key');
+          if (btn.getAttribute('data-action') === 'load') loadScenario(key);
+          else deleteScenario(key);
+        });
+      });
+    }
+
+    function exportCSV(){
+      if (entries.length === 0) {
+        alert('No entries to export.');
+        return;
+      }
+      let csv = 'Date,Type,System,Crop,Quantity(kg),Revenue(KES),Expenses(KES),Details\n';
+      entries.forEach(item => {
+        csv += `"${item.date}","${item.type}","${item.system}","${item.crop}",${item.qty},${item.rev},${item.exp},"${item.details}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'symbio_operations_log.csv';
+      a.click();
+    }
+
+    root.querySelector('#o-dailylog-entryForm').addEventListener('submit', saveEntry);
+    root.querySelector('#o-dailylog-clearBtn').addEventListener('click', clearData);
+    root.querySelector('#o-dailylog-exportBtn').addEventListener('click', exportCSV);
+    root.querySelector('#o-dailylog-saveScenarioBtn').addEventListener('click', saveScenario);
+
+    renderApp();
+    renderScenarios();
+  }
+
+  function destroy(){
+    charts.forEach(c => { try{ c.destroy(); }catch(e){} });
+    charts = [];
+  }
+
+  return { build, init, destroy };
+})();
+
 // ==================== HOME SCREEN NAVIGATION ====================
 function showHome(){
   document.getElementById('homeScreen').style.display = 'grid';
@@ -3353,9 +7791,15 @@ function goToPlanner(){
   document.getElementById('compareSection').style.display = 'none';
   renderPlannerView();
 }
+function goToOps(){
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('compareSection').style.display = 'none';
+  renderOpsView();
+}
 document.getElementById('homeCardCompare').addEventListener('click', showCompareSection);
 document.getElementById('homeCardManuals').addEventListener('click', goToManuals);
 document.getElementById('homeCardPlanner').addEventListener('click', goToPlanner);
+document.getElementById('homeCardOps').addEventListener('click', goToOps);
 document.getElementById('backFromCompare').addEventListener('click', showHome);
 
 // ==================== THEME TOGGLE ====================
