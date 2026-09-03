@@ -729,6 +729,50 @@
   }
   .ops-section-title:first-of-type{border-top:none;padding-top:0;margin-top:0;}
 
+  .intro-list{
+    margin:0 0 6px;
+    padding-left:20px;
+    font-size:13px;
+    line-height:1.65;
+    color:var(--bone-dim);
+  }
+  .intro-list li{margin-bottom:8px;}
+  .intro-list strong{color:var(--bone);}
+
+  .intro-nav-guide{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:8px;
+  }
+  .intro-nav-step{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:var(--soil-800);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:12px 14px;
+    font-size:13px;
+    line-height:1.55;
+    color:var(--bone-dim);
+  }
+  .intro-nav-step strong{color:var(--bone);}
+  .intro-nav-num{
+    flex:0 0 auto;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:var(--maize);
+    color:var(--gold-text);
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:700;
+    font-size:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
   .ops-field-row{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -1136,9 +1180,11 @@
     font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.02em;text-transform:uppercase;
     border-radius:5px;padding:8px 13px;cursor:pointer;transition:all .15s ease;}
   .ops-pill.o-active{background:var(--maize);border-color:var(--maize);color:var(--gold-text);font-weight:600;}
-.ops-note{font-size:11.5px;color:var(--bone-dim);font-style:italic;line-height:1.5;margin:6px 0 12px;}
+  .ops-note{font-size:11.5px;color:var(--bone-dim);font-style:italic;line-height:1.5;margin:6px 0 12px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
 <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light theme" title="Toggle theme">
@@ -1154,6 +1200,11 @@
   </header>
 
   <div class="home-grid" id="homeScreen">
+    <div class="home-card" id="homeCardIntro" style="border-color:var(--maize);">
+      <div class="home-card-icon">🌿</div>
+      <div class="home-card-title">Start Here</div>
+      <div class="home-card-desc">Why organic and biological methods pay off, and how to move through the four tools below.</div>
+    </div>
     <div class="home-card" id="homeCardCompare">
       <div class="home-card-icon">🌱</div>
       <div class="home-card-title">Compare Enterprises</div>
@@ -2809,6 +2860,12 @@ function renderPlannerView(){
         </table>
       </div>
       <button type="button" class="planner-btn" id="addProductionRowBtn">+ Add Production Target</button>
+      <div class="save-row" style="margin-top:16px;">
+        <button type="button" class="planner-btn" id="sharePlanBtn">\ud83d\udcac Share via WhatsApp/SMS</button>
+        <button type="button" class="planner-btn" id="copyPlanBtn">\ud83d\udccb Copy Summary</button>
+        <button type="button" class="planner-btn" id="exportPdfBtn">\ud83d\udcc4 Export PDF Report</button>
+      </div>
+      <div class="save-status" id="shareStatus"></div>
     </div>
 
     <!-- 3. BED MAPPING -->
@@ -2870,6 +2927,9 @@ function renderPlannerView(){
   document.getElementById('addMarketingRowBtn').addEventListener('click', addMarketingRow);
   document.getElementById('addMarketingChannelBtn').addEventListener('click', addMarketingChannel);
   document.getElementById('addProductionRowBtn').addEventListener('click', addProductionRow);
+  document.getElementById('sharePlanBtn').addEventListener('click', shareViaWhatsApp);
+  document.getElementById('copyPlanBtn').addEventListener('click', copyPlanSummary);
+  document.getElementById('exportPdfBtn').addEventListener('click', exportPlanPDF);
   document.getElementById('autofillFromMarketingBtn').addEventListener('click', autofillFromMarketing);
   document.getElementById('addMapUnitBtn').addEventListener('click', addMapUnit);
   document.getElementById('transferFromProductionBtn').addEventListener('click', transferBedsFromProduction);
@@ -2966,7 +3026,8 @@ function getMarketingRowTotals(){
       rowVal += (wks * kgwk) * price;
       // Weekly target is the SUM of Kg/wk sold through every channel at once
       // (e.g. 50 Kg/wk local market + 20 Kg/wk direct clients + 10 Kg/wk
-      // hotels = 80 Kg/wk needed every week).
+      // hotels = 80 Kg/wk needed every week) \u2014 not the total yield divided
+      // by weeks.
       weeklyKg += kgwk;
     });
     results.push({ crop, totalVal: rowVal, weeklyKg });
@@ -3059,10 +3120,10 @@ function calcProduction(){
     const weeklyEl = row.querySelector('.pr-target-kgwk');
     const weekly = weeklyEl ? (parseFloat(weeklyEl.value) || 0) : 0;
 
-    // Beds Needed is driven by the WEEKLY target (how many beds you need in
-    // rotation at once), not the total target yield \u2014 e.g. 80 Kg/wk needed
-    // and 10 Kg per bed means 8 beds. Falls back to the total yield only when
-    // no weekly figure has been entered yet.
+    // Beds Needed runs off the WEEKLY target (how many beds you need in
+    // rotation at once), not the total yield \u2014 e.g. 80 Kg/wk needed and
+    // 10 Kg per bed means 8 beds. Falls back to the total yield only when no
+    // weekly figure has been entered yet.
     let unitsNeeded = 0;
     if(yieldPerBed > 0 && weekly > 0){
       unitsNeeded = Math.ceil(weekly / yieldPerBed);
@@ -3074,6 +3135,175 @@ function calcProduction(){
     const seedlingsNeeded = unitsNeeded * 100;
     row.querySelector('.pr-seedlings').textContent = seedlingsNeeded.toLocaleString();
   });
+}
+
+// ==================== SHARE / EXPORT: PLAN SUMMARY ====================
+function stripHtml(html){
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html || '';
+  return (tmp.textContent || tmp.innerText || '').replace(/\s+/g, ' ').trim();
+}
+
+function getProductionSummaryRows(){
+  return Array.from(document.querySelectorAll('#plannerProductionBody tr')).map(row => ({
+    crop: row.querySelector('.pr-crop').value || 'Unnamed crop',
+    weekly: row.querySelector('.pr-target-kgwk').value || '0',
+    targetKg: row.querySelector('.pr-target-kg').textContent,
+    price: row.querySelector('.pr-price').value || '0',
+    rev: row.querySelector('.pr-rev').value || '0',
+    bedsNeeded: row.querySelector('.pr-beds-needed').textContent
+  })).filter(r => r.crop.trim() !== '' && r.crop !== 'Unnamed crop');
+}
+
+function getBedMappingSummaryRows(){
+  return Array.from(document.querySelectorAll('.planner-bed')).map(div => {
+    const label = div.querySelector('.bed-range-label') ? div.querySelector('.bed-range-label').textContent : 'Bed group';
+    const qty = div.querySelector('.bed-qty-input') ? div.querySelector('.bed-qty-input').value : '1';
+    const cropSelect = div.querySelector('.bed-crop-select');
+    const crop = cropSelect && cropSelect.selectedIndex > 0 ? cropSelect.options[cropSelect.selectedIndex].text : '';
+    const bioText = div.querySelector('.bed-bio-output') ? stripHtml(div.querySelector('.bed-bio-output').innerHTML) : '';
+    return { label, qty, crop, bioText };
+  }).filter(b => b.crop !== '');
+}
+
+function buildPlanSummaryText(){
+  const prodRows = getProductionSummaryRows();
+  const bedRows = getBedMappingSummaryRows();
+  const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  let lines = [];
+  lines.push('*SYMBIO BIOTECH SOLUTIONS*');
+  lines.push('Farm Plan Summary \u2014 ' + today);
+  lines.push('');
+
+  if(prodRows.length){
+    lines.push('*PRODUCTION PLAN*');
+    prodRows.forEach(r => {
+      lines.push(`\u2022 ${r.crop}: ${r.weekly} Kg/wk target (${r.targetKg} total) \u2014 KSh ${r.price}/Kg \u2014 ${r.bedsNeeded}`);
+    });
+    lines.push('');
+  }
+
+  if(bedRows.length){
+    lines.push('*BIOLOGICAL BED PLAN*');
+    bedRows.forEach(b => {
+      const recipe = b.bioText ? ` \u2014 ${b.bioText}` : '';
+      lines.push(`\u2022 ${b.label} (${b.qty} unit(s)): ${b.crop}${recipe}`);
+    });
+    lines.push('');
+  }
+
+  if(!prodRows.length && !bedRows.length){
+    lines.push('No production or bed data entered yet \u2014 fill in the Farming for Profit Planner first.');
+    lines.push('');
+  }
+
+  lines.push('Generated via Symbio Biotech Agribusiness Enterprise Planner');
+  return lines.join('\n');
+}
+
+function shareViaWhatsApp(){
+  const text = buildPlanSummaryText();
+  const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+  const statusEl = document.getElementById('shareStatus');
+  if(statusEl) statusEl.textContent = 'Opening WhatsApp \u2014 if it didn\u2019t open, use Copy Summary instead.';
+}
+
+function copyPlanSummary(){
+  const text = buildPlanSummaryText();
+  const statusEl = document.getElementById('shareStatus');
+  const showSuccess = () => { if(statusEl) statusEl.textContent = 'Summary copied \u2014 paste it into WhatsApp, SMS, or anywhere else.'; };
+  const showFailure = () => { if(statusEl) statusEl.textContent = 'Could not copy automatically \u2014 select and copy the text manually.'; };
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(showSuccess).catch(() => fallbackCopy(text, showSuccess, showFailure));
+  } else {
+    fallbackCopy(text, showSuccess, showFailure);
+  }
+}
+
+function fallbackCopy(text, onSuccess, onFailure){
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if(ok){ onSuccess(); } else { onFailure(); }
+  } catch(e){
+    onFailure();
+  }
+}
+
+function exportPlanPDF(){
+  const statusEl = document.getElementById('shareStatus');
+  if(!window.jspdf || !window.jspdf.jsPDF){
+    if(statusEl) statusEl.textContent = 'PDF library did not load \u2014 check your internet connection and try again.';
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const prodRows = getProductionSummaryRows();
+  const bedRows = getBedMappingSummaryRows();
+  const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  doc.setFontSize(16);
+  doc.text('Symbio Biotech Solutions', 14, 18);
+  doc.setFontSize(11);
+  doc.setTextColor(90);
+  doc.text('Farm Business Plan \u2014 ' + today, 14, 25);
+  doc.setTextColor(0);
+
+  let cursorY = 34;
+
+  if(prodRows.length){
+    doc.setFontSize(13);
+    doc.text('Production Plan', 14, cursorY);
+    cursorY += 4;
+    doc.autoTable({
+      startY: cursorY,
+      head: [['Crop', 'Weekly Target', 'Total Target Yield', 'Price/Kg (KSh)', 'Target Revenue (KSh)', 'Beds Needed']],
+      body: prodRows.map(r => [r.crop, r.weekly + ' Kg/wk', r.targetKg, r.price, r.rev, r.bedsNeeded]),
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [46, 74, 42] },
+      margin: { left: 14, right: 14 }
+    });
+    cursorY = doc.lastAutoTable.finalY + 10;
+  } else {
+    doc.setFontSize(10);
+    doc.text('No production data entered yet.', 14, cursorY);
+    cursorY += 10;
+  }
+
+  if(bedRows.length){
+    if(cursorY > 250){ doc.addPage(); cursorY = 20; }
+    doc.setFontSize(13);
+    doc.text('Biological Bed Plan', 14, cursorY);
+    cursorY += 4;
+    doc.autoTable({
+      startY: cursorY,
+      head: [['Bed Group', 'Units', 'Crop', 'Companion / Pest-Control Notes']],
+      body: bedRows.map(b => [b.label, b.qty, b.crop, b.bioText || '\u2014']),
+      styles: { fontSize: 9, cellWidth: 'wrap' },
+      columnStyles: { 3: { cellWidth: 90 } },
+      headStyles: { fillColor: [46, 74, 42] },
+      margin: { left: 14, right: 14 }
+    });
+    cursorY = doc.lastAutoTable.finalY + 10;
+  }
+
+  doc.setFontSize(8);
+  doc.setTextColor(120);
+  doc.text('Generated via Symbio Biotech Agribusiness Enterprise Planner', 14, 290);
+
+  doc.save('symbio-farm-plan.pdf');
+  if(statusEl) statusEl.textContent = 'PDF downloaded.';
 }
 
 // ---- 3. Biological Bed Mapping ----
@@ -7761,6 +7991,105 @@ window.OPS_MODULES['o-dailylog'] = (function(){
   return { build, init, destroy };
 })();
 
+// ==================== INTRODUCTION / START HERE ====================
+function renderIntroView(){
+  const results = document.getElementById('results');
+  results.innerHTML = `
+    <span class="back-link" id="backFromIntro">\u2190 Back</span>
+    <div class="results-head">
+      <h2>Start Here</h2>
+      <span>by Symbio Biotech Solutions</span>
+    </div>
+
+    <div class="ops-intro" style="margin-bottom:14px; border-left-color:var(--maize);">
+      Profit on a farm really comes down to two levers: what it costs you to grow something, and how well you sell it. <strong>Healthy soil is the lever on the cost side</strong> — the more alive and self-sustaining your soil is, the less you spend fighting pests, disease, and depleted ground season after season. <strong>Good sales management is the lever on the revenue side</strong> — the best harvest in the world means nothing if it's not sold at a fair price to a buyer who actually wanted it. This app treats both as equally important, not as a farming half and a business half bolted together.
+    </div>
+
+    <div class="ops-intro" style="margin-bottom:22px;">
+      Every shilling you save on inputs is a shilling that stays in your pocket at harvest \u2014 and that's really what organic and biological farming comes down to. It's not a purity test or a trend to chase for its own sake. It's simply the cheapest, most reliable way to build soil that keeps giving back season after season, without you having to buy your way out of every problem. The forest floor, the grass in your compound, the waste from your own animals \u2014 most of what your land needs to thrive is already sitting around you, free for the collecting. This app is about putting that to work, and connecting it honestly to the numbers, so good soil practice and a profitable farm are the same goal, not two competing ones.
+    </div>
+
+    <div class="ops-section-title">Soil Health &amp; JADAM Biology</div>
+    <ul class="intro-list">
+      <li><strong>Biological Foundation:</strong> Good soil does the heavy lifting your budget can't. The more alive it is, the less you'll find yourself reaching for expensive synthetic inputs.</li>
+      <li><strong>Forest Leaf Mold &amp; JMS:</strong> Gather undisturbed leaf litter from a nearby forest floor and brew it into JADAM Microbial Solution (JMS). A drench over your nursery trays gives young roots a protective coat of biology before they even reach the field.</li>
+      <li><strong>In-Situ Microbe Trap:</strong> Cover a moist bed with dry native grass and keep it watered for three to four weeks. You're culturing wild, locally-adapted microbes right where they'll be used \u2014 no lab required. Worth logging in your Biological Bed Mapping so you can see which beds respond best.</li>
+      <li><strong>Experimentation Over Conformity:</strong> Any manual, including this one, is a starting point. Your land will tell you what it actually wants \u2014 pay attention and adjust.</li>
+    </ul>
+
+    <div class="ops-section-title">Green Manures &amp; Microbial Livestock Systems</div>
+    <ul class="intro-list">
+      <li><strong>Multi-Purpose Cover Crops:</strong> Green manures rarely do just one job \u2014 they're fodder, they're mulch, they're compost you chop and drop right where it's needed.</li>
+      <li><strong>Livestock Efficiency:</strong> A little JMS and Lactic Acid Bacteria (LAB) in drinking water and bedding goes a long way \u2014 better nutrient uptake, less smell, fewer vet bills.</li>
+      <li><strong>Compost Enterprise:</strong> Mix farm waste with JMS, LAB, and Fish Amino Acids (FAA) and you get compost fast enough, and rich enough, to sell. Give it a weekly target and a price in your Production Plan like any other crop, and let it prove itself.</li>
+    </ul>
+
+    <div class="ops-section-title">Bottom-Line Analytics &amp; Production Planning</div>
+    <ul class="intro-list">
+      <li><strong>Math Over Emotion:</strong> Judge a crop by what it actually nets you, not by how popular it is or how full the harvest basket looks. Demand doesn't matter if your costs quietly eat the margin.</li>
+      <li><strong>Crop Audits:</strong> A regular look at your numbers catches the small leaks before they become big ones, and helps you balance steady earners against fast-turnover crops. Your Production Plan is built to do exactly this \u2014 lean on it before you commit a single seedling.</li>
+    </ul>
+
+    <div class="ops-section-title">Market-Centric Strategy &amp; Active Selling</div>
+    <ul class="intro-list">
+      <li><strong>Production Follows Market:</strong> Find your buyer before you find your seed. The Comparison Tool is there for this \u2014 figure out where the demand is before you've spent anything.</li>
+      <li><strong>Direct Buyer Research:</strong> A few honest questions to a potential buyer save months of guessing: <em>"What exact weekly volume and quality grade do you need, consistently?"</em> &middot; <em>"What are your usual delivery schedules and payment terms?"</em> &middot; <em>"Where are your current suppliers letting you down?"</em> Whatever they tell you becomes your Marketing Chart, channel by channel, week by week.</li>
+      <li><strong>Differentiate Your Advantage:</strong> Reliability is its own selling point \u2014 consistent timing, consistent grading, or the extra shelf-life your biological methods buy you.</li>
+      <li><strong>Active Selling &amp; Pricing:</strong> Go find your buyers, don't wait for them. Expect some doors to stay shut \u2014 that's normal, not failure. Price to cover transport, storage, and loss, and let the money you saved on inputs become the cushion that carries you through a slow month.</li>
+    </ul>
+
+    <div class="ops-section-title">Professional Standards &amp; Branding</div>
+    <ul class="intro-list">
+      <li><strong>Uncompromising Execution:</strong> One standard keeps commercial accounts coming back: deliver in full, on time, every time.</li>
+      <li><strong>Unified Visual Identity:</strong> A consistent name, logo, and color on your crates, bags, receipt books, and signage means a customer who liked what you sold them can find you again.</li>
+    </ul>
+
+    <div class="ops-section-title">Four Tools \u2014 Use What You Need</div>
+    <p style="font-size:13px;line-height:1.6;color:var(--bone-dim);margin:0 0 12px;">
+      These aren't sequential steps. Someone who only ever opens the Planner has a complete tool; so does someone who only tracks numbers in Analytics. Use whichever door fits what you're doing right now \u2014 open the others only when you actually need them.
+    </p>
+    <div class="intro-nav-guide">
+      <div class="intro-nav-step">
+        <span class="intro-nav-num">\u25cf</span>
+        <div>
+          <strong>Compare Enterprises</strong> \u2014 for deciding what to grow or raise, if that's still open. Enter what you have (capital, land, water, labour) and see every enterprise ranked by fit. Purely for brainstorming \u2014 skip it entirely if you already know your crop.
+        </div>
+      </div>
+      <div class="intro-nav-step">
+        <span class="intro-nav-num">\u25cf</span>
+        <div>
+          <strong>Farming for Profit Planner</strong> \u2014 for running a specific enterprise day to day: Marketing Chart, Production Plan, Biological Bed Mapping, and Seedling &amp; Succession. Those four tabs build on each other in that order, but the Planner as a whole is a closed loop \u2014 it needs nothing from Compare or Ops to be useful on its own.
+        </div>
+      </div>
+      <div class="intro-nav-step">
+        <span class="intro-nav-num">\u25cf</span>
+        <div>
+          <strong>Farming Manuals and Systems</strong> \u2014 the how-to library: JMS, FAA/LAB, compost, pest control, and more. Reference these any time, on their own, whether or not you touch anything else here.
+        </div>
+      </div>
+      <div class="intro-nav-step">
+        <span class="intro-nav-num">\u25cf</span>
+        <div>
+          <strong>Farm Operations and Analytics</strong> \u2014 for tracking real performance against projections, enterprise by enterprise. Stands entirely on its own \u2014 you don't need to have used the Planner first.
+        </div>
+      </div>
+    </div>
+
+    <div class="save-row" style="margin-top:22px;">
+      <button type="button" class="planner-btn" id="introGoCompare">Go to Compare Enterprises</button>
+      <button type="button" class="planner-btn" id="introGoPlanner">Go to Farming Planner</button>
+      <button type="button" class="planner-btn" id="introGoManuals">Go to Manuals</button>
+      <button type="button" class="planner-btn" id="introGoOps">Go to Farm Operations</button>
+    </div>
+  `;
+
+  document.getElementById('backFromIntro').addEventListener('click', showHome);
+  document.getElementById('introGoCompare').addEventListener('click', showCompareSection);
+  document.getElementById('introGoPlanner').addEventListener('click', goToPlanner);
+  document.getElementById('introGoManuals').addEventListener('click', goToManuals);
+  document.getElementById('introGoOps').addEventListener('click', goToOps);
+}
+
 // ==================== HOME SCREEN NAVIGATION ====================
 function showHome(){
   document.getElementById('homeScreen').style.display = 'grid';
@@ -7787,6 +8116,12 @@ function goToOps(){
   document.getElementById('compareSection').style.display = 'none';
   renderOpsView();
 }
+function goToIntro(){
+  document.getElementById('homeScreen').style.display = 'none';
+  document.getElementById('compareSection').style.display = 'none';
+  renderIntroView();
+}
+document.getElementById('homeCardIntro').addEventListener('click', goToIntro);
 document.getElementById('homeCardCompare').addEventListener('click', showCompareSection);
 document.getElementById('homeCardManuals').addEventListener('click', goToManuals);
 document.getElementById('homeCardPlanner').addEventListener('click', goToPlanner);
