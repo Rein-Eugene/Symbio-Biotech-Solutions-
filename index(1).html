@@ -3762,7 +3762,7 @@ function renderOpsView(){
     ['o-kienyeji','Kienyeji Poultry','Improved Kienyeji poultry (plus bio-manure byproduct income)'],
     ['o-pigs','Pigs','Pig enterprise (Refinery vs Regular Commercial)'],
     ['o-compost','Compost','Compost production &amp; sales enterprise'],
-    ['o-dailylog','Daily Log','Daily farm income &amp; expense logbook']
+    ['o-dailylog','Homestead Animals','Livestock &amp; other homestead animals \u2014 acquisitions, sales, births, losses, and care costs']
   ];
   const nav = TABS.map((t,i)=>`<button type="button" class="${i===0?'o-active':''}" data-otab="${t[0]}">${t[1]}</button>`).join('');
   const panes = TABS.map((t,i)=>`<div id="${t[0]}" class="ops-tab${i===0?' o-active':''}">`+
@@ -4554,6 +4554,9 @@ window.OPS_MODULES['o-horticulture'] = (function(){
   const LS_PRICE = 'symbio_price';
   const LS_CAPEX = 'symbio_capex';
   const LS_OPEX = 'symbio_opex';
+  const LS_YIELD = 'symbio_yield_per_unit';
+  const LS_UNIT_SIZE = 'symbio_unit_size';
+  const LS_SENTIMENT = 'symbio_market_sentiment';
   const LS_SCENARIOS = 'symbio_horticulture_scenarios';
   let charts = [];
   let entries = [];
@@ -4562,33 +4565,37 @@ window.OPS_MODULES['o-horticulture'] = (function(){
     ground: {
       name: 'Ground Beds',
       unitLabel: 'Beds Count',
+      unitSize: '1m x 10m',
       baseCapex: 97000,
       baseOpex: 9200,
       monthlyKgPerUnit: 12.5,
       plantsPerUnit: 200,
-      desc: 'Standard 1m x 10m ground beds require direct ground labor, higher weed management, and higher irrigation volumes.'
+      desc: 'Standard ground beds require direct ground labor, higher weed management, and higher irrigation volumes. Bed size and yield below are starting defaults \u2014 edit them to match your own beds.'
     },
     bags: {
       name: 'Real IPM Vertical Bags',
       unitLabel: 'Bags Count',
+      unitSize: 'Standard grow bag',
       baseCapex: 32000,
       baseOpex: 5400,
       monthlyKgPerUnit: 11.5,
       plantsPerUnit: 90,
-      desc: 'Real IPM vertical bags conserve moisture beneath the canopy, drastically reduce weeding labor, and optimize JADAM drenching.'
+      desc: 'Real IPM vertical bags conserve moisture beneath the canopy, drastically reduce weeding labor, and optimize JADAM drenching. Size and yield below are starting defaults \u2014 edit them to match your own setup.'
     },
     cones: {
       name: 'Cone / Multi-Storey',
       unitLabel: 'Cones Count',
+      unitSize: 'Multi-tier cone unit',
       baseCapex: 52000,
       baseOpex: 5800,
       monthlyKgPerUnit: 12.5,
       plantsPerUnit: 110,
-      desc: 'Multi-storey cone gardens create a dense microclimate canopy that retains soil moisture and minimizes weeding work.'
+      desc: 'Multi-storey cone gardens create a dense microclimate canopy that retains soil moisture and minimizes weeding work. Size and yield below are starting defaults \u2014 edit them to match your own setup.'
     },
     hybrid: {
       name: 'Hybrid Mix',
       unitLabel: 'Total Hybrid Units',
+      unitSize: 'Mixed dimensions',
       baseCapex: 70000,
       baseOpex: 7200,
       monthlyKgPerUnit: 12.0,
@@ -4640,9 +4647,9 @@ window.OPS_MODULES['o-horticulture'] = (function(){
         <div class="ops-field">
           <label>Farming System Type</label>
           <select id="o-hort-system-type">
-            <option value="ground">Ground Beds (1m x 10m Standard)</option>
-            <option value="bags">Real IPM Vertical Grow Bags (80-100 Plants)</option>
-            <option value="cones">Cone / Multi-Storey Gardens (100-120 Plants)</option>
+            <option value="ground">Ground Beds (size &amp; yield editable below)</option>
+            <option value="bags">Real IPM Vertical Grow Bags</option>
+            <option value="cones">Cone / Multi-Storey Gardens</option>
             <option value="hybrid">Hybrid System (Custom Combination of Systems)</option>
           </select>
           <span class="ops-hint" id="o-hort-system-desc-text">Standard 1m x 10m ground beds require direct ground labor, higher weed management, and higher irrigation volumes.</span>
@@ -4653,6 +4660,16 @@ window.OPS_MODULES['o-horticulture'] = (function(){
         <div class="ops-field">
           <label><span id="o-hort-label-unit-count">Units Count</span>: <span id="o-hort-val-beds">20</span></label>
           <input type="range" id="o-hort-beds" min="0" max="200" value="20">
+        </div>
+        <div class="ops-field">
+          <label>Unit Size / Dimensions</label>
+          <input type="text" id="o-hort-unit-size" value="1m x 10m" placeholder="e.g. 1m x 10m">
+          <span class="ops-hint">Purely descriptive \u2014 for your own reference, doesn't affect the math below.</span>
+        </div>
+        <div class="ops-field">
+          <label>Yield per Unit (Kg/Month): <span id="o-hort-val-yield">12.5</span></label>
+          <input type="range" id="o-hort-yield" min="0" max="50" step="0.5" value="12.5">
+          <span class="ops-hint">What one unit actually produces for you \u2014 adjust to match your own harvests instead of the system default.</span>
         </div>
         <div class="ops-field">
           <label>Blended Price / KG (KES): <span id="o-hort-val-price">55</span></label>
@@ -4672,14 +4689,28 @@ window.OPS_MODULES['o-horticulture'] = (function(){
         <div class="ops-field">
           <label>Ground Beds: <span id="o-hort-val-hy-beds">10</span></label>
           <input type="range" id="o-hort-hy-beds" min="0" max="200" value="10">
+          <span class="ops-hint">Yield/unit (Kg/mo): <span id="o-hort-val-hy-yield-beds">12.5</span></span>
+          <input type="range" id="o-hort-hy-yield-beds" min="0" max="50" step="0.5" value="12.5">
         </div>
         <div class="ops-field">
           <label>Vertical Grow Bags: <span id="o-hort-val-hy-bags">5</span></label>
           <input type="range" id="o-hort-hy-bags" min="0" max="200" value="5">
+          <span class="ops-hint">Yield/unit (Kg/mo): <span id="o-hort-val-hy-yield-bags">11.5</span></span>
+          <input type="range" id="o-hort-hy-yield-bags" min="0" max="50" step="0.5" value="11.5">
         </div>
         <div class="ops-field">
           <label>Cone Gardens: <span id="o-hort-val-hy-cones">5</span></label>
           <input type="range" id="o-hort-hy-cones" min="0" max="200" value="5">
+          <span class="ops-hint">Yield/unit (Kg/mo): <span id="o-hort-val-hy-yield-cones">12.5</span></span>
+          <input type="range" id="o-hort-hy-yield-cones" min="0" max="50" step="0.5" value="12.5">
+        </div>
+      </div>
+
+      <div class="ops-field-row">
+        <div class="ops-field" style="grid-column:1 / -1;">
+          <label>Market Sentiment: <span id="o-hort-sentiment-label">Standard Market (0%)</span></label>
+          <input type="range" id="o-hort-sentiment" min="-50" max="50" step="5" value="0">
+          <span class="ops-hint">Slide left for oversupply / market glut / inflation squeeze, right for off-season timing, direct clients, or rising prices. Scales every revenue projection below \u2014 your entered price stays your own reference point.</span>
         </div>
       </div>
 
@@ -4695,6 +4726,10 @@ window.OPS_MODULES['o-horticulture'] = (function(){
         <div class="ops-summary-card">
           <span class="ops-sum-label">Peak Monthly Harvest</span>
           <span class="ops-sum-value" id="o-hort-calc-kg-peak">0 kg</span>
+        </div>
+        <div class="ops-summary-card">
+          <span class="ops-sum-label">Effective Price/KG (Market-Adjusted)</span>
+          <span class="ops-sum-value" id="o-hort-out-effective-price">KES 0</span>
         </div>
         <div class="ops-summary-card">
           <span class="ops-sum-label">Peak Monthly Revenue</span>
@@ -4877,11 +4912,17 @@ window.OPS_MODULES['o-horticulture'] = (function(){
     const hybridControls = $('#o-hort-hybrid-controls');
 
     const beds = $('#o-hort-beds');
+    const unitSize = $('#o-hort-unit-size');
+    const yieldSlider = $('#o-hort-yield');
+    const valYield = $('#o-hort-val-yield');
     const price = $('#o-hort-price');
     const baseCapex = $('#o-hort-base-capex');
     const baseOpex = $('#o-hort-base-opex');
     const valBeds = $('#o-hort-val-beds');
     const valPrice = $('#o-hort-val-price');
+    const sentiment = $('#o-hort-sentiment');
+    const sentimentLabel = $('#o-hort-sentiment-label');
+    const outEffectivePrice = $('#o-hort-out-effective-price');
 
     const hyBeds = $('#o-hort-hy-beds');
     const hyBags = $('#o-hort-hy-bags');
@@ -4889,6 +4930,12 @@ window.OPS_MODULES['o-horticulture'] = (function(){
     const valHyBeds = $('#o-hort-val-hy-beds');
     const valHyBags = $('#o-hort-val-hy-bags');
     const valHyCones = $('#o-hort-val-hy-cones');
+    const hyYieldBeds = $('#o-hort-hy-yield-beds');
+    const hyYieldBags = $('#o-hort-hy-yield-bags');
+    const hyYieldCones = $('#o-hort-hy-yield-cones');
+    const valHyYieldBeds = $('#o-hort-val-hy-yield-beds');
+    const valHyYieldBags = $('#o-hort-val-hy-yield-bags');
+    const valHyYieldCones = $('#o-hort-val-hy-yield-cones');
 
     const calcKgPeak = $('#o-hort-calc-kg-peak');
     const calcIncomePeak = $('#o-hort-calc-income-peak');
@@ -4939,6 +4986,9 @@ window.OPS_MODULES['o-horticulture'] = (function(){
       if (!fromLoad) {
         baseCapex.value = preset.baseCapex;
         baseOpex.value = preset.baseOpex;
+        yieldSlider.value = preset.monthlyKgPerUnit;
+        valYield.innerText = preset.monthlyKgPerUnit;
+        unitSize.value = preset.unitSize;
       }
 
       if (sysType === 'hybrid') {
@@ -4965,6 +5015,9 @@ window.OPS_MODULES['o-horticulture'] = (function(){
       valHyBeds.innerText = hBeds;
       valHyBags.innerText = hBags;
       valHyCones.innerText = hCones;
+      valHyYieldBeds.innerText = hyYieldBeds.value;
+      valHyYieldBags.innerText = hyYieldBags.value;
+      valHyYieldCones.innerText = hyYieldCones.value;
 
       const totalHybridUnits = hBeds + hBags + hCones;
       beds.value = totalHybridUnits;
@@ -4978,21 +5031,39 @@ window.OPS_MODULES['o-horticulture'] = (function(){
       entryRate.placeholder = cat === 'Expense' ? 'Amount (KES)' : 'Rate (KES/kg)';
     }
 
+    function getSentimentLabel(pct){
+      if(pct <= -30) return `Worst Case \u2014 Oversupply / Market Glut (${pct}%)`;
+      if(pct <= -10) return `Below Average \u2014 Soft Demand (${pct}%)`;
+      if(pct < 10) return `Standard Market (${pct >= 0 ? '+' : ''}${pct}%)`;
+      if(pct < 30) return `Above Average \u2014 Favorable Demand (+${pct}%)`;
+      return `Best Case \u2014 Off-Season / Direct Clients (+${pct}%)`;
+    }
+
     function calculate(){
       const sysType = systemType.value;
       const bedsVal = parseInt(beds.value) || 0;
       const priceVal = parseInt(price.value) || 0;
       const rawCapex = parseFloat(baseCapex.value) || 0;
       const rawOpex = parseFloat(baseOpex.value) || 0;
+      const sentimentPct = parseInt(sentiment.value) || 0;
+      const effectivePrice = priceVal * (1 + sentimentPct / 100);
 
       localStorage.setItem(LS_SYSTEM, sysType);
       localStorage.setItem(LS_BEDS, bedsVal);
       localStorage.setItem(LS_PRICE, priceVal);
       localStorage.setItem(LS_CAPEX, rawCapex);
       localStorage.setItem(LS_OPEX, rawOpex);
+      localStorage.setItem(LS_SENTIMENT, sentimentPct);
+      if(sysType !== 'hybrid'){
+        localStorage.setItem(LS_YIELD, yieldSlider.value);
+        localStorage.setItem(LS_UNIT_SIZE, unitSize.value);
+      }
 
       valBeds.innerText = bedsVal;
       valPrice.innerText = priceVal;
+      valYield.innerText = yieldSlider.value;
+      sentimentLabel.innerText = getSentimentLabel(sentimentPct);
+      outEffectivePrice.innerText = 'KES ' + Math.round(effectivePrice).toLocaleString();
 
       let peakKg = 0;
       let estSeedlings = 0;
@@ -5001,10 +5072,13 @@ window.OPS_MODULES['o-horticulture'] = (function(){
         const hBeds = parseInt(hyBeds.value) || 0;
         const hBags = parseInt(hyBags.value) || 0;
         const hCones = parseInt(hyCones.value) || 0;
-        peakKg = (hBeds * 12.5) + (hBags * 11.5) + (hCones * 12.5);
+        const yBeds = parseFloat(hyYieldBeds.value) || 0;
+        const yBags = parseFloat(hyYieldBags.value) || 0;
+        const yCones = parseFloat(hyYieldCones.value) || 0;
+        peakKg = (hBeds * yBeds) + (hBags * yBags) + (hCones * yCones);
         estSeedlings = (hBeds * 200) + (hBags * 90) + (hCones * 110);
       } else {
-        const monthlyKgUnit = SYSTEM_PRESETS[sysType].monthlyKgPerUnit;
+        const monthlyKgUnit = parseFloat(yieldSlider.value) || 0;
         const plantsUnit = SYSTEM_PRESETS[sysType].plantsPerUnit;
         peakKg = bedsVal * monthlyKgUnit;
         estSeedlings = bedsVal * plantsUnit;
@@ -5014,9 +5088,9 @@ window.OPS_MODULES['o-horticulture'] = (function(){
       const scaledCapex = Math.round(rawCapex * scale);
       const scaledOpex = Math.round(rawOpex * scale);
 
-      const breakEvenKg = priceVal > 0 ? Math.ceil(scaledOpex / priceVal) : 0;
+      const breakEvenKg = effectivePrice > 0 ? Math.ceil(scaledOpex / effectivePrice) : 0;
 
-      const peakMonthlyRev = peakKg * priceVal;
+      const peakMonthlyRev = peakKg * effectivePrice;
       const netMonthlyPeak = peakMonthlyRev - scaledOpex;
 
       const estAnnualNet = (peakMonthlyRev * 7) - scaledCapex - (scaledOpex * 12);
@@ -5096,12 +5170,18 @@ window.OPS_MODULES['o-horticulture'] = (function(){
       scenarios[name] = {
         systemType: systemType.value,
         beds: beds.value,
+        unitSize: unitSize.value,
+        yield: yieldSlider.value,
         price: price.value,
+        sentiment: sentiment.value,
         capex: baseCapex.value,
         opex: baseOpex.value,
         hyBeds: hyBeds.value,
         hyBags: hyBags.value,
         hyCones: hyCones.value,
+        hyYieldBeds: hyYieldBeds.value,
+        hyYieldBags: hyYieldBags.value,
+        hyYieldCones: hyYieldCones.value,
         entries: entries,
         timestamp: new Date().toISOString()
       };
@@ -5117,18 +5197,27 @@ window.OPS_MODULES['o-horticulture'] = (function(){
       if (s) {
         systemType.value = s.systemType;
         beds.value = s.beds;
+        unitSize.value = s.unitSize || SYSTEM_PRESETS[s.systemType].unitSize;
+        yieldSlider.value = s.yield || SYSTEM_PRESETS[s.systemType].monthlyKgPerUnit;
         price.value = s.price;
+        sentiment.value = s.sentiment || 0;
         baseCapex.value = s.capex;
         baseOpex.value = s.opex;
         hyBeds.value = s.hyBeds || 10;
         hyBags.value = s.hyBags || 5;
         hyCones.value = s.hyCones || 5;
+        hyYieldBeds.value = s.hyYieldBeds || 12.5;
+        hyYieldBags.value = s.hyYieldBags || 11.5;
+        hyYieldCones.value = s.hyYieldCones || 12.5;
         entries = s.entries || [];
         localStorage.setItem(LS_SYSTEM, s.systemType);
         localStorage.setItem(LS_BEDS, s.beds);
         localStorage.setItem(LS_PRICE, s.price);
         localStorage.setItem(LS_CAPEX, s.capex);
         localStorage.setItem(LS_OPEX, s.opex);
+        localStorage.setItem(LS_YIELD, yieldSlider.value);
+        localStorage.setItem(LS_UNIT_SIZE, unitSize.value);
+        localStorage.setItem(LS_SENTIMENT, sentiment.value);
         localStorage.setItem(LS_LEDGER, JSON.stringify(entries));
         onSystemTypeChange(true);
         alert(`Scenario "${name}" loaded successfully!`);
@@ -5373,24 +5462,36 @@ window.OPS_MODULES['o-horticulture'] = (function(){
       const savedPrice = localStorage.getItem(LS_PRICE);
       const savedCapex = localStorage.getItem(LS_CAPEX);
       const savedOpex = localStorage.getItem(LS_OPEX);
+      const savedYield = localStorage.getItem(LS_YIELD);
+      const savedUnitSize = localStorage.getItem(LS_UNIT_SIZE);
+      const savedSentiment = localStorage.getItem(LS_SENTIMENT);
 
       if (savedSys) systemType.value = savedSys;
       if (savedBeds) beds.value = savedBeds;
       if (savedPrice) price.value = savedPrice;
       if (savedCapex) baseCapex.value = savedCapex;
       if (savedOpex) baseOpex.value = savedOpex;
+      if (savedYield) { yieldSlider.value = savedYield; valYield.innerText = savedYield; }
+      if (savedUnitSize) unitSize.value = savedUnitSize;
+      if (savedSentiment) sentiment.value = savedSentiment;
 
       onSystemTypeChange(true);
     }
 
     systemType.addEventListener('change', () => onSystemTypeChange(false));
     beds.addEventListener('input', calculate);
+    unitSize.addEventListener('input', calculate);
+    yieldSlider.addEventListener('input', calculate);
     price.addEventListener('input', calculate);
     baseCapex.addEventListener('input', calculate);
     baseOpex.addEventListener('input', calculate);
+    sentiment.addEventListener('input', calculate);
     hyBeds.addEventListener('input', updateHybridTotal);
     hyBags.addEventListener('input', updateHybridTotal);
     hyCones.addEventListener('input', updateHybridTotal);
+    hyYieldBeds.addEventListener('input', updateHybridTotal);
+    hyYieldBags.addEventListener('input', updateHybridTotal);
+    hyYieldCones.addEventListener('input', updateHybridTotal);
     entryCategory.addEventListener('change', adjustFields);
     ledgerForm.addEventListener('submit', addEntry);
     exportBtn.addEventListener('click', exportToCSV);
@@ -7680,18 +7781,22 @@ window.OPS_MODULES['o-compost'] = (function(){
 window.OPS_MODULES = window.OPS_MODULES || {};
 window.OPS_MODULES['o-dailylog'] = (function(){
   'use strict';
-  const LS_ENTRIES = 'symbio_entries';
-  const LS_SCENARIOS = 'symbio_operations_scenarios';
+  const LS_ENTRIES = 'symbio_animal_entries';
+  const LS_SCENARIOS = 'symbio_animal_scenarios';
   let charts = [];
   let entries = [];
 
   function build(){
     return `
-      <div class="ops-section-title">Scenario & Plan Vault</div>
+      <div class="ops-intro">
+        For animals kept mainly as a store of wealth or a long-term investment \u2014 cows, goats, sheep, rabbits, dogs, and anything else you keep \u2014 rather than fast-turnover enterprises like broilers or layers (those have their own calculators). Log acquisitions, sales, births, losses, and care costs to track your herd's size and value over time.
+      </div>
+
+      <div class="ops-section-title">Scenario &amp; Plan Vault</div>
       <div class="ops-field-row">
         <div class="ops-field">
           <label for="o-dailylog-scenarioName">Plan name</label>
-          <input type="text" id="o-dailylog-scenarioName" placeholder="Plan name (e.g., Q3 Baseline)">
+          <input type="text" id="o-dailylog-scenarioName" placeholder="Plan name (e.g., 2026 Herd Baseline)">
         </div>
         <button type="button" class="planner-btn" id="o-dailylog-saveScenarioBtn">Save Plan</button>
       </div>
@@ -7707,56 +7812,64 @@ window.OPS_MODULES['o-dailylog'] = (function(){
             <input type="date" id="o-dailylog-entryDate" required>
           </div>
           <div class="ops-field">
-            <label for="o-dailylog-entryType">Type</label>
-            <select id="o-dailylog-entryType" required>
-              <option value="Harvest & Sale">Harvest & Sale</option>
-              <option value="Planting">Planting</option>
-              <option value="Input Application">Input Application</option>
-              <option value="Maintenance">Maintenance</option>
+            <label for="o-dailylog-entryActivity">Activity</label>
+            <select id="o-dailylog-entryActivity" required>
+              <option value="Acquired / Purchased">Acquired / Purchased</option>
+              <option value="Sale">Sale</option>
+              <option value="Birth / New Offspring">Birth / New Offspring</option>
+              <option value="Death / Loss">Death / Loss</option>
+              <option value="Health &amp; Vet Care">Health &amp; Vet Care</option>
+              <option value="Feed &amp; Maintenance">Feed &amp; Maintenance</option>
+              <option value="Valuation Update">Valuation Update</option>
+              <option value="General Care">General Care</option>
             </select>
           </div>
         </div>
 
         <div class="ops-field-row">
           <div class="ops-field">
-            <label for="o-dailylog-entrySystem">System</label>
-            <select id="o-dailylog-entrySystem" required>
-              <option value="Ground Bed">Ground Bed</option>
-              <option value="Vertical Bag">Vertical Bag</option>
-              <option value="Cone Garden">Cone Garden</option>
-              <option value="Nursery Shed">Nursery Shed</option>
-            </select>
+            <label for="o-dailylog-entryType">Animal Type</label>
+            <input type="text" id="o-dailylog-entryType" list="o-dailylog-animal-types" placeholder="e.g. Cow, Goat, Sheep, Rabbit, Dog\u2026" required>
+            <datalist id="o-dailylog-animal-types">
+              <option value="Cow">
+              <option value="Goat">
+              <option value="Sheep">
+              <option value="Dog">
+              <option value="Rabbit">
+              <option value="Pig">
+              <option value="Donkey">
+              <option value="Chicken">
+              <option value="Bee Hive">
+            </datalist>
+            <span class="ops-hint">Type any animal \u2014 not limited to the suggestions.</span>
           </div>
           <div class="ops-field">
-            <label for="o-dailylog-entryCrop">Crop</label>
-            <select id="o-dailylog-entryCrop" required>
-              <option value="Sukuma Wiki">Sukuma Wiki</option>
-              <option value="Spinach">Spinach</option>
-              <option value="African Nightshade">African Nightshade (Managu)</option>
-              <option value="Tomato">Tomato</option>
-            </select>
+            <label for="o-dailylog-entryName">Name / ID (optional)</label>
+            <input type="text" id="o-dailylog-entryName" placeholder="e.g. Bella, Herd #2">
           </div>
         </div>
 
         <div class="ops-field-row">
           <div class="ops-field">
-            <label for="o-dailylog-entryQty">Harvest (kg)</label>
-            <input type="number" step="0.1" id="o-dailylog-entryQty" placeholder="0.0" value="0">
+            <label for="o-dailylog-entryQty">Head Count</label>
+            <input type="number" step="1" min="0" id="o-dailylog-entryQty" placeholder="1" value="1">
           </div>
           <div class="ops-field">
-            <label for="o-dailylog-entryRev">Revenue (KES)</label>
+            <label for="o-dailylog-entryRev">Value / Income (KES)</label>
             <input type="number" id="o-dailylog-entryRev" placeholder="0" value="0">
+            <span class="ops-hint">Sale proceeds, or the animal's assessed value if acquiring/revaluing.</span>
           </div>
         </div>
 
         <div class="ops-field-row">
           <div class="ops-field">
-            <label for="o-dailylog-entryExp">Expenses (KES)</label>
+            <label for="o-dailylog-entryExp">Expense (KES)</label>
             <input type="number" id="o-dailylog-entryExp" placeholder="0" value="0">
+            <span class="ops-hint">Purchase cost, feed, vet bills, etc.</span>
           </div>
           <div class="ops-field">
             <label for="o-dailylog-entryDetails">Details</label>
-            <input type="text" id="o-dailylog-entryDetails" placeholder="e.g., Bag 3">
+            <input type="text" id="o-dailylog-entryDetails" placeholder="e.g., Deworming, sold at market">
           </div>
         </div>
 
@@ -7765,24 +7878,24 @@ window.OPS_MODULES['o-dailylog'] = (function(){
 
       <div class="ops-summary-grid">
         <div class="ops-summary-card">
-          <div class="ops-sum-label">Actual Harvested</div>
-          <div class="ops-sum-value" id="o-dailylog-totalQty">0.0 kg</div>
+          <div class="ops-sum-label">Current Head Count</div>
+          <div class="ops-sum-value" id="o-dailylog-totalQty">0</div>
         </div>
         <div class="ops-summary-card">
-          <div class="ops-sum-label">Actual Revenue</div>
+          <div class="ops-sum-label">Total Income (Sales &amp; Valuation)</div>
           <div class="ops-sum-value" id="o-dailylog-totalRev">KES 0</div>
         </div>
         <div class="ops-summary-card">
-          <div class="ops-sum-label">Actual Expenses</div>
+          <div class="ops-sum-label">Total Care &amp; Acquisition Costs</div>
           <div class="ops-sum-value" id="o-dailylog-totalExp">KES 0</div>
         </div>
         <div class="ops-summary-card">
-          <div class="ops-sum-label">Actual Net Cashflow</div>
+          <div class="ops-sum-label">Net Cashflow</div>
           <div class="ops-sum-value" id="o-dailylog-netCash">KES 0</div>
         </div>
       </div>
 
-      <div class="ops-section-title">Symbio Operations Log</div>
+      <div class="ops-section-title">Homestead Animal Log</div>
       <div class="ops-ledger-bar">
         <button type="button" class="planner-btn" id="o-dailylog-exportBtn">Export CSV</button>
         <button type="button" class="planner-btn" id="o-dailylog-clearBtn">Clear</button>
@@ -7793,9 +7906,10 @@ window.OPS_MODULES['o-dailylog'] = (function(){
           <thead>
             <tr>
               <th>Date</th>
-              <th>Type</th>
-              <th>System</th>
-              <th>Crop</th>
+              <th>Activity</th>
+              <th>Animal Type</th>
+              <th>Name / ID</th>
+              <th>Head Count</th>
               <th>Details</th>
               <th></th>
             </tr>
@@ -7812,9 +7926,12 @@ window.OPS_MODULES['o-dailylog'] = (function(){
 
   function init(root){
     entries = JSON.parse(localStorage.getItem(LS_ENTRIES)) || [
-      { date: '2026-08-23', type: 'Harvest & Sale', system: 'Ground Bed', crop: 'Sukuma Wiki', qty: 15.0, rev: 1100, exp: 0, details: 'Bag 3' },
-      { date: '2026-08-22', type: 'Harvest & Sale', system: 'Vertical Bag', crop: 'Sukuma Wiki', qty: 10.0, rev: 800, exp: 0, details: 'Bag 5 and 6' }
+      { date: '2026-08-20', activity: 'Acquired / Purchased', type: 'Cow', name: 'Bella', qty: 1, rev: 45000, exp: 45000, details: 'Friesian cross, in-calf' },
+      { date: '2026-08-27', activity: 'Sale', type: 'Goat', name: '', qty: 2, rev: 12000, exp: 0, details: 'Sold at local market' }
     ];
+
+    const ADD_ACTIVITIES = ['Acquired / Purchased', 'Birth / New Offspring'];
+    const REMOVE_ACTIVITIES = ['Sale', 'Death / Loss'];
 
     const entryDate = root.querySelector('#o-dailylog-entryDate');
     entryDate.valueAsDate = new Date();
@@ -7823,28 +7940,32 @@ window.OPS_MODULES['o-dailylog'] = (function(){
       const tbody = root.querySelector('#o-dailylog-logTableBody');
       tbody.innerHTML = '';
 
-      let totalQ = 0;
+      let netHead = 0;
       let totalR = 0;
       let totalE = 0;
 
       entries.forEach((item, idx) => {
-        totalQ += parseFloat(item.qty || 0);
+        const qty = parseFloat(item.qty || 0);
+        if(ADD_ACTIVITIES.includes(item.activity)) netHead += qty;
+        else if(REMOVE_ACTIVITIES.includes(item.activity)) netHead -= qty;
+
         totalR += parseFloat(item.rev || 0);
         totalE += parseFloat(item.exp || 0);
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${item.date}</td>
-          <td>${item.type.replace('&', '&amp;')}</td>
-          <td>${item.system}</td>
-          <td>${item.crop}</td>
+          <td>${(item.activity || '').replace(/&/g, '&amp;')}</td>
+          <td>${item.type}</td>
+          <td>${item.name || '-'}</td>
+          <td>${item.qty}</td>
           <td>${item.details || '-'}</td>
           <td><button type="button" class="row-remove-btn" data-idx="${idx}">&times;</button></td>
         `;
         tbody.appendChild(tr);
       });
 
-      root.querySelector('#o-dailylog-totalQty').innerText = totalQ.toFixed(1) + ' kg';
+      root.querySelector('#o-dailylog-totalQty').innerText = Math.max(0, netHead).toLocaleString();
       root.querySelector('#o-dailylog-totalRev').innerText = 'KES ' + totalR.toLocaleString();
       root.querySelector('#o-dailylog-totalExp').innerText = 'KES ' + totalE.toLocaleString();
 
@@ -7868,9 +7989,9 @@ window.OPS_MODULES['o-dailylog'] = (function(){
       e.preventDefault();
       const newEntry = {
         date: root.querySelector('#o-dailylog-entryDate').value,
+        activity: root.querySelector('#o-dailylog-entryActivity').value,
         type: root.querySelector('#o-dailylog-entryType').value,
-        system: root.querySelector('#o-dailylog-entrySystem').value,
-        crop: root.querySelector('#o-dailylog-entryCrop').value,
+        name: root.querySelector('#o-dailylog-entryName').value,
         qty: parseFloat(root.querySelector('#o-dailylog-entryQty').value) || 0,
         rev: parseFloat(root.querySelector('#o-dailylog-entryRev').value) || 0,
         exp: parseFloat(root.querySelector('#o-dailylog-entryExp').value) || 0,
@@ -7881,10 +8002,11 @@ window.OPS_MODULES['o-dailylog'] = (function(){
       renderApp();
       root.querySelector('#o-dailylog-entryForm').reset();
       root.querySelector('#o-dailylog-entryDate').valueAsDate = new Date();
+      root.querySelector('#o-dailylog-entryQty').value = 1;
     }
 
     function clearData(){
-      if (confirm('Are you sure you want to clear all operation log entries?')) {
+      if (confirm('Are you sure you want to clear all homestead animal log entries?')) {
         entries = [];
         renderApp();
       }
@@ -7962,15 +8084,15 @@ window.OPS_MODULES['o-dailylog'] = (function(){
         alert('No entries to export.');
         return;
       }
-      let csv = 'Date,Type,System,Crop,Quantity(kg),Revenue(KES),Expenses(KES),Details\n';
+      let csv = 'Date,Activity,Animal Type,Name/ID,Head Count,Value/Income(KES),Expense(KES),Details\n';
       entries.forEach(item => {
-        csv += `"${item.date}","${item.type}","${item.system}","${item.crop}",${item.qty},${item.rev},${item.exp},"${item.details}"\n`;
+        csv += `"${item.date}","${item.activity}","${item.type}","${item.name || ''}",${item.qty},${item.rev},${item.exp},"${item.details}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'symbio_operations_log.csv';
+      a.download = 'symbio_homestead_animals.csv';
       a.click();
     }
 
@@ -8002,7 +8124,7 @@ function renderIntroView(){
     </div>
 
     <div class="ops-intro" style="margin-bottom:14px; border-left-color:var(--maize);">
-      Profit on a farm really comes down to two levers: what it costs you to grow something, and how well you sell it. <strong>Healthy soil is the lever on the cost side</strong> — the more alive and self-sustaining your soil is, the less you spend fighting pests, disease, and depleted ground season after season. <strong>Good sales management is the lever on the revenue side</strong> — the best harvest in the world means nothing if it's not sold at a fair price to a buyer who actually wanted it. This app treats both as equally important, not as a farming half and a business half bolted together.
+      Profit on a farm really comes down to two levers: what it costs you to grow something, and how well you sell it. <strong>Healthy soil is the lever on the cost side</strong> — the more alive and self-sustaining your soil is, the less you spend fighting pests, disease, depleted ground, and hours of labour, season after season. <strong>Good sales management is the lever on the revenue side</strong> — the best harvest in the world means nothing if it's not sold at a fair price to a buyer who actually wanted it. This app treats both as equally important, not as a farming half and a business half bolted together.
     </div>
 
     <div class="ops-intro" style="margin-bottom:22px;">
@@ -8015,6 +8137,14 @@ function renderIntroView(){
       <li><strong>Forest Leaf Mold &amp; JMS:</strong> Gather undisturbed leaf litter from a nearby forest floor and brew it into JADAM Microbial Solution (JMS). A drench over your nursery trays gives young roots a protective coat of biology before they even reach the field.</li>
       <li><strong>In-Situ Microbe Trap:</strong> Cover a moist bed with dry native grass and keep it watered for three to four weeks. You're culturing wild, locally-adapted microbes right where they'll be used \u2014 no lab required. Worth logging in your Biological Bed Mapping so you can see which beds respond best.</li>
       <li><strong>Experimentation Over Conformity:</strong> Any manual, including this one, is a starting point. Your land will tell you what it actually wants \u2014 pay attention and adjust.</li>
+    </ul>
+
+    <div class="ops-section-title">Labour: The Cost Most Farms Underestimate</div>
+    <ul class="intro-list">
+      <li><strong>Weeding Eats More Than Anything Else:</strong> Across most crops, weeding quietly consumes more labour hours than planting, watering, and harvesting put together. If a farm's labour bill is running high, this is usually where to look first.</li>
+      <li><strong>Design the Weeds Out, Don't Just Fight Them:</strong> Cone gardens and vertical growing structures shrink the exposed soil surface a weed can even germinate on. A living floor \u2014 a low, deliberate ground cover planted to occupy every bit of open soil \u2014 does the same job biologically, crowding weeds out before they get a foothold. Plastic mulch works more directly, physically blocking light from reaching the soil surface. Different tools, same target: less bare, disturbed soil for weeds to exploit.</li>
+      <li><strong>No-Till as Weed Management:</strong> Every time soil is turned, buried weed seed gets a fresh shot at daylight and germinates. Leave the soil undisturbed and build fertility on top instead of digging it in, and that seed bank mostly stays asleep.</li>
+      <li><strong>Labour Is Not Negotiable:</strong> A plan that looks profitable on paper but quietly assumes free or unlimited family labour isn't a real plan. Budget for the hours a system actually needs, and lean toward systems designed to need fewer of them.</li>
     </ul>
 
     <div class="ops-section-title">Green Manures &amp; Microbial Livestock Systems</div>
